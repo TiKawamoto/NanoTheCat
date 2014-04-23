@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 
@@ -15,13 +16,16 @@ public class ScrollingHandler {
 	private Iterator<Platform> pIter;
 	private float xDefPos, yDefPos, xSpeed, newX, platLeftEdgeX;
 	private int platTotalWidth = 0;
+	private int platCheckWidth = 0;
 	private int gapWidth = 0;
 	private Random gapRand;
+	private Rectangle bounds;
 	
 	public ScrollingHandler() {
 		xDefPos = 0;
 		yDefPos = 0;
 		xSpeed = -5;
+		bounds = new Rectangle(0,0,0,0);
 		
 		
 	}
@@ -42,17 +46,25 @@ public class ScrollingHandler {
 		while(pIter.hasNext()){
 			platformIter = pIter.next();
 			
-			platTotalWidth = (int)platformIter.getxPos() + platformIter.getWidth();
+			if(!pIter.hasNext()){
+				platTotalWidth = (int)platformIter.getxPos() + platformIter.getWidth();
+			}
+			
 			
 			//System.out.println((int)platformIter.getxPos() + " + " + platformIter.getWidth());
-			platLeftEdgeX = (float) platTotalWidth;
+			platCheckWidth = (int)platformIter.getxPos() + platformIter.getWidth();
+			platLeftEdgeX = (float) platCheckWidth;
 			
-			if(platTotalWidth < 0){
-				pIter.remove();
+			
+			if(((int)platformIter.getxPos() + platformIter.getWidth()) < 0){
+				//System.out.println((int)platformIter.getxPos() + " + " + platformIter.getWidth());
+				//System.out.println(((int)platformIter.getxPos() + platformIter.getWidth()));
+				//pIter.remove();
+				
 			}
 			
 			if(platTotalWidth < (int)Gdx.graphics.getWidth()){
-				System.out.println(platTotalWidth + " + " + Gdx.graphics.getWidth() + "Platform");
+				//System.out.println(platTotalWidth + " + " + Gdx.graphics.getWidth() + "Platform");
 				Platform p = new Platform(platLeftEdgeX + 30,0,xSpeed,800,100,1);
 				platform.add(p);
 				
@@ -61,6 +73,10 @@ public class ScrollingHandler {
 			newX = platformIter.getxPos() + xSpeed;
 			platformIter.setxPos(newX);
 			
+			//platformIter.update(delta);
+			//System.out.println(platformIter.getxSpeed());
+			bounds.set(platformIter.getxPos(), platformIter.getyPos(), platformIter.getWidth(), platformIter.getHeight());
+			platformIter.setBounds(bounds);			
 			
 		}
 		

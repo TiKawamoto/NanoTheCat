@@ -1,5 +1,6 @@
 package GameObjects;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class ScrollEntities {
@@ -9,6 +10,7 @@ public class ScrollEntities {
 	private float yPos;
 	private Vector2 position;
 	private Vector2 velocity;
+	private Rectangle bounds;
 	private int width;
 	private int height;
 	private boolean outOfBounds = false;
@@ -20,6 +22,7 @@ public class ScrollEntities {
 		this.height = height;
 		this.xPos = xPos;
 		this.yPos = yPos;
+		bounds = new Rectangle(position.x, position.y, width, height);
 		
 	}
 	
@@ -40,6 +43,9 @@ public class ScrollEntities {
 		return position;
 	}
 	
+	public Rectangle getBounds(){
+		return bounds;
+	}
 	
 	
 	public boolean isOutOfBounds(){
@@ -76,6 +82,10 @@ public class ScrollEntities {
 	
 	public void setyPos(float ySet){
 		this.yPos = ySet;
+	}
+	
+	public void setBounds(Rectangle bounds){
+		this.bounds = bounds;
 	}
 
 }

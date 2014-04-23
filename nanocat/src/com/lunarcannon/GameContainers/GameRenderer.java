@@ -63,10 +63,16 @@ public class GameRenderer {
 		while(platformIterator.hasNext()){
 			platform = platformIterator.next();
 			shape1.rect(platform.getxPos(), platform.getyPos(), platform.getWidth(), platform.getHeight());
+			shape1.setColor(Color.GREEN);
+			shape1.rect(platform.getBounds().x, platform.getBounds().y, platform.getBounds().width,platform.getBounds().height);
 			//System.out.println(platform.getxPos() + " + " + platform.getyPos() + " + " + platform.getWidth());
 		}
 		//Draw Cat
 		shape1.rect(cat.getPosition().x, cat.getPosition().y, 200,100);
+		
+		shape1.setColor(Color.BLUE);
+		shape1.rect(cat.getBounds().x, cat.getBounds().y, cat.getBounds().width, cat.getBounds().height);
+		
 			
 		shape1.end();
 	}

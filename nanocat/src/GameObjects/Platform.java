@@ -15,9 +15,9 @@ public class Platform extends ScrollEntities{
 				
 	}
 	
-	public void update(float delta){
+	//public void update(float delta){
 		
-	}
+	//}
 	
 	@Override
 	public void generate(float newPosX){
