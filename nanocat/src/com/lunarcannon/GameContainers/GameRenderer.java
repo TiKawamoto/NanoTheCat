@@ -2,6 +2,7 @@ package com.lunarcannon.GameContainers;
 
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import GameObjects.Cat;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.utils.Array;
 
 public class GameRenderer {
 	private GameWorld world;
@@ -23,7 +23,7 @@ public class GameRenderer {
 	
 	private Platform platform;
 	private ScrollingHandler scrollHandler;
-	private Array<Platform> platformScroller = new Array<Platform>();
+	private ArrayList<Platform> platformScroller = new ArrayList<Platform>();
 	private Iterator<Platform> platformIterator;
 	private Cat cat;
 	
@@ -49,7 +49,7 @@ public class GameRenderer {
 	}
 	
 	public void render(float delta){
-		platformIterator = platformScroller.iterator();
+		
 		cat = world.getCat();
 		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -59,19 +59,21 @@ public class GameRenderer {
 		shape1.begin(ShapeType.Rectangle);
 		shape1.setColor(Color.RED);
 		
-		//Draw Platform
-		while(platformIterator.hasNext()){
-			platform = platformIterator.next();
-			shape1.rect(platform.getxPos(), platform.getyPos(), platform.getWidth(), platform.getHeight());
+		
+		for(int i = 0; i < platformScroller.size(); i++){
+			
+					
+			platform = platformScroller.get(i);
 			shape1.setColor(Color.GREEN);
-			shape1.rect(platform.getBounds().x, platform.getBounds().y, platform.getBounds().width,platform.getBounds().height);
-			//System.out.println(platform.getxPos() + " + " + platform.getyPos() + " + " + platform.getWidth());
+			shape1.rect(platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), platformScroller.get(i).getWidth(), platformScroller.get(i).getHeight());
+			
 		}
 		//Draw Cat
-		shape1.rect(cat.getPosition().x, cat.getPosition().y, 200,100);
+		shape1.setColor(Color.RED);
+		shape1.rect(cat.getPosition().x, cat.getPosition().y, cat.getWidth(),cat.getHeight());
 		
-		shape1.setColor(Color.BLUE);
-		shape1.rect(cat.getBounds().x, cat.getBounds().y, cat.getBounds().width, cat.getBounds().height);
+		//shape1.setColor(Color.BLUE);
+		//shape1.rect(cat.getBounds().x, cat.getBounds().y, cat.getBounds().width, cat.getBounds().height);
 		
 			
 		shape1.end();

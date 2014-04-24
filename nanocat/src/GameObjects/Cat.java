@@ -23,10 +23,12 @@ public class Cat {
 	private int height;
 
 	public Cat(float x, float y) {
+		xPos = x;
+		yPos = y;
 		velocity = new Vector2(0, ySpeed);
 		position = new Vector2(xPos, yPos);
-		width = 200;
-		height = 100;
+		width = 150;
+		height = 75;
 		bounds = new Rectangle(position.x, position.y, width, height);
 	}
 
@@ -41,16 +43,18 @@ public class Cat {
 		// Detect Regular Jump + Hold -------------------------
 		if (Gdx.input.isTouched()) {
 			if (jump) {
-				if (ySpeed > 750) {
+				if (ySpeed != 0) {
 					jump = false;
 				} else if(!dblJump && !jumped) {
-					ySpeed = ySpeed + 100;
+					ySpeed = ySpeed + 750;
+					jumped = true;
+					
 					
 				}
 			}
 		}
 		// Detect Double Jump -------------------------
-		if (dblJump && !dblJumped) {
+		if (jumped && dblJump && !dblJumped) {
 			ySpeed = 500;
 			yGrav = -1;
 			dblJumped = true;
@@ -60,16 +64,19 @@ public class Cat {
 		}
 
 		// Detect if on ground -------------------------
-		if (ySpeed == 0) {
+		if (ySpeed == 0 && !jump) {
 			//yPos = 100;
 			//position.y = yPos;
 			//ySpeed = 0;
+			dblJump = false;
 			dblJumped = false;
 			yGrav = -1;
+			ySpeed += yGrav;
+			yPos += ySpeed;
 
 		} else { // Not on Ground -------------------------
 
-			if (ySpeed == 0) { // if at apex in mid air
+			if (ySpeed == 0 && jump) { // if at apex in mid air
 				yGrav = -1;
 			} else { // if jumping
 				yGrav -= 2;
@@ -78,11 +85,10 @@ public class Cat {
 			ySpeed += yGrav;
 			yPos += ySpeed;
 			// if on ground -------------------------
-			if (ySpeed <= 0) {
-				System.out.println(ySpeed);
+			/*if (ySpeed <= 0) {
 				jumped = false;
 				dblJump = false;
-			}
+			}*/
 					
 		}// END Gravity
 		
@@ -94,10 +100,9 @@ public class Cat {
 			yGrav = -100;
 		}
 		
-		System.out.println(ySpeed + " + "+yGrav);
 		velocity.set(0, ySpeed);
 		position.add(velocity.cpy().mul(delta));
-		bounds.set(this.position.x, this.position.y, this.width, this.height);
+		bounds.set((float)this.position.x, (float)this.position.y,(float)this.width, (float)this.height);
 		setBounds();
 
 	}//END JUMPLOGIC
@@ -132,10 +137,21 @@ public class Cat {
 		this.bounds = bounds;
 		
 	}
+	public void landed(){
+		this.ySpeed = 0;
+		this.jump = false;
+		this.jumped = false;
+		this.dblJump = false;
+		this.dblJumped = false;
+	}
 	public void setY(float setY){
 		this.position.y = setY;
 		bounds.set(this.position.x, this.position.y, this.width, this.height);
 		setBounds();
 	}
-
+	public void setX(float setX){
+		this.position.x = setX;
+		bounds.set(this.position.x, this.position.y, this.width, this.height);
+		setBounds();
+	}
 }

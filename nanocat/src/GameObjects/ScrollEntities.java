@@ -28,7 +28,6 @@ public class ScrollEntities {
 	
 	public void update(float delta){
 		position.add(velocity.cpy().mul(delta));
-		
 		if(position.x + width < 0){
 			outOfBounds = true;
 		}
@@ -57,11 +56,11 @@ public class ScrollEntities {
 	}
 
 	public float getxPos() {
-		return xPos;
+		return position.x;
 	}
 
 	public float getyPos() {
-		return yPos;
+		return position.y;
 	}
 
 	public Vector2 getVelocity() {
@@ -75,6 +74,10 @@ public class ScrollEntities {
 	public int getHeight() {
 		return height;
 	}	
+	
+	public void setVelocity(Vector2 velocity){
+		this.velocity = velocity;
+	}
 	
 	public void setxPos(float xSet){
 		this.xPos = xSet;
