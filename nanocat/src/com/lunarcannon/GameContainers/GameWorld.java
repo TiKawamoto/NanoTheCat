@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class GameWorld {
 
-	// private NanoCat game;
 
 	private Cat cat;
 	private ScrollingHandler scrollHandler;
@@ -25,7 +24,7 @@ public class GameWorld {
 	public GameWorld() {
 		// this.game = game;
 
-		cat = new Cat(200, 100);
+		cat = new Cat(200, 102);
 		scrollHandler = new ScrollingHandler();
 		this.platform = scrollHandler.getPlatform();
 
@@ -35,47 +34,35 @@ public class GameWorld {
 		cat.update(delta);
 		scrollHandler.update(delta);
 		
+		//BEGIN PLATFORM COLLISION CHECK
 		for (int i = 0; i < platform.size(); i++) {
 			
 			p = platform.get(i);
 			catBounds = new Rectangle(cat.getPosition().x, cat.getPosition().y, cat.getWidth(), cat.getHeight());
-			platBounds = new Rectangle(p.getxPos(), p.getyPos(), p.getWidth(), p.getHeight());
-			
+			platBounds = new Rectangle(p.getxPos(), p.getyPos(), p.getWidth(), p.getHeight());			
 					
-			//CHECK IF ON TOP OF PLATFORM
-			
-			if((catBounds.width + catBounds.x > platBounds.x) && (catBounds.x < platBounds.x + platBounds.width) && (catBounds.y <= platBounds.height)){
+			//CHECK IF ON TOP OF PLATFORM			
+			if((catBounds.width + catBounds.x > platBounds.x) && (catBounds.x < platBounds.x + platBounds.width - 10f) && (catBounds.y <= platBounds.height)){
 				
-				if (Intersector.overlapRectangles(catBounds, platBounds)) {
-					System.out.println("top collision");
 					cat.setY((float) (platBounds.height)); 
 					cat.landed();
-				}
 			}
-			//System.out.println("CATBOUNDS Y: " + catBounds.y + " AND PLATHEIGHT: " + platBounds.height);
-			System.out.println("CATBOUNDS X: " + (catBounds.width + catBounds.x) + " AND platX: " + platBounds.x);
-			if((catBounds.width + catBounds.x <= platBounds.x) && (catBounds.width + catBounds.x > platBounds.x - 5) && (catBounds.y < platBounds.height)){	//SIDE COLLISIONS
+			
+			//CHECK FOR SIDE COLLISION			
+			if((catBounds.width + catBounds.x <= platBounds.x) && (catBounds.width + catBounds.x > platBounds.x -12f) && (catBounds.y < platBounds.height)){	//SIDE COLLISIONS				
 					
-					//if (Intersector.overlapRectangles(catBounds, platBounds)) {
-						scrollHandler.stop();
-						System.out.println("SIDE COLLISION");
-						//cat.setX((float)(p.getxPos() - cat.getWidth())); 
-						
-					//}
-				}
-			
-			
-			
-//			if (platBounds.x < catBounds.x + catBounds.width && platBounds.x + platBounds.width > catBounds.x && (catBounds.y + 1 >= platBounds.height)) {
-//				if (Intersector.overlapRectangles(catBounds, platBounds)) {
-//					//System.out.println("COLLIDE!!" + "  " + platBounds	+ "  " + catBounds);
-//					cat.setY((float) (p.getyPos() + cat.getHeight())); //
-//					cat.landed();
-//				}
-//			}
-		}
+					scrollHandler.stop();
+					cat.collide();
+					cat.setX(platBounds.x - cat.getWidth());					
+					
+					if(catBounds.y < -300){
+						cat.stop();						
+					}
+
+			}//END SIDE COLLISION LOGIC		
+		}//END PLATFORM ITERATION FOR LOOP
 		
-	}
+	}//END UPDATE
 
 	public Cat getCat() {
 		return cat;

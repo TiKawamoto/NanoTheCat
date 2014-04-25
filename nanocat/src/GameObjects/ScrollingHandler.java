@@ -17,7 +17,11 @@ public class ScrollingHandler {
 	private int platTotalWidth = 0;
 	private int platCheckWidth = 0;
 	private int gapWidth = 0;
+	private int platType = 0;
+	private int width = 0;
+	private int height = 0;
 	private Random gapRand;
+	private Random platRand;
 	private Rectangle bounds;
 	private Vector2 velocity;
 	private boolean stopped = false;
@@ -25,9 +29,11 @@ public class ScrollingHandler {
 	public ScrollingHandler() {
 		xDefPos = 0;
 		yDefPos = 0;
-		xSpeed = -350;
+		xSpeed = -570;
 		velocity = new Vector2(0,0);
 		bounds = new Rectangle(0, 0, 0, 0);
+		gapRand = new Random();
+		platRand = new Random();
 
 	}
 
@@ -36,7 +42,7 @@ public class ScrollingHandler {
 		// STARTING PLATFORM
 		
 		if(platform.size() == 0){
-			Platform p = new Platform(xDefPos, yDefPos, xSpeed, 800, 100, 1);
+			Platform p = new Platform(xDefPos, yDefPos, xSpeed, 800, 100, 0);
 			platform.add(p);
 			bounds.set(platform.get(0).getxPos(), platform.get(0).getyPos(), platform.get(0).getWidth(), platform.get(0).getHeight());
 			platform.get(0).setBounds(bounds);
@@ -46,6 +52,12 @@ public class ScrollingHandler {
 		if(!stopped){	
 			
 			for (int i = 0; i < platform.size(); i++) {
+				
+				//Generate Random Gap Width
+				gapWidth = (gapRand.nextInt(320 - 150) + 150);
+				
+				//Generate Random Platform Type
+				platType = (platRand.nextInt(6-1) + 1);
 					
 				//Find edge of platform
 				platCheckWidth = (int) platform.get(i).getxPos() + platform.get(i).getWidth();
@@ -71,12 +83,13 @@ public class ScrollingHandler {
 				}
 				
 				//Checks if last platform is fully on screen and then adds new one
-				if (platTotalWidth != 0 && platTotalWidth < (int) Gdx.graphics.getWidth()) {			
-					Platform p = new Platform(platLeftEdgeX + 300, 0, xSpeed, 800, 100, 1);
+				if (platTotalWidth != 0 && platTotalWidth < (int) Gdx.graphics.getWidth()) {
+				
+					//pTemp.setPlat(platType);
+					platLogic(platType);
+					Platform p = new Platform(platLeftEdgeX + gapWidth, 0, xSpeed, width, height, platType);
 					
-					platform.add(p);				
-					//platform.add(new Platform(platLeftEdgeX + 150, 0, xSpeed, 800, 100, 1));
-					
+					platform.add(p);									
 					platTotalWidth = 0;
 					
 				}
@@ -87,7 +100,6 @@ public class ScrollingHandler {
 
 	public ArrayList<Platform> getPlatform() {
 		return platform;
-
 	}
 
 	public void remove() {
@@ -95,8 +107,45 @@ public class ScrollingHandler {
 	}
 	
 	public void stop(){
-		System.out.println("stopped");
 		stopped = true;
+		
+	}
+
+	public void platLogic(int platType){
+		switch(platType){
+		case(0):
+			this.height = 100;
+			this.width = 800;
+			break;
+		case(1):
+			this.height = 220;
+			this.width = 150;
+			break;
+		case(2):
+			this.height = 120;
+			this.width = 80;
+			break;
+		case(3):
+			this.height = 120;
+			this.width = 200;
+			break;
+		case(4):
+			this.height = 130;
+			this.width = 120;
+			break;
+		case(5):
+			this.height = 150;
+			this.width = 150;
+			break;
+		case(6):
+			this.height = 120;
+			this.width = 300;
+			break;
+		default:
+			this.height = 100;
+			this.width = 250;
+			break;
+		}
 		
 	}
 }

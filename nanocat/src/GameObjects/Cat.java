@@ -19,22 +19,27 @@ public class Cat {
 	private boolean jumped = false;
 	private boolean dblJump = false;
 	private boolean dblJumped = false;
+	private boolean gameReset = false;
 	private int width;
 	private int height;
+	private int touchTime = 0;
 
 	public Cat(float x, float y) {
 		xPos = x;
 		yPos = y;
 		velocity = new Vector2(0, ySpeed);
 		position = new Vector2(xPos, yPos);
-		width = 150;
-		height = 75;
+		width = 130;
+		height = 70;
 		bounds = new Rectangle(position.x, position.y, width, height);
 	}
 
 	public void update(float delta) {
 
-		jumpLogic(delta);
+		if(!gameReset){
+			jumpLogic(delta);	
+		}
+		
 	
 
 	}
@@ -42,21 +47,38 @@ public class Cat {
 	public void jumpLogic(float delta) {
 		// Detect Regular Jump + Hold -------------------------
 		if (Gdx.input.isTouched()) {
+			touchTime++;
 			if (jump) {
 				if (ySpeed != 0) {
 					jump = false;
 				} else if(!dblJump && !jumped) {
-					ySpeed = ySpeed + 750;
-					jumped = true;
-					
-					
+					ySpeed = ySpeed + 300;
+					//jumped = true;
+					//System.out.println("TOUCHED");										
 				}
 			}
+			if(touchTime > 2){
+				if(!dblJump && !jumped && ySpeed < 450) {
+					ySpeed = ySpeed + 200;
+				} else if(!dblJump && !jumped && ySpeed < 550) {
+					ySpeed = ySpeed + 120;										
+				} else if(!dblJump && !jumped && ySpeed < 750) {
+						ySpeed = ySpeed + 50;										
+				}
+			}
+			if(ySpeed > 750){
+				jumped = true;
+			}
+		}
+		
+		if(!Gdx.input.isTouched()){
+			jumped = true;
+			touchTime = 0;
 		}
 		// Detect Double Jump -------------------------
 		if (jumped && dblJump && !dblJumped) {
 			ySpeed = 500;
-			yGrav = -1;
+			yGrav = -1f;
 			dblJumped = true;
 			jumped = true;
 		} else {
@@ -70,16 +92,16 @@ public class Cat {
 			//ySpeed = 0;
 			dblJump = false;
 			dblJumped = false;
-			yGrav = -1;
+			yGrav = -1f;
 			ySpeed += yGrav;
 			yPos += ySpeed;
 
 		} else { // Not on Ground -------------------------
 
 			if (ySpeed == 0 && jump) { // if at apex in mid air
-				yGrav = -1;
+				yGrav =  -1f;
 			} else { // if jumping
-				yGrav -= 2;
+				yGrav -= 2.5f;
 			}
 			// Scale gravity acceleration
 			ySpeed += yGrav;
@@ -114,14 +136,14 @@ public class Cat {
 
 	public void jump() {
 		if (!jump && ySpeed != 0 && !dblJump) {
-			System.out.println("DBLJUMP");
+	
 			dblJump = true;
 		}
 		jump = true;
 		System.out.println("JUMP");
 	}
 	public void noJump(){
-		jump = false;
+	//	jump = false;
 		
 	}
 	public int getWidth(){
@@ -132,6 +154,13 @@ public class Cat {
 	}
 	public Rectangle getBounds(){
 		return bounds;
+	}
+	public void collide(){
+		this.width = 85;
+		
+	}
+	public void stop(){		
+		gameReset = true;
 	}
 	public void setBounds(){
 		this.bounds = bounds;
