@@ -1,4 +1,4 @@
-package GameObjects;
+package com.lunarcannon.GameObjects;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -80,11 +80,11 @@ public class ScrollEntities {
 	}
 	
 	public void setxPos(float xSet){
-		this.xPos = xSet;
+		position.x = xSet;
 	}
 	
 	public void setyPos(float ySet){
-		this.yPos = ySet;
+		position.y = ySet;
 	}
 	
 	public void setBounds(Rectangle bounds){

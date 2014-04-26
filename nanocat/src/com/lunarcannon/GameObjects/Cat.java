@@ -1,4 +1,4 @@
-package GameObjects;
+package com.lunarcannon.GameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
@@ -20,6 +20,7 @@ public class Cat {
 	private boolean dblJump = false;
 	private boolean dblJumped = false;
 	private boolean gameReset = false;
+	private boolean dblJumpTrigger = false;
 	private int width;
 	private int height;
 	private int touchTime = 0;
@@ -48,10 +49,11 @@ public class Cat {
 		// Detect Regular Jump + Hold -------------------------
 		if (Gdx.input.isTouched()) {
 			touchTime++;
-			if (jump) {
+			if (jump) {				
 				if (ySpeed != 0) {
 					jump = false;
 				} else if(!dblJump && !jumped) {
+					
 					ySpeed = ySpeed + 300;
 					//jumped = true;
 					//System.out.println("TOUCHED");										
@@ -77,8 +79,10 @@ public class Cat {
 		}
 		// Detect Double Jump -------------------------
 		if (jumped && dblJump && !dblJumped) {
+			
 			ySpeed = 500;
 			yGrav = -1f;
+			dblJumpTrigger = true;
 			dblJumped = true;
 			jumped = true;
 		} else {
@@ -146,12 +150,28 @@ public class Cat {
 	//	jump = false;
 		
 	}
+	
+	public void reset(){
+		this.yGrav = -1;
+		this.ySpeed = 0;
+		this.width = 130;
+		this.height = 70;
+		position.set(200,102);
+		landed();
+		gameReset = false;
+	}
+	
+	public boolean getDblJumpTrigger(){
+		return dblJumpTrigger;
+	}
+	
 	public int getWidth(){
 		return width;
 	}
 	public int getHeight(){
 		return height;
 	}
+
 	public Rectangle getBounds(){
 		return bounds;
 	}
@@ -172,6 +192,8 @@ public class Cat {
 		this.jumped = false;
 		this.dblJump = false;
 		this.dblJumped = false;
+		this.dblJumpTrigger = false;
+		
 	}
 	public void setY(float setY){
 		this.position.y = setY;

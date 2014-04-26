@@ -2,30 +2,41 @@ package com.lunarcannon.GameContainers;
 
 
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import GameObjects.Cat;
-import GameObjects.Platform;
-import GameObjects.ScrollingHandler;
+import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.lunarcannon.GameObjects.Background;
+import com.lunarcannon.GameObjects.Cat;
+import com.lunarcannon.GameObjects.Platform;
+import com.lunarcannon.GameObjects.ScrollingHandler;
 
 public class GameRenderer {
 	private GameWorld world;
 	private OrthographicCamera cam;
 	private ShapeRenderer shape1;
+	private SpriteBatch spriteBatch;
+	private float elapsedTime;
+	private float frameNum;
+	private TextBounds totalDistWidth;
 	
 	private Platform platform;
 	private ScrollingHandler scrollHandler;
+	private Background bgScroller1, bgScroller2;
 	private ArrayList<Platform> platformScroller = new ArrayList<Platform>();
 	private Iterator<Platform> platformIterator;
 	private Cat cat;
+	
+	private NumberFormat f = NumberFormat.getInstance(Locale.ENGLISH);
 	
 	private float width, height, aspectRatio;
 
@@ -34,6 +45,8 @@ public class GameRenderer {
 		this.world = world;
 		
 		platformScroller = scrollHandler.getPlatform();
+		bgScroller1 = scrollHandler.getBg1();
+		bgScroller2 = scrollHandler.getBg2();
 				
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
@@ -41,10 +54,16 @@ public class GameRenderer {
 		
 		
 		cam = new OrthographicCamera();
-		cam.setToOrtho(false, width, width * aspectRatio);
+		cam.setToOrtho(false, 960, 960 * aspectRatio);
 		cam.update();
 		
 		shape1 = new ShapeRenderer();
+		shape1.setProjectionMatrix(cam.combined);
+		spriteBatch = new SpriteBatch();
+		spriteBatch.setProjectionMatrix(cam.combined);
+		
+		f.setMaximumFractionDigits(2);
+		f.setMinimumFractionDigits(2);
 		
 	}
 	
@@ -55,32 +74,55 @@ public class GameRenderer {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		shape1.setProjectionMatrix(cam.combined);
-		shape1.begin(ShapeType.Rectangle);
-		shape1.setColor(Color.RED);
+        //DRAW BACKGROUND        
+        spriteBatch.begin();
+        spriteBatch.draw(AssetLibrary.bg, bgScroller1.getxPos(), bgScroller1.getyPos(), 1920, 540);
+        spriteBatch.draw(AssetLibrary.bg, bgScroller2.getxPos(), bgScroller2.getyPos(), 1920, 540);
+        spriteBatch.end();
 		
 		
+		
+		shape1.begin(ShapeType.FilledRectangle);		
+		//Draw Platforms
 		for(int i = 0; i < platformScroller.size(); i++){
-			
 					
 			platform = platformScroller.get(i);
-			shape1.setColor(Color.GREEN);
-			shape1.rect(platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), platformScroller.get(i).getWidth(), platformScroller.get(i).getHeight());
+			shape1.setColor(Color.ORANGE);
+			shape1.filledRect(platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), platformScroller.get(i).getWidth(), platformScroller.get(i).getHeight());
 			
 		}
-		//Draw Cat
-		shape1.setColor(Color.RED);
-		shape1.rect(cat.getPosition().x, cat.getPosition().y, cat.getWidth(),cat.getHeight());
-		
-		//shape1.setColor(Color.BLUE);
-		//shape1.rect(cat.getBounds().x, cat.getBounds().y, cat.getBounds().width, cat.getBounds().height);
-		
-			
 		shape1.end();
+		
+		//DRAW CAT
+		spriteBatch.begin();
+		spriteBatch.enableBlending();
+		elapsedTime += Gdx.graphics.getDeltaTime();
+		if(!world.getMidAirTrigger()){
+			spriteBatch.draw(AssetLibrary.catRunAnim.getKeyFrame(elapsedTime, true), cat.getPosition().x - 60f, cat.getPosition().y, 200, 80);
+		} else if (world.getMidAirTrigger()){
+
+				spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(elapsedTime, false), cat.getPosition().x - 60f, cat.getPosition().y, 200, 80);
+		} else if (cat.getDblJumpTrigger()){
+			spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(.9f, false), cat.getPosition().x - 60f, cat.getPosition().y, 200, 80);
+		}
+		
+		//Score Text
+		AssetLibrary.robotoLt.draw(spriteBatch, "TOTAL DISTANCE", 655, 520);		
+		totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
+		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, 490);
+		
+		spriteBatch.end();
+		
+//		shape1.begin(ShapeType.Rectangle);
+//		shape1.setColor(Color.RED);
+//		shape1.rect(cat.getPosition().x, cat.getPosition().y, 80, 80);
+//		shape1.end();
+		
 	}
 	
 	public void dispose(){
 		shape1.dispose();
+		spriteBatch.dispose();
 	}
 
 }

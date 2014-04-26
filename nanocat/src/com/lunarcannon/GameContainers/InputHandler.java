@@ -1,18 +1,19 @@
 package com.lunarcannon.GameContainers;
 
-import GameObjects.Cat;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.lunarcannon.GameObjects.Cat;
 
 public class InputHandler implements InputProcessor {
 	private GameWorld world;
 	private Cat cat;
+	private boolean gameReset = false;
 
 	public InputHandler(GameWorld world) {
 		this.world = world;
 		cat = world.getCat();
+		gameReset = world.gameOver();
 
 	}
 
@@ -43,8 +44,9 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-		cat.jump();
+		
+			// CAT JUMP
+			cat.jump();			
 
 		return true;
 	}
@@ -52,6 +54,10 @@ public class InputHandler implements InputProcessor {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		cat.noJump();
+		// RESET AFTER FALLING
+		if (world.gameOver()) {
+			world.gameReset();
+		}
 
 		return true;
 	}
