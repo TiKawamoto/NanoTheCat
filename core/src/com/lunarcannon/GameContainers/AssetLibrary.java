@@ -12,6 +12,7 @@ public class AssetLibrary {
 	public static Texture bgtexture;
 	public static Texture texture;
 	public static TextureRegion bg;
+	public static Texture fontFilter;
 	
 	public static TextureRegion catRun1, catRun2, catRun3, catRun4, catRun5, catRun6, catRun7;
 	
@@ -45,8 +46,11 @@ public class AssetLibrary {
 		catJumpAnim = new Animation(.07f, catJump);
 		catJumpAnim.setPlayMode(Animation.PlayMode.LOOP);
 		
-		robotoLt = new BitmapFont(Gdx.files.internal("data/roboto_lt.fnt"), false);
-		robotoLt.setScale(.9f, .9f);
+		fontFilter = new Texture(Gdx.files.internal("data/roboto_lt.png"));
+		fontFilter.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		robotoLt = new BitmapFont(Gdx.files.internal("data/roboto_lt.fnt"), new TextureRegion(fontFilter), false);
+		robotoLt.setScale(.5f, .5f);
+		
 		
 		
 		}

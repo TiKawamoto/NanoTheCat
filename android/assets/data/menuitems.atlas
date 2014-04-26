@@ -1,0 +1,68 @@
+
+menuitems.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+menubg_day
+  rotate: false
+  xy: 1, 1453
+  size: 960, 540
+  orig: 960, 540
+  offset: 0, 0
+  index: -1
+menubg_evening
+  rotate: false
+  xy: 1, 911
+  size: 960, 540
+  orig: 960, 540
+  offset: 0, 0
+  index: -1
+menubg_night
+  rotate: false
+  xy: 1, 369
+  size: 960, 540
+  orig: 960, 540
+  offset: 0, 0
+  index: -1
+logo
+  rotate: false
+  xy: 1, 192
+  size: 500, 175
+  orig: 500, 175
+  offset: 0, 0
+  index: -1
+logo_i
+  rotate: false
+  xy: 1, 15
+  size: 500, 175
+  orig: 500, 175
+  offset: 0, 0
+  index: -1
+button_down
+  rotate: false
+  xy: 503, 277
+  size: 350, 90
+  orig: 350, 90
+  offset: 0, 0
+  index: -1
+button_down_i
+  rotate: false
+  xy: 503, 185
+  size: 350, 90
+  orig: 350, 90
+  offset: 0, 0
+  index: -1
+button_up
+  rotate: false
+  xy: 503, 93
+  size: 350, 90
+  orig: 350, 90
+  offset: 0, 0
+  index: -1
+button_up_i
+  rotate: false
+  xy: 503, 1
+  size: 350, 90
+  orig: 350, 90
+  offset: 0, 0
+  index: -1

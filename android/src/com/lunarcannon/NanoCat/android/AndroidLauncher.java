@@ -13,6 +13,7 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new NanoCat(), config);
 		
+		config.useImmersiveMode = true;
 		config.useGLSurfaceView20API18 = false;
 	}
 }

@@ -106,9 +106,9 @@ public class GameRenderer {
 		}
 		
 		//Score Text
-		AssetLibrary.robotoLt.draw(spriteBatch, "TOTAL DISTANCE", 655, 520);		
+		AssetLibrary.robotoLt.draw(spriteBatch, "TOTAL DISTANCE", 607, 520);		
 		totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
-		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, 490);
+		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, 480);
 		
 		spriteBatch.end();
 		

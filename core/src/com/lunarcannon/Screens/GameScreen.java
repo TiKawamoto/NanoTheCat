@@ -5,13 +5,14 @@ import com.badlogic.gdx.Screen;
 import com.lunarcannon.GameContainers.GameRenderer;
 import com.lunarcannon.GameContainers.GameWorld;
 import com.lunarcannon.GameContainers.InputHandler;
+import com.lunarcannon.NanoCat.NanoCat;
 
 public class GameScreen implements Screen{
 	
 	private GameWorld world;
 	private GameRenderer renderer;
 		
-    public GameScreen() {
+    public GameScreen(NanoCat game) {
         world = new GameWorld();
         renderer = new GameRenderer(world);
         
