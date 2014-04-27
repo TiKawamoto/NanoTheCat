@@ -11,9 +11,10 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+
+		config.hideStatusBar = true;
+		config.useImmersiveMode = true;
 		initialize(new NanoCat(), config);
 		
-		config.useImmersiveMode = true;
-		config.useGLSurfaceView20API18 = false;
 	}
 }

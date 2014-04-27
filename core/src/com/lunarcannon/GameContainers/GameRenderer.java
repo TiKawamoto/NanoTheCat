@@ -31,7 +31,7 @@ public class GameRenderer {
 	
 	private Platform platform;
 	private ScrollingHandler scrollHandler;
-	private Background bgScroller1, bgScroller2;
+	private Background bgScroller1, bgScroller2, bgScrollerBack1, bgScrollerBack2;
 	private ArrayList<Platform> platformScroller = new ArrayList<Platform>();
 	private Iterator<Platform> platformIterator;
 	private Cat cat;
@@ -47,6 +47,8 @@ public class GameRenderer {
 		platformScroller = scrollHandler.getPlatform();
 		bgScroller1 = scrollHandler.getBg1();
 		bgScroller2 = scrollHandler.getBg2();
+		bgScrollerBack1 = scrollHandler.getBgBack1();
+		bgScrollerBack2 = scrollHandler.getBgBack2();
 				
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
@@ -76,6 +78,9 @@ public class GameRenderer {
 		
         //DRAW BACKGROUND        
         spriteBatch.begin();
+        spriteBatch.enableBlending();
+        spriteBatch.draw(AssetLibrary.bgBack, bgScrollerBack1.getxPos(), bgScrollerBack1.getyPos(), bgScrollerBack1.getWidth(), bgScrollerBack1.getHeight());
+        spriteBatch.draw(AssetLibrary.bgBack, bgScrollerBack2.getxPos(), bgScrollerBack2.getyPos(), bgScrollerBack2.getWidth(), bgScrollerBack2.getHeight());
         spriteBatch.draw(AssetLibrary.bg, bgScroller1.getxPos(), bgScroller1.getyPos(), bgScroller1.getWidth(), bgScroller1.getHeight());
         spriteBatch.draw(AssetLibrary.bg, bgScroller2.getxPos(), bgScroller2.getyPos(), bgScroller2.getWidth(), bgScroller2.getHeight());
         spriteBatch.end();

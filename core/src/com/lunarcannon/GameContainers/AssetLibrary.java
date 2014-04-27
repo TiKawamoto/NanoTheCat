@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AssetLibrary {
 
-	public static Texture bgtexture;
+	public static Texture bgTexture, bgBackTexture;
 	public static Texture texture;
-	public static TextureRegion bg;
+	public static TextureRegion bg, bgBack;
 	public static Texture fontFilter;
 	
 	public static TextureRegion catRun1, catRun2, catRun3, catRun4, catRun5, catRun6, catRun7;
@@ -22,10 +22,14 @@ public class AssetLibrary {
 	public static BitmapFont robotoLt;
 	
 	public static void load(){
-		bgtexture = new Texture(Gdx.files.internal("data/bg_1.png"));
-		bgtexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		bgTexture = new Texture(Gdx.files.internal("data/bg_1.png"));
+		bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		bg = new TextureRegion(bgtexture, 0, 0, 1024, 289);
+		bgBackTexture = new Texture(Gdx.files.internal("data/bg_back.png"));
+		bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		bg = new TextureRegion(bgTexture, 0, 0, 2048, 289);
+		bgBack = new TextureRegion(bgBackTexture, 0, 0, 2048, 289);
 		
 		texture = new Texture(Gdx.files.internal("data/nano_region.png"));
 		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -61,7 +65,7 @@ public class AssetLibrary {
 	
 	public static void dispose(){
 		texture.dispose();
-		bgtexture.dispose();
+		bgTexture.dispose();
 		robotoLt.dispose();
 	}
 

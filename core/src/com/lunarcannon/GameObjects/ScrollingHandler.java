@@ -13,7 +13,7 @@ public class ScrollingHandler {
 	private Platform p, pTemp;
 	private ArrayList<Platform> platform = new ArrayList<Platform>();
 	private Iterator<Platform> pIter;
-	private float xDefPos, yDefPos, xSpeed, bgXSpeed, newX, platLeftEdgeX, newXBg, totalDist, totalDistTemp;
+	private float xDefPos, yDefPos, xSpeed, bgXSpeed, bgBackXSpeed, newX, platLeftEdgeX, newXBg, totalDist, totalDistTemp;
 	private int platTotalWidth = 0;
 	private int platCheckWidth = 0;
 	private int gapWidth = 0;
@@ -23,9 +23,9 @@ public class ScrollingHandler {
 	private Random gapRand;
 	private Random platRand;
 	private Rectangle bounds;
-	private Vector2 velocity, bgVelocity;
+	private Vector2 velocity, bgVelocity, bgBackVelocity;
 	private float bgWidth, bgHeight, aspectRatio;
-	private Background bg1, bg2;
+	private Background bg1, bg2, bgBack1, bgBack2;
 	
 	private boolean stopped = false;
 
@@ -35,6 +35,7 @@ public class ScrollingHandler {
 		yDefPos = 0;
 		xSpeed = -570;
 		bgVelocity = new Vector2(0,0);
+		bgBackVelocity = new Vector2(0,0);
 		velocity = new Vector2(0,0);
 		bounds = new Rectangle(0, 0, 0, 0);
 		gapRand = new Random();
@@ -44,8 +45,10 @@ public class ScrollingHandler {
 		bgHeight = (Gdx.graphics.getHeight());
 		aspectRatio = bgHeight / bgWidth;
 		
-		bg1 = new Background(0, 0, 0, (int)(578 / aspectRatio) * 2, (int)(578), 0);
-		bg2 = new Background(960, 0, 0, (int)(578 / aspectRatio) * 2, (int)(578), 0);
+		bg1 = new Background(0, 0, 0, (int)(578 / aspectRatio) * 4, (int)(578), 0);
+		bg2 = new Background(960, 0, 0, (int)(578 / aspectRatio) * 4, (int)(578), 0);
+		bgBack1 = new Background(0, 0, 0, (int)(578 / aspectRatio) * 4, (int)(578), 0);
+		bgBack2 = new Background(960, 0, 0, (int)(578 / aspectRatio) * 4, (int)(578), 0);
 	}
 
 	public void update(float delta) {		
@@ -133,13 +136,32 @@ public class ScrollingHandler {
 			bg1.setxPos(newXBg);
 		}
 		
-		bgXSpeed = xSpeed + 400f;
+		bgXSpeed = xSpeed + 300f;
 		bgVelocity.set(bgXSpeed, 0);
 				
 		bg1.setVelocity(bgVelocity);
 		bg2.setVelocity(bgVelocity);
 		bg1.update(delta);
-		bg2.update(delta);		
+		bg2.update(delta);
+		
+		//Background Background
+		if((int)bgBack1.getxPos() + bgBack1.getWidth() <= bgBack1.getWidth()){
+			newXBg = (float)bgBack1.getxPos() + bgBack1.getWidth();
+			bgBack2.setxPos(newXBg);
+		} 
+		
+		if ((int)bgBack2.getxPos() + bgBack2.getWidth() <= bgBack2.getWidth()){
+			newXBg = (float)bgBack2.getxPos() + bgBack2.getWidth();
+			bgBack1.setxPos(newXBg);
+		}
+		
+		bgBackXSpeed = xSpeed + 500f;
+		bgBackVelocity.set(bgBackXSpeed, 0);
+				
+		bgBack1.setVelocity(bgBackVelocity);
+		bgBack2.setVelocity(bgBackVelocity);
+		bgBack1.update(delta);
+		bgBack2.update(delta);		
 	}
 
 	public ArrayList<Platform> getPlatform() {
@@ -151,6 +173,12 @@ public class ScrollingHandler {
 	}
 	public Background getBg2(){
 		return bg2;
+	}
+	public Background getBgBack1(){
+		return bgBack1;
+	}
+	public Background getBgBack2(){
+		return bgBack2;
 	}
 	
 	public float getTotalDist(){
@@ -210,6 +238,7 @@ public class ScrollingHandler {
 	
 	public void reset(){
 		bg1.setxPos(0);
+		bgBack1.setxPos(0);
 		totalDist = 0;
 		platform.clear();
 		stopped = false;
