@@ -81,8 +81,8 @@ public class GameRenderer {
         spriteBatch.enableBlending();
         spriteBatch.draw(AssetLibrary.bgBack, bgScrollerBack1.getxPos(), bgScrollerBack1.getyPos(), bgScrollerBack1.getWidth(), bgScrollerBack1.getHeight());
         spriteBatch.draw(AssetLibrary.bgBack, bgScrollerBack2.getxPos(), bgScrollerBack2.getyPos(), bgScrollerBack2.getWidth(), bgScrollerBack2.getHeight());
-        spriteBatch.draw(AssetLibrary.bg, bgScroller1.getxPos(), bgScroller1.getyPos(), bgScroller1.getWidth(), bgScroller1.getHeight());
-        spriteBatch.draw(AssetLibrary.bg, bgScroller2.getxPos(), bgScroller2.getyPos(), bgScroller2.getWidth(), bgScroller2.getHeight());
+        spriteBatch.draw(AssetLibrary.bgTexture, bgScroller1.getxPos(), bgScroller1.getyPos(), bgScroller1.getWidth(), bgScroller1.getHeight());
+        spriteBatch.draw(AssetLibrary.bgTexture, bgScroller2.getxPos(), bgScroller2.getyPos(), bgScroller2.getWidth(), bgScroller2.getHeight());
         spriteBatch.end();
 		
 		
@@ -103,11 +103,11 @@ public class GameRenderer {
 		spriteBatch.enableBlending();
 		elapsedTime += Gdx.graphics.getDeltaTime();
 		if(!world.getMidAirTrigger()){
-			spriteBatch.draw(AssetLibrary.catRunAnim.getKeyFrame(elapsedTime, true), cat.getPosition().x - 70f, cat.getPosition().y, 200, 80);
+			spriteBatch.draw(AssetLibrary.catRunAnim.getKeyFrame(elapsedTime, true), cat.getPosition().x - 95f, cat.getPosition().y - 13f, 250, 100);
 		} else if (world.getMidAirTrigger()){			
-				spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(elapsedTime, false), cat.getPosition().x - 70f, cat.getPosition().y - 20f, 100f, 40f,200, 80,1,1,10f);
+				spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(elapsedTime, false), cat.getPosition().x - 95f, cat.getPosition().y - 45f, 100f, 40f,250, 100,1,1,10f);
 		} else if (cat.getDblJumpTrigger()){
-			spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(.9f, false), cat.getPosition().x - 60f, cat.getPosition().y, 200, 80);
+			spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(.9f, false), cat.getPosition().x - 95f, cat.getPosition().y - 45f, 250, 100);
 		}
 		
 		//Score Text
@@ -117,7 +117,7 @@ public class GameRenderer {
 		
 		spriteBatch.end();
 		
-//		shape1.begin(ShapeType.Rectangle);
+//		shape1.begin(ShapeType.Line);
 //		shape1.setColor(Color.RED);
 //		shape1.rect(cat.getPosition().x, cat.getPosition().y, cat.getWidth(), cat.getHeight());
 //		shape1.end();

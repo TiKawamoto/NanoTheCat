@@ -1,0 +1,110 @@
+
+nanorun.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+nanorun0001
+  rotate: false
+  xy: 1, 165
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0005
+  rotate: false
+  xy: 1, 83
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0009
+  rotate: false
+  xy: 203, 165
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0013
+  rotate: false
+  xy: 1, 1
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0017
+  rotate: false
+  xy: 203, 83
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0021
+  rotate: false
+  xy: 405, 165
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0025
+  rotate: false
+  xy: 203, 1
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0029
+  rotate: false
+  xy: 405, 83
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0033
+  rotate: false
+  xy: 607, 165
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0037
+  rotate: false
+  xy: 405, 1
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0041
+  rotate: false
+  xy: 607, 83
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0045
+  rotate: false
+  xy: 809, 165
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0049
+  rotate: false
+  xy: 607, 1
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0053
+  rotate: false
+  xy: 809, 83
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+nanorun0057
+  rotate: false
+  xy: 809, 1
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
