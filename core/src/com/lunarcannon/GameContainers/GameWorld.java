@@ -11,7 +11,6 @@ import com.lunarcannon.GameObjects.ScrollingHandler;
 
 public class GameWorld {
 
-
 	private Cat cat;
 	private ScrollingHandler scrollHandler;
 	private Platform p;
@@ -20,6 +19,7 @@ public class GameWorld {
 	private Rectangle catBounds, platBounds;
 	private boolean gameReset = false;
 	private boolean midAirTrigger = false;
+	private boolean collide = false;
 	
 	private enum GameState{
 		RUNNING, GAMEOVER
@@ -85,6 +85,7 @@ public class GameWorld {
 					
 					scrollHandler.stop();
 					cat.collide();
+					collide = true;
 					cat.setX(platBounds.x - cat.getWidth());	
 					
 					
@@ -111,6 +112,13 @@ public class GameWorld {
 	public boolean getMidAirTrigger(){
 		return midAirTrigger;
 	}
+	
+	public boolean getCollide(){
+		return collide;
+	}
+	public boolean getReset(){
+		return gameReset;
+	}
 
 	public ScrollingHandler getScroller() {
 		return scrollHandler;
@@ -121,8 +129,13 @@ public class GameWorld {
 		scrollHandler.reset();
 		cat.reset();
 		gameReset = false;
-				
+		collide = false;	
 		
+		
+	}
+	
+	public void setCollide(boolean collide){
+		this.collide = collide;
 	}
 
 }

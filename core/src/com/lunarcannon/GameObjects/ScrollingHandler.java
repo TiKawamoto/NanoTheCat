@@ -33,7 +33,7 @@ public class ScrollingHandler {
 		totalDist = 0;
 		xDefPos = 0;
 		yDefPos = 0;
-		xSpeed = -570;
+		xSpeed = -700;
 		bgVelocity = new Vector2(0,0);
 		bgBackVelocity = new Vector2(0,0);
 		velocity = new Vector2(0,0);
@@ -76,10 +76,10 @@ public class ScrollingHandler {
 		for (int i = 0; i < platform.size(); i++) {
 			
 			//Generate Random Gap Width
-			gapWidth = (gapRand.nextInt(320 - 150) + 150);
+			gapWidth = (gapRand.nextInt(350 - 150) + 150);
 			
 			//Generate Random Platform Type
-			platType = (platRand.nextInt(6-1) + 1);
+			platType = (platRand.nextInt(7-1) + 1);
 				
 			//Find edge of platform
 			platCheckWidth = (int) platform.get(i).getxPos() + platform.get(i).getWidth();
@@ -205,32 +205,32 @@ public class ScrollingHandler {
 			this.width = 800;
 			break;
 		case(1):
-			this.height = 220;
-			this.width = 150;
+			this.height = 120;
+			this.width = 210;
 			break;
 		case(2):
 			this.height = 120;
-			this.width = 80;
+			this.width = 100;
 			break;
 		case(3):
-			this.height = 120;
-			this.width = 200;
+			this.height = 180;
+			this.width = 100;
 			break;
 		case(4):
-			this.height = 160;
-			this.width = 120;
+			this.height = 180;
+			this.width = 320;
 			break;
 		case(5):
-			this.height = 150;
-			this.width = 150;
-			break;
-		case(6):
 			this.height = 120;
 			this.width = 400;
 			break;
+		case(6):
+			this.height = 220;
+			this.width = 220;
+			break;
 		default:
-			this.height = 100;
-			this.width = 250;
+			this.height = 250;
+			this.width = 100;
 			break;
 		}
 		

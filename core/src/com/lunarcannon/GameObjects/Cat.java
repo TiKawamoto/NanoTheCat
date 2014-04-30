@@ -54,23 +54,26 @@ public class Cat {
 					jump = false;
 				} else if(!dblJump && !jumped) {
 					
-					ySpeed = ySpeed + 300;
+					ySpeed = 300;
 					//jumped = true;
 					//System.out.println("TOUCHED");										
 				}
 			}
-			if(touchTime > 2){
+			if(touchTime > 2 && touchTime < 16){
+				
 				if(!dblJump && !jumped && ySpeed < 450) {
 					ySpeed = ySpeed + 200;
 				} else if(!dblJump && !jumped && ySpeed < 550) {
-					ySpeed = ySpeed + 120;										
+					ySpeed = ySpeed + 140;										
 				} else if(!dblJump && !jumped && ySpeed < 750) {
-						ySpeed = ySpeed + 50;										
+						ySpeed = ySpeed + 70;										
 				}
 			}
+
 			if(ySpeed > 750){
 				jumped = true;
 			}
+			
 		}
 		
 		if(!Gdx.input.isTouched()){

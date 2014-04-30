@@ -25,7 +25,7 @@ public class GameRenderer {
 	private OrthographicCamera cam;
 	private ShapeRenderer shape1;
 	private SpriteBatch spriteBatch;
-	private float elapsedTime;
+	private float elapsedTime, elapsedTime2;
 	private float frameNum;
 	private TextBounds totalDistWidth;
 	
@@ -71,6 +71,7 @@ public class GameRenderer {
 	
 	public void render(float delta){
 		
+		
 		cat = world.getCat();
 		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -85,29 +86,40 @@ public class GameRenderer {
         spriteBatch.draw(AssetLibrary.bgTexture, bgScroller2.getxPos(), bgScroller2.getyPos(), bgScroller2.getWidth(), bgScroller2.getHeight());
         spriteBatch.end();
 		
+        spriteBatch.begin();
+		spriteBatch.enableBlending();
 		
-		
-		shape1.begin(ShapeType.Filled);		
-		//Draw Platforms
 		for(int i = 0; i < platformScroller.size(); i++){
-					
-			platform = platformScroller.get(i);
-			shape1.setColor(Color.ORANGE);
-			shape1.rect(platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), platformScroller.get(i).getWidth(), platformScroller.get(i).getHeight());
+			
+			if(platformScroller.get(i).getType() == 1){
+				spriteBatch.draw(AssetLibrary.case1, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 210, 350);
+			} else if(platformScroller.get(i).getType() == 5){
+				spriteBatch.draw(AssetLibrary.case5, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 400, 300);
+			} else if(platformScroller.get(i).getType() == 6){
+				spriteBatch.draw(AssetLibrary.case6, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 220, 220);
+			}
 			
 		}
-		shape1.end();
 		
+		spriteBatch.end();
+				
 		//DRAW CAT
 		spriteBatch.begin();
 		spriteBatch.enableBlending();
 		elapsedTime += Gdx.graphics.getDeltaTime();
-		if(!world.getMidAirTrigger()){
-			spriteBatch.draw(AssetLibrary.catRunAnim.getKeyFrame(elapsedTime, true), cat.getPosition().x - 95f, cat.getPosition().y - 13f, 250, 100);
-		} else if (world.getMidAirTrigger()){			
-				spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(elapsedTime, false), cat.getPosition().x - 95f, cat.getPosition().y - 45f, 100f, 40f,250, 100,1,1,10f);
-		} else if (cat.getDblJumpTrigger()){
-			spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(.9f, false), cat.getPosition().x - 95f, cat.getPosition().y - 45f, 250, 100);
+		
+		if(!world.getCollide()){			
+			if(!world.getMidAirTrigger()){
+				spriteBatch.draw(AssetLibrary.catRunAnim.getKeyFrame(elapsedTime, true), cat.getPosition().x - 95f, cat.getPosition().y - 13f, 250, 100);
+			} else if (world.getMidAirTrigger()){			
+					spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(elapsedTime, false), cat.getPosition().x - 95f, cat.getPosition().y - 45f, 100f, 40f,250, 100,1,1,10f);
+			} else if (cat.getDblJumpTrigger()){
+				spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(.9f, false), cat.getPosition().x - 95f, cat.getPosition().y - 45f, 250, 100);
+			}
+		} else if(world.getCollide()){
+			elapsedTime2 += Gdx.graphics.getDeltaTime();
+			spriteBatch.draw(AssetLibrary.catCollideAnim.getKeyFrame(elapsedTime2, false), cat.getPosition().x - 135f, cat.getPosition().y - 13f, 250, 125);
+			
 		}
 		
 		//Score Text
@@ -120,7 +132,50 @@ public class GameRenderer {
 //		shape1.begin(ShapeType.Line);
 //		shape1.setColor(Color.RED);
 //		shape1.rect(cat.getPosition().x, cat.getPosition().y, cat.getWidth(), cat.getHeight());
+//		shape1.end();			
+		
+		//Draw Platforms
+//		shape1.begin(ShapeType.Line);		
+//		for(int i = 0; i < platformScroller.size(); i++){
+//					
+//			platform = platformScroller.get(i);			
+//			shape1.setColor(Color.ORANGE);
+//			shape1.rect(platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), platformScroller.get(i).getWidth(), platformScroller.get(i).getHeight());
+//						
+//		}
 //		shape1.end();
+		
+		spriteBatch.begin();
+		spriteBatch.enableBlending();
+		
+		for(int i = 0; i < platformScroller.size(); i++){
+			
+			if(platformScroller.get(i).getType() == 0){
+				spriteBatch.draw(AssetLibrary.case0, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 800, 118);
+			}	else if(platformScroller.get(i).getType() == 1){				
+			} else if(platformScroller.get(i).getType() == 2){
+				spriteBatch.draw(AssetLibrary.case2, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 100, 120);
+			} else if(platformScroller.get(i).getType() == 3){
+				spriteBatch.draw(AssetLibrary.case3, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 100, 180);
+			} else if(platformScroller.get(i).getType() == 4){
+				spriteBatch.draw(AssetLibrary.case4, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 320, 180);
+			} else if(platformScroller.get(i).getType() == 5){
+				//spriteBatch.draw(AssetLibrary.case3, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 100, 180);
+			} else if(platformScroller.get(i).getType() == 6){
+				//spriteBatch.draw(AssetLibrary.case3, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 100, 180);
+			}  else {
+				spriteBatch.draw(AssetLibrary.caseDefault, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 100, 250);
+			}
+			
+		}
+		
+		spriteBatch.end();
+		
+		
+		//Reset elapsedTime on game reset
+		if(world.getReset()){
+			elapsedTime2 = 0;
+		}
 		
 	}
 	
@@ -128,5 +183,4 @@ public class GameRenderer {
 		shape1.dispose();
 		spriteBatch.dispose();
 	}
-
 }

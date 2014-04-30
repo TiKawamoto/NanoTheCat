@@ -3,107 +3,163 @@ nanorun.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+nanocollide0080
+  rotate: false
+  xy: 1, 411
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+nanocollide0084
+  rotate: false
+  xy: 1, 309
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+nanocollide0088
+  rotate: false
+  xy: 203, 411
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+nanocollide0092
+  rotate: false
+  xy: 1, 207
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+nanocollide0096
+  rotate: false
+  xy: 203, 309
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+nanocollide0100
+  rotate: false
+  xy: 405, 411
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+nanocollide0104
+  rotate: false
+  xy: 1, 105
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+nanocollide0108
+  rotate: false
+  xy: 203, 207
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
 nanorun0001
   rotate: false
-  xy: 1, 165
+  xy: 405, 329
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0005
   rotate: false
-  xy: 1, 83
+  xy: 607, 431
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0009
   rotate: false
-  xy: 203, 165
+  xy: 1, 23
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0013
   rotate: false
-  xy: 1, 1
+  xy: 203, 125
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0017
   rotate: false
-  xy: 203, 83
+  xy: 405, 247
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0021
   rotate: false
-  xy: 405, 165
+  xy: 607, 349
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0025
   rotate: false
-  xy: 203, 1
+  xy: 809, 431
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0029
   rotate: false
-  xy: 405, 83
+  xy: 203, 43
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0033
   rotate: false
-  xy: 607, 165
+  xy: 405, 165
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0037
   rotate: false
-  xy: 405, 1
+  xy: 607, 267
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0041
   rotate: false
-  xy: 607, 83
+  xy: 809, 349
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0045
   rotate: false
-  xy: 809, 165
+  xy: 405, 83
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0049
   rotate: false
-  xy: 607, 1
+  xy: 405, 1
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0053
   rotate: false
-  xy: 809, 83
+  xy: 607, 185
   size: 200, 80
   orig: 200, 80
   offset: 0, 0
   index: -1
 nanorun0057
   rotate: false
-  xy: 809, 1
+  xy: 809, 267
   size: 200, 80
   orig: 200, 80
   offset: 0, 0

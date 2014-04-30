@@ -1,0 +1,61 @@
+
+platform.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+case0
+  rotate: false
+  xy: 1, 837
+  size: 800, 118
+  orig: 800, 118
+  offset: 0, 0
+  index: -1
+case5
+  rotate: false
+  xy: 1, 535
+  size: 400, 300
+  orig: 400, 300
+  offset: 0, 0
+  index: -1
+case1
+  rotate: false
+  xy: 1, 183
+  size: 210, 350
+  orig: 210, 350
+  offset: 0, 0
+  index: -1
+case6
+  rotate: false
+  xy: 803, 735
+  size: 220, 220
+  orig: 220, 220
+  offset: 0, 0
+  index: -1
+case4
+  rotate: false
+  xy: 403, 655
+  size: 320, 180
+  orig: 320, 180
+  offset: 0, 0
+  index: -1
+default
+  rotate: false
+  xy: 213, 283
+  size: 100, 250
+  orig: 100, 250
+  offset: 0, 0
+  index: -1
+case3
+  rotate: false
+  xy: 1, 1
+  size: 100, 180
+  orig: 100, 180
+  offset: 0, 0
+  index: -1
+case2
+  rotate: false
+  xy: 103, 61
+  size: 100, 120
+  orig: 100, 120
+  offset: 0, 0
+  index: -1
