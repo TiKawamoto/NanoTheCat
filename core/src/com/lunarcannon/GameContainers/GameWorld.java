@@ -1,10 +1,14 @@
 package com.lunarcannon.GameContainers;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.lunarcannon.GameObjects.Cat;
 import com.lunarcannon.GameObjects.Platform;
 import com.lunarcannon.GameObjects.ScrollingHandler;
@@ -19,7 +23,8 @@ public class GameWorld {
 	private Rectangle catBounds, platBounds;
 	private boolean gameReset = false;
 	private boolean midAirTrigger = false;
-	private boolean collide = false;
+	private boolean collide = false;	
+	private int soundPlay = 0;
 	
 	private enum GameState{
 		RUNNING, GAMEOVER
@@ -29,8 +34,7 @@ public class GameWorld {
 	
 
 	public GameWorld() {
-		// this.game = game;
-
+		
 		cat = new Cat(200, 102);
 		scrollHandler = new ScrollingHandler();
 		this.platform = scrollHandler.getPlatform();
@@ -83,6 +87,10 @@ public class GameWorld {
 			//CHECK FOR SIDE COLLISION			
 			if((catBounds.width + catBounds.x <= platBounds.x) && (catBounds.width + catBounds.x > platBounds.x -12f) && (catBounds.y < platBounds.height)){	//SIDE COLLISIONS				
 					
+					if(soundPlay == 0){
+						AssetLibrary.collision.play();
+						soundPlay++;
+					}
 					scrollHandler.stop();
 					cat.collide();
 					collide = true;
@@ -130,6 +138,7 @@ public class GameWorld {
 		cat.reset();
 		gameReset = false;
 		collide = false;	
+		soundPlay = 0;
 		
 		
 	}

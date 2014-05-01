@@ -92,7 +92,7 @@ public class MenuScreen implements Screen {
 		menuAtlas = new TextureAtlas(Gdx.files.internal("data/menuitems.atlas"));
 		buttonUp = menuAtlas.findRegion("button_up");
 		buttonDown = menuAtlas.findRegion("button_down");
-		bgDay = menuAtlas.findRegion("menubg_evening");
+		bgDay = menuAtlas.findRegion("menubg_day");
 		logo = menuAtlas.findRegion("logo"); 
 
 		//SPRITES -------------------------------------

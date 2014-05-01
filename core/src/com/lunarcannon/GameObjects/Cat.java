@@ -55,6 +55,7 @@ public class Cat {
 				} else if(!dblJump && !jumped) {
 					
 					ySpeed = 300;
+					yGrav =  -1f;
 					//jumped = true;
 					//System.out.println("TOUCHED");										
 				}

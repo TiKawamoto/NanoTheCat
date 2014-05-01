@@ -77,7 +77,7 @@ public class GameRenderer {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-        //DRAW BACKGROUND        
+        //DRAW BACKGROUND  ----------------------------------------------------
         spriteBatch.begin();
         spriteBatch.enableBlending();
         spriteBatch.draw(AssetLibrary.bgBack, bgScrollerBack1.getxPos(), bgScrollerBack1.getyPos(), bgScrollerBack1.getWidth(), bgScrollerBack1.getHeight());
@@ -103,7 +103,7 @@ public class GameRenderer {
 		
 		spriteBatch.end();
 				
-		//DRAW CAT
+		//DRAW CAT  ----------------------------------------------------
 		spriteBatch.begin();
 		spriteBatch.enableBlending();
 		elapsedTime += Gdx.graphics.getDeltaTime();
@@ -122,7 +122,7 @@ public class GameRenderer {
 			
 		}
 		
-		//Score Text
+		//DRAW SCORE TEXT  ----------------------------------------------------
 		AssetLibrary.robotoLt.draw(spriteBatch, "TOTAL DISTANCE", 607, 520);		
 		totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
 		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, 480);
@@ -145,6 +145,7 @@ public class GameRenderer {
 //		}
 //		shape1.end();
 		
+		//DRAW PLAFORM ----------------------------------------------------
 		spriteBatch.begin();
 		spriteBatch.enableBlending();
 		

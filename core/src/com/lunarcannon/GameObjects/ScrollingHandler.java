@@ -76,7 +76,8 @@ public class ScrollingHandler {
 		for (int i = 0; i < platform.size(); i++) {
 			
 			//Generate Random Gap Width
-			gapWidth = (gapRand.nextInt(350 - 150) + 150);
+			gapWidth = (gapRand.nextInt(550 - 150) + 150);
+			
 			
 			//Generate Random Platform Type
 			platType = (platRand.nextInt(7-1) + 1);
@@ -96,7 +97,7 @@ public class ScrollingHandler {
 			platform.get(i).update(delta);
 			
 			//Detect Total Distance
-			totalDist += .007f;
+			totalDist += .008f;
 			
 			
 			//Set Bounds

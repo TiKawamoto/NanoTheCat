@@ -1,6 +1,7 @@
 package com.lunarcannon.GameContainers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,9 +9,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.lunarcannon.NanoCat.NanoCat;
 
 public class AssetLibrary {
-
+	
+	public static NanoCat nano;
 	public static Texture bgTexture, bgBackTexture;
 	public static Texture texture;
 	public static TextureRegion bg, bgBack;
@@ -28,12 +31,36 @@ public class AssetLibrary {
 	
 	public static BitmapFont robotoLt;
 	
-	public static void load(){
-		bgTexture = new Texture(Gdx.files.internal("data/bg_1.png"));
-		bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+	public static Sound collision;
+	
+	public static void load(NanoCat nano){
+			
+		if(nano.getTime() < 15 && nano.getTime() >= 5){				
+			bgTexture = new Texture(Gdx.files.internal("data/bg_1.png"));
+			bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+			
+			bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_1.png"));
+			bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		} else if (nano.getTime() < 20 && nano.getTime() >= 15){
+			bgTexture = new Texture(Gdx.files.internal("data/bg_2.png"));
+			bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);	
+			
+			bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_2.png"));
+			bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);	
+		} else if (nano.getTime() >= 20){
+			bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
+			bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+			
+			bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
+			bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		} else {
+			bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
+			bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+			
+			bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
+			bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		}			
 		
-		bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_1.png"));
-		bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 		bgBack = new TextureRegion(bgBackTexture, 0, 0, 4096, 580);
 		
@@ -97,8 +124,10 @@ public class AssetLibrary {
 		robotoLt.setScale(.5f, .5f);
 		
 		
+		collision = Gdx.audio.newSound(Gdx.files.internal("data/audio/collide.wav"));
 		
-		}
+		
+	}
 		
 		
 		
