@@ -27,6 +27,9 @@ public class GameRenderer {
 	private SpriteBatch spriteBatch;
 	private float elapsedTime, elapsedTime2;
 	private float frameNum;
+	private String highScore, thisScore;
+	private String highScoreText = "high score!";
+	private String yourScoreText = "score";
 	private TextBounds totalDistWidth;
 	
 	private Platform platform;
@@ -121,13 +124,11 @@ public class GameRenderer {
 			spriteBatch.draw(AssetLibrary.catCollideAnim.getKeyFrame(elapsedTime2, false), cat.getPosition().x - 135f, cat.getPosition().y - 13f, 250, 125);
 			
 		}
-		
-		//DRAW SCORE TEXT  ----------------------------------------------------
-		AssetLibrary.robotoLt.draw(spriteBatch, "TOTAL DISTANCE", 607, 520);		
-		totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
-		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, 480);
-		
 		spriteBatch.end();
+
+
+		
+		
 		
 //		shape1.begin(ShapeType.Line);
 //		shape1.setColor(Color.RED);
@@ -170,7 +171,66 @@ public class GameRenderer {
 			
 		}
 		
+		
+		
+		
+		//DRAW SCORE TEXT  ----------------------------------------------------
+		AssetLibrary.robotoLt.draw(spriteBatch, "total distance", 688, 520);		
+		totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
+		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, 480);
+		
+		if(world.getCollide()){
+			
+		}
+		
+		if(world.getCollide()){			
+			if(world.getHigh()){						
+				thisScore = Float.toString(world.getThisScore());
+				
+				AssetLibrary.panelSprite.setX(230);
+				AssetLibrary.panelSprite.setY(125);
+				AssetLibrary.panelSprite.setAlpha(.85f);
+				AssetLibrary.panelSprite.draw(spriteBatch);				
+				
+				AssetLibrary.robotoLt.setScale(1f);
+				AssetLibrary.robotoLt.draw(spriteBatch, "yay.", 250, 405);
+				
+				AssetLibrary.robotoLt.setScale(.6f);
+				AssetLibrary.robotoLt.draw(spriteBatch, thisScore + "m", 250, 270);
+				
+				AssetLibrary.robotoLt.setScale(.3f);
+				AssetLibrary.robotoLt.draw(spriteBatch, highScoreText, 250, 220);
+				
+				AssetLibrary.robotoLt.setScale(.3f);
+				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", 550, 155);				
+				
+				AssetLibrary.robotoLt.setScale(.5f);
+			} else {
+				highScore = Float.toString(world.getHighScore());
+				thisScore = Float.toString(world.getThisScore());
+				
+				AssetLibrary.panelSprite.setX(230);
+				AssetLibrary.panelSprite.setY(125);
+				AssetLibrary.panelSprite.setAlpha(.85f);
+				AssetLibrary.panelSprite.draw(spriteBatch);							
+				
+				AssetLibrary.robotoLt.setScale(1f);
+				AssetLibrary.robotoLt.draw(spriteBatch, "oof.", 250, 395);
+				
+				AssetLibrary.robotoLt.setScale(.6f);
+				AssetLibrary.robotoLt.draw(spriteBatch, "score: " + thisScore + "m", 250, 270);
+				
+				AssetLibrary.robotoLt.setScale(.3f);
+				AssetLibrary.robotoLt.draw(spriteBatch, "high score: " + highScore + "m", 250, 220);
+				
+				AssetLibrary.robotoLt.setScale(.3f);
+				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", 550, 155);
+				
+				AssetLibrary.robotoLt.setScale(.5f);	
+			}					
+		}		
 		spriteBatch.end();
+		
 		
 		
 		//Reset elapsedTime on game reset

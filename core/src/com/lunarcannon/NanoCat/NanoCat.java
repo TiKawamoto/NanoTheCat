@@ -9,8 +9,15 @@ import com.lunarcannon.GameContainers.AssetLibrary;
 import com.lunarcannon.Screens.MenuScreen;
 
 public class NanoCat extends Game {
-	
+			
+	private ExternalInterface extInterface;
 	private int timeOfDay;
+	
+	public NanoCat(ExternalInterface extInterface){
+		this.extInterface = extInterface;
+		
+		extInterface.login();
+	}
 	
 	@Override
 	public void create() {

@@ -33,7 +33,7 @@ public class ScrollingHandler {
 		totalDist = 0;
 		xDefPos = 0;
 		yDefPos = 0;
-		xSpeed = -700;
+		xSpeed = -750;
 		bgVelocity = new Vector2(0,0);
 		bgBackVelocity = new Vector2(0,0);
 		velocity = new Vector2(0,0);
@@ -76,8 +76,8 @@ public class ScrollingHandler {
 		for (int i = 0; i < platform.size(); i++) {
 			
 			//Generate Random Gap Width
-			gapWidth = (gapRand.nextInt(550 - 150) + 150);
-			
+			gapWidth = (gapRand.nextInt(580 - 150) + 150);
+		
 			
 			//Generate Random Platform Type
 			platType = (platRand.nextInt(7-1) + 1);

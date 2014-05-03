@@ -1,14 +1,11 @@
 package com.lunarcannon.GameContainers;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.lunarcannon.GameObjects.Cat;
 import com.lunarcannon.GameObjects.Platform;
 import com.lunarcannon.GameObjects.ScrollingHandler;
@@ -21,10 +18,18 @@ public class GameWorld {
 	private ArrayList<Platform> platform = new ArrayList<Platform>();
 	private Iterator<Platform> pIter;
 	private Rectangle catBounds, platBounds;
+	private NumberFormat f = NumberFormat.getInstance(Locale.ENGLISH);
+	
 	private boolean gameReset = false;
 	private boolean midAirTrigger = false;
 	private boolean collide = false;	
-	private int soundPlay = 0;
+	private boolean highBool = false;
+	
+	private int runOnce = 0;
+	
+	private float totalDistance = 0;
+	private float highScore = 0;
+	
 	
 	private enum GameState{
 		RUNNING, GAMEOVER
@@ -39,6 +44,9 @@ public class GameWorld {
 		scrollHandler = new ScrollingHandler();
 		this.platform = scrollHandler.getPlatform();
 		gameState = GameState.RUNNING;
+		
+		f.setMaximumFractionDigits(2);
+		f.setMinimumFractionDigits(2);
 
 	}
 
@@ -85,18 +93,34 @@ public class GameWorld {
 			
 			
 			//CHECK FOR SIDE COLLISION			
-			if((catBounds.width + catBounds.x <= platBounds.x) && (catBounds.width + catBounds.x > platBounds.x -12f) && (catBounds.y < platBounds.height)){	//SIDE COLLISIONS				
+			if((catBounds.width + catBounds.x <= platBounds.x) && (catBounds.width + catBounds.x > platBounds.x -14f) && (catBounds.y < platBounds.height)){	//SIDE COLLISIONS				
 					
-					if(soundPlay == 0){
+					//Things to run only once upon collision					
+					
+					scrollHandler.stop();						
+					
+					if(runOnce == 0){
+						//collision sound
 						AssetLibrary.collision.play();
-						soundPlay++;
+						
+						//check high score
+						totalDistance = Float.parseFloat(f.format(scrollHandler.getTotalDist()));
+						highScore = AssetLibrary.getHighScore();
+						
+						if(totalDistance > highScore){
+							AssetLibrary.setHighScore(totalDistance);
+							System.out.println("high: " + AssetLibrary.getHighScore() + " set: " + totalDistance);
+							highBool = true;
+						} else {
+							System.out.println("get " + AssetLibrary.getHighScore());
+							highBool = false;
+						}
+						runOnce++;
 					}
-					scrollHandler.stop();
+				
 					cat.collide();
 					collide = true;
-					cat.setX(platBounds.x - cat.getWidth());	
-					
-					
+					cat.setX(platBounds.x - cat.getWidth());
 					
 					if(catBounds.y < -300){
 						cat.stop();	
@@ -113,7 +137,19 @@ public class GameWorld {
 	public boolean gameOver(){
 		return gameReset;		
 	}
-
+	
+	public float getThisScore(){
+		return totalDistance;
+	}
+	
+	public float getHighScore(){
+		return highScore;
+	}
+	
+	public boolean getHigh(){
+		return highBool;
+	}
+	
 	public Cat getCat() {
 		return cat;
 	}
@@ -138,7 +174,7 @@ public class GameWorld {
 		cat.reset();
 		gameReset = false;
 		collide = false;	
-		soundPlay = 0;
+		runOnce = 0;
 		
 		
 	}

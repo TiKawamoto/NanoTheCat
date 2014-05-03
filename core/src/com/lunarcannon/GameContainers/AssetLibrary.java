@@ -1,11 +1,13 @@
 package com.lunarcannon.GameContainers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,6 +20,8 @@ public class AssetLibrary {
 	public static Texture texture;
 	public static TextureRegion bg, bgBack;
 	public static Texture fontFilter;
+	public static Texture panel;
+	public static Sprite panelSprite;
 	
 	public static AtlasRegion catRun1, catRun2, catRun3, catRun4, catRun5, catRun6, catRun7, catRun8, catRun9, catRun10, catRun11, catRun12, catRun13, catRun14, catRun15;
 	public static AtlasRegion catCollide1, catCollide2, catCollide3, catCollide4, catCollide5, catCollide6, catCollide7, catCollide8;
@@ -30,6 +34,8 @@ public class AssetLibrary {
 	public static Animation catCollideAnim;
 	
 	public static BitmapFont robotoLt;
+	
+	public static Preferences score;
 	
 	public static Sound collision;
 	
@@ -123,10 +129,30 @@ public class AssetLibrary {
 		robotoLt = new BitmapFont(Gdx.files.internal("data/roboto_lt.fnt"), new TextureRegion(fontFilter), false);
 		robotoLt.setScale(.5f, .5f);
 		
+		panel = new Texture(Gdx.files.internal("data/panelcolor.png"));
+		panel.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		panelSprite = new Sprite(panel, 500, 300);
+		
 		
 		collision = Gdx.audio.newSound(Gdx.files.internal("data/audio/collide.wav"));
 		
 		
+		//Scoring
+		score = Gdx.app.getPreferences("NanoCat");
+		
+		if(!score.contains("highScore")){
+			score.putFloat("highScore", 0);
+		}
+	
+	}
+	
+	public static void setHighScore(float val){
+		score.putFloat("highScore", val);
+		score.flush();
+	}
+	
+	public static float getHighScore(){
+		return score.getFloat("highScore");
 	}
 		
 		

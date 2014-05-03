@@ -56,8 +56,8 @@ public class MenuScreen implements Screen {
 		
 		batch.begin();
 		batch.enableBlending();
-		stage.draw();		
 		stage.addActor(playButton);		
+		stage.draw();				
 		batch.end();
 		
 	}
@@ -102,7 +102,8 @@ public class MenuScreen implements Screen {
 		bgDaySprite.setY(0);
 		
 		logoSprite = new Sprite(logo);
-		logoSprite.setBounds(430 / xDif, 330 / yDif, 500 / xDif, 175 / xDif);
+		logoSprite.setAlpha(.85f);
+		logoSprite.setBounds(480 / xDif, 365 / yDif, 450 / xDif, 140 / xDif);
 		
 //		logoSprite.setX(430);
 //		logoSprite.setY(330);
@@ -115,18 +116,20 @@ public class MenuScreen implements Screen {
 		buttonStyle.up = menuSkin.getDrawable("button_up");
 		buttonStyle.down = menuSkin.getDrawable("button_down");
 		buttonStyle.font = buttonFont;
-		buttonStyle.font.scale(-.2f);
-		buttonStyle.unpressedOffsetX = 100;
+		buttonStyle.font.scale(-.5f);
+		buttonStyle.unpressedOffsetX = 75;
 		buttonStyle.unpressedOffsetY = 2;
-		buttonStyle.pressedOffsetX = 102;
-		buttonStyle.pressedOffsetY = -2;
+		buttonStyle.pressedOffsetX = 76;
+		buttonStyle.pressedOffsetY = 1;
+		
 		
 		//Button Stuff -------------------------------------
 		playButton = new TextButton("play", buttonStyle);
-		playButton.setWidth(350);
-		playButton.setHeight(90);
-		playButton.setX(580);
-		playButton.setY(110);
+		playButton.setColor(1, 1, 1, .85f);
+		playButton.setWidth(280);
+		playButton.setHeight(70);
+		playButton.setX(650);
+		playButton.setY(270);
 
 		playButton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
