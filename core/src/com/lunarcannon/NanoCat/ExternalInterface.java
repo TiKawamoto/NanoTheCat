@@ -9,7 +9,7 @@ public void logout();
 
 public boolean getSignedIn();
 
-public void submitScore(int highScore);
+public void submitScore(long highScore);
 
 public void getScore();
 

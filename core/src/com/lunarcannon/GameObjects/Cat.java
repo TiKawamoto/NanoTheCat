@@ -24,6 +24,8 @@ public class Cat {
 	private int width;
 	private int height;
 	private int touchTime = 0;
+	
+	private float maxYPos = 0;
 
 	public Cat(float x, float y) {
 		xPos = x;
@@ -40,6 +42,11 @@ public class Cat {
 		if(!gameReset){
 			jumpLogic(delta);	
 		}
+		
+		if(position.y > maxYPos){
+			maxYPos = position.y;
+		}
+
 		
 	
 
@@ -161,6 +168,7 @@ public class Cat {
 		this.width = 100;
 		this.height = 70;
 		position.set(200,102);
+		maxYPos = 0;
 		landed();
 		gameReset = false;
 	}
@@ -210,5 +218,9 @@ public class Cat {
 		this.position.x = setX;
 		bounds.set(this.position.x, this.position.y, this.width, this.height);
 		setBounds();
+	}
+	
+	public float getMaxYPos(){
+		return maxYPos;
 	}
 }

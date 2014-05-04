@@ -39,6 +39,9 @@ public class AssetLibrary {
 	
 	public static Sound collision;
 	
+	private static float distTemp = 0;
+	private static int fallTemp = 0;
+	
 	public static void load(NanoCat nano){
 			
 		if(nano.getTime() < 15 && nano.getTime() >= 5){				
@@ -140,10 +143,41 @@ public class AssetLibrary {
 		//Scoring
 		score = Gdx.app.getPreferences("NanoCat");
 		
+		if(!score.contains("distance")){
+			score.putFloat("distance", 0);
+		}
+		
 		if(!score.contains("highScore")){
 			score.putFloat("highScore", 0);
 		}
+		
+		if(!score.contains("totalFall")){
+			score.putInteger("totalFall", 0);			
+		}
 	
+	}
+	
+	public static void setDistance(float dist){		
+		distTemp = score.getFloat("distance");
+		distTemp = distTemp + dist;
+		
+		score.putFloat("distance", distTemp);
+		score.flush();
+	}
+	
+	public static void setTotalFall(){
+		fallTemp = score.getInteger("totalFall");
+		fallTemp++;
+		score.putInteger("totalFall", fallTemp);
+		
+	}
+	
+	public static int getTotalFall(){
+		return score.getInteger("totalFall");
+	}
+	
+	public static float getDistance(){
+		return score.getFloat("distance");
 	}
 	
 	public static void setHighScore(float val){
@@ -163,6 +197,11 @@ public class AssetLibrary {
 		texture.dispose();
 		bgTexture.dispose();
 		robotoLt.dispose();
+		bgBackTexture.dispose();
+		panel.dispose();
+		fontFilter.dispose();
+		collision.dispose();
+		
 	}
 
 }

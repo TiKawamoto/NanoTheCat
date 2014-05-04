@@ -10,13 +10,11 @@ import com.lunarcannon.Screens.MenuScreen;
 
 public class NanoCat extends Game {
 			
-	private ExternalInterface extInterface;
+	public ExternalInterface extInt;
 	private int timeOfDay;
 	
-	public NanoCat(ExternalInterface extInterface){
-		this.extInterface = extInterface;
-		
-		extInterface.login();
+	public NanoCat(ExternalInterface extInt){
+		this.extInt = extInt;
 	}
 	
 	@Override

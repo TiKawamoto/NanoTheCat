@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.lunarcannon.GameObjects.Cat;
+import com.lunarcannon.NanoCat.NanoCat;
 
 public class InputHandler implements InputProcessor {
+	private NanoCat game;
 	private GameWorld world;
 	private Cat cat;
 	private boolean gameReset = false;
@@ -14,6 +16,7 @@ public class InputHandler implements InputProcessor {
 		this.world = world;
 		cat = world.getCat();
 		gameReset = world.gameOver();
+		Gdx.input.setCatchBackKey(true);
 
 	}
 
@@ -23,6 +26,12 @@ public class InputHandler implements InputProcessor {
 		switch (keycode) {
 		case Keys.SPACE:
 			cat.jump();
+			break;
+		case Keys.BACK:
+			world.setMainTrigger(true);
+			break;	
+		case Keys.BACKSPACE:
+			world.setMainTrigger(true);
 			break;
 		default:
 			break;

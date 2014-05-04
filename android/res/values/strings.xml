@@ -2,5 +2,7 @@
 <resources>
 
     <string name="app_name">Nano the Cat</string>
-
+    <string name="app_id">140063147477</string> 
+	<string name="logout">Signed out of Google Play Games</string>
+	<string name="login">Signed in to Google Play Games</string>
 </resources>

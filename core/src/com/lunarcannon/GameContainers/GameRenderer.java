@@ -175,9 +175,9 @@ public class GameRenderer {
 		
 		
 		//DRAW SCORE TEXT  ----------------------------------------------------
-		AssetLibrary.robotoLt.draw(spriteBatch, "total distance", 688, 520);		
+		AssetLibrary.robotoLt.draw(spriteBatch, "total distance", 688, height - 20);		
 		totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
-		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, 480);
+		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, height - 60);
 		
 		if(world.getCollide()){
 			

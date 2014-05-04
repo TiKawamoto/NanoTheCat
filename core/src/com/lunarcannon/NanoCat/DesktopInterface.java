@@ -17,11 +17,12 @@ public class DesktopInterface implements ExternalInterface {
 	@Override
 	public boolean getSignedIn() {
 		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	@Override
-	public void submitScore(int highScore) {
+	public void submitScore(long highScore) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -52,7 +53,8 @@ public class DesktopInterface implements ExternalInterface {
 
 	@Override
 	public void getLeaderboard() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
+		
 		
 	}
 

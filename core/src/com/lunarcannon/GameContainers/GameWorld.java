@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.lunarcannon.GameObjects.Cat;
 import com.lunarcannon.GameObjects.Platform;
 import com.lunarcannon.GameObjects.ScrollingHandler;
+import com.lunarcannon.NanoCat.NanoCat;
 
 public class GameWorld {
 
@@ -24,6 +25,7 @@ public class GameWorld {
 	private boolean midAirTrigger = false;
 	private boolean collide = false;	
 	private boolean highBool = false;
+	private boolean mainTrigger = false;
 	
 	private int runOnce = 0;
 	
@@ -39,11 +41,12 @@ public class GameWorld {
 	
 
 	public GameWorld() {
-		
+				
 		cat = new Cat(200, 102);
 		scrollHandler = new ScrollingHandler();
 		this.platform = scrollHandler.getPlatform();
 		gameState = GameState.RUNNING;
+		mainTrigger = false;
 		
 		f.setMaximumFractionDigits(2);
 		f.setMinimumFractionDigits(2);
@@ -107,6 +110,9 @@ public class GameWorld {
 						totalDistance = Float.parseFloat(f.format(scrollHandler.getTotalDist()));
 						highScore = AssetLibrary.getHighScore();
 						
+						AssetLibrary.setTotalFall();
+						AssetLibrary.setDistance(totalDistance);
+						
 						if(totalDistance > highScore){
 							AssetLibrary.setHighScore(totalDistance);
 							System.out.println("high: " + AssetLibrary.getHighScore() + " set: " + totalDistance);
@@ -120,6 +126,7 @@ public class GameWorld {
 				
 					cat.collide();
 					collide = true;
+					
 					cat.setX(platBounds.x - cat.getWidth());
 					
 					if(catBounds.y < -300){
@@ -181,6 +188,25 @@ public class GameWorld {
 	
 	public void setCollide(boolean collide){
 		this.collide = collide;
+	}
+	
+	public void setMainTrigger(boolean mainTrigger){
+		this.mainTrigger = mainTrigger;
+	}
+	public boolean returnToMain(){		
+		return mainTrigger;
+	}
+	
+	public float getMaxY(){
+		return cat.getMaxYPos();
+	}
+	
+	public float getTotalDist(){
+		return AssetLibrary.getDistance();
+	}
+	
+	public int getTotalFall(){
+		return AssetLibrary.getTotalFall();
 	}
 
 }
