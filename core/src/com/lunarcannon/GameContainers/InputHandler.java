@@ -3,6 +3,7 @@ package com.lunarcannon.GameContainers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector3;
 import com.lunarcannon.GameObjects.Cat;
 import com.lunarcannon.NanoCat.NanoCat;
 
@@ -11,6 +12,7 @@ public class InputHandler implements InputProcessor {
 	private GameWorld world;
 	private Cat cat;
 	private boolean gameReset = false;
+	private Vector3 touchPos;
 
 	public InputHandler(GameWorld world) {
 		this.world = world;
@@ -64,8 +66,15 @@ public class InputHandler implements InputProcessor {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		cat.noJump();
 		// RESET AFTER FALLING
-		if (world.gameOver()) {
-			world.gameReset();
+		if (world.gameOver()) {	
+	
+			touchPos = GameStateHandler.getTouchPos();
+					
+			if(touchPos.x > (world.getActualWidth() - 730)  && touchPos.x < (world.getActualWidth() - 230) 
+					&&  touchPos.y > 125 && touchPos.y < 425){
+				world.gameReset();
+			}
+					
 		}
 
 		return true;

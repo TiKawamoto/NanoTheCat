@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Preferences;
 import com.lunarcannon.GameContainers.AssetLibrary;
+import com.lunarcannon.GameContainers.GameStateHandler;
 import com.lunarcannon.Screens.MenuScreen;
 
 public class NanoCat extends Game {
@@ -18,7 +20,9 @@ public class NanoCat extends Game {
 	}
 	
 	@Override
-	public void create() {
+	public void create() {		
+		
+		
 		//GET TIME
 		DateFormat dateFormatter = new SimpleDateFormat("HH");
 		Calendar cal = Calendar.getInstance();
@@ -26,7 +30,10 @@ public class NanoCat extends Game {
 		System.out.println(timeOfDay);
 		
 		AssetLibrary.load(this);
+		GameStateHandler.load(this);
+		this.extInt.showAds(GameStateHandler.getAdState());
 		setScreen(new MenuScreen(this));
+		
 //		setScreen(new GameScreen());
 	}
 	

@@ -45,10 +45,10 @@ public class ScrollingHandler {
 		bgHeight = (Gdx.graphics.getHeight());
 		aspectRatio = bgHeight / bgWidth;
 		
-		bg1 = new Background(0, 0, 0, (int)(bgHeight / aspectRatio) * 4, (int)(bgHeight), 0);
-		bg2 = new Background(960, 0, 0, (int)(bgHeight / aspectRatio) * 4, (int)(bgHeight), 0);
-		bgBack1 = new Background(0, 0, 0, (int)(bgHeight / aspectRatio) * 4, (int)(bgHeight), 0);
-		bgBack2 = new Background(960, 0, 0, (int)(bgHeight / aspectRatio) * 4, (int)(bgHeight), 0);
+		bg1 = new Background(0, 0, 0, (int)(580 / aspectRatio) * 4, (int)(580), 0);
+		bg2 = new Background(960, 0, 0, (int)(580 / aspectRatio) * 4, (int)(580), 0);
+		bgBack1 = new Background(0, 0, 0, (int)(580 / aspectRatio) * 4, (int)(580), 0);
+		bgBack2 = new Background(960, 0, 0, (int)(580 / aspectRatio) * 4, (int)(580), 0);
 	}
 
 	public void update(float delta) {		
@@ -236,6 +236,7 @@ public class ScrollingHandler {
 		}
 		
 	}
+
 	
 	public void reset(){
 		bg1.setxPos(0);

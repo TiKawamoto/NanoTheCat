@@ -228,6 +228,7 @@ containing a value of this type.
         public static final int achievement_kitteh=0x7f050020;
         public static final int achievement_nanobot=0x7f050023;
         public static final int achievement_the_cats_meow=0x7f050022;
+        public static final int ad_id=0x7f050028;
         /**  TODO: Replace this by your app's app ID! 
          */
         public static final int app_id=0x7f05001f;
@@ -326,6 +327,7 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f050013;
+        public static final int fb_app_id=0x7f050027;
         public static final int gamehelper_app_misconfigured=0x7f05001c;
         public static final int gamehelper_license_failed=0x7f05001d;
         public static final int gamehelper_sign_in_failed=0x7f05001b;
@@ -334,8 +336,8 @@ containing a value of this type.
         /**  Location client code resources (prefix with location_client) 
          */
         public static final int location_client_powered_by_google=0x7f05001a;
-        public static final int login=0x7f050028;
-        public static final int logout=0x7f050027;
+        public static final int login=0x7f05002a;
+        public static final int logout=0x7f050029;
     }
     public static final class style {
         public static final int GdxTheme=0x7f070000;

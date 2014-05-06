@@ -1,7 +1,7 @@
 
 menuitems.png
 format: RGBA8888
-filter: Nearest,Nearest
+filter: Linear,Linear
 repeat: none
 menubg_day
   rotate: false

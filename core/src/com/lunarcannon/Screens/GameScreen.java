@@ -2,6 +2,7 @@ package com.lunarcannon.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.lunarcannon.GameContainers.AssetLibrary;
 import com.lunarcannon.GameContainers.GameRenderer;
 import com.lunarcannon.GameContainers.GameWorld;
 import com.lunarcannon.GameContainers.InputHandler;
@@ -25,6 +26,7 @@ public class GameScreen implements Screen{
     	world.update(delta);
     	renderer.render(delta);
     	
+    	   	
     	if(world.getCollide()){
     		
     		if(game.extInt.getSignedIn()){
@@ -101,5 +103,6 @@ public class GameScreen implements Screen{
     	}
     	
     }
+    
 
 }

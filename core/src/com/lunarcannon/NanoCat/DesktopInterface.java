@@ -57,5 +57,8 @@ public class DesktopInterface implements ExternalInterface {
 		
 		
 	}
+	
+	@Override
+	public void showAds(boolean show){}
 
 }

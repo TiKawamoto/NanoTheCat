@@ -11,6 +11,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.lunarcannon.NanoCat.NanoCat;
 
 public class AssetLibrary {
@@ -28,6 +33,7 @@ public class AssetLibrary {
 	public static AtlasRegion case0, case1, case2, case3, case4, case5, case6, caseDefault;
 	public static TextureAtlas nanoRun;
 	public static TextureAtlas platform;
+	public static TextureAtlas gpgsAtlas;
 	
 	public static Animation catJumpAnim;
 	public static Animation catRunAnim;
@@ -35,7 +41,7 @@ public class AssetLibrary {
 	
 	public static BitmapFont robotoLt;
 	
-	public static Preferences score;
+	public static Preferences score, pref;
 	
 	public static Sound collision;
 	
@@ -43,33 +49,67 @@ public class AssetLibrary {
 	private static int fallTemp = 0;
 	
 	public static void load(NanoCat nano){
-			
-		if(nano.getTime() < 15 && nano.getTime() >= 5){				
-			bgTexture = new Texture(Gdx.files.internal("data/bg_1.png"));
-			bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-			
-			bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_1.png"));
-			bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		} else if (nano.getTime() < 20 && nano.getTime() >= 15){
-			bgTexture = new Texture(Gdx.files.internal("data/bg_2.png"));
-			bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);	
-			
-			bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_2.png"));
-			bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);	
-		} else if (nano.getTime() >= 20){
-			bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
-			bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-			
-			bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
-			bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		} else {
-			bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
-			bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-			
-			bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
-			bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		}			
 		
+		pref = Gdx.app.getPreferences("NanoGameState");
+		
+	
+		if(!pref.getBoolean("hdState")){
+			if(nano.getTime() < 15 && nano.getTime() >= 5){				
+				bgTexture = new Texture(Gdx.files.internal("data/bg_1_s.png"));
+				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+				
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_1_s.png"));
+				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+				
+			} else if (nano.getTime() < 20 && nano.getTime() >= 15){
+				bgTexture = new Texture(Gdx.files.internal("data/bg_2_s.png"));
+				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);	
+				
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_2_s.png"));
+				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);	
+			} else if (nano.getTime() >= 20){
+				bgTexture = new Texture(Gdx.files.internal("data/bg_3_s.png"));
+				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+				
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3_s.png"));
+				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			} else {
+				bgTexture = new Texture(Gdx.files.internal("data/bg_3_s.png"));
+				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+				
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3_s.png"));
+				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			}	
+		} else if(pref.getBoolean("hdState")) {
+			if(nano.getTime() < 15 && nano.getTime() >= 5){				
+				bgTexture = new Texture(Gdx.files.internal("data/bg_1.png"));
+				bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_1.png"));
+				bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+			} else if (nano.getTime() < 20 && nano.getTime() >= 15){
+				bgTexture = new Texture(Gdx.files.internal("data/bg_2.png"));
+				bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);	
+				
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_2.png"));
+				bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);	
+			} else if (nano.getTime() >= 20){
+				bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
+				bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
+				bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+			} else {
+				bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
+				bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
+				bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+			}	
+		}
+			
+				
+				
 		
 		bgBack = new TextureRegion(bgBackTexture, 0, 0, 4096, 580);
 		
@@ -187,10 +227,7 @@ public class AssetLibrary {
 	
 	public static float getHighScore(){
 		return score.getFloat("highScore");
-	}
-		
-		
-		
+	}	
 	
 	
 	public static void dispose(){

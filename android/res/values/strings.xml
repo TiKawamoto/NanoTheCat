@@ -3,6 +3,8 @@
 
     <string name="app_name">Nano the Cat</string>
     <string name="app_id">140063147477</string> 
+    <string name="fb_app_id">667362429984463</string>
+    <string name="ad_id">ca-app-pub-9782017076126208/2849197083</string>
 	<string name="logout">Signed out of Google Play Games</string>
 	<string name="login">Signed in to Google Play Games</string>
 </resources>

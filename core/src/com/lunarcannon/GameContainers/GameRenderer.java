@@ -8,13 +8,12 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector3;
 import com.lunarcannon.GameObjects.Background;
 import com.lunarcannon.GameObjects.Cat;
 import com.lunarcannon.GameObjects.Platform;
@@ -39,9 +38,11 @@ public class GameRenderer {
 	private Iterator<Platform> platformIterator;
 	private Cat cat;
 	
+	private Vector3 touchPos;
+	
 	private NumberFormat f = NumberFormat.getInstance(Locale.ENGLISH);
 	
-	private float width, height, aspectRatio;
+	private float width, height, aspectRatio, actualWidth;
 
 	public GameRenderer(GameWorld world) {
 		this.scrollHandler = world.getScroller();
@@ -57,9 +58,12 @@ public class GameRenderer {
 		height = Gdx.graphics.getHeight();
 		aspectRatio = height / width;
 		
+		actualWidth = 540 / aspectRatio;
+		world.setActualWidth(actualWidth);
 		
+		//System.out.println(width + " " +  height + " " + aspectRatio + " " + actualWidth);
 		cam = new OrthographicCamera();
-		cam.setToOrtho(false, 960, 960 * aspectRatio);
+		cam.setToOrtho(false, 540 / aspectRatio, 540);
 		cam.update();
 		
 		shape1 = new ShapeRenderer();
@@ -70,9 +74,13 @@ public class GameRenderer {
 		f.setMaximumFractionDigits(2);
 		f.setMinimumFractionDigits(2);
 		
+		
+		
 	}
 	
 	public void render(float delta){
+		touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+		GameStateHandler.setTouchPos(cam.unproject(touchPos));
 		
 		
 		cat = world.getCat();
@@ -83,8 +91,8 @@ public class GameRenderer {
         //DRAW BACKGROUND  ----------------------------------------------------
         spriteBatch.begin();
         spriteBatch.enableBlending();
-        spriteBatch.draw(AssetLibrary.bgBack, bgScrollerBack1.getxPos(), bgScrollerBack1.getyPos(), bgScrollerBack1.getWidth(), bgScrollerBack1.getHeight());
-        spriteBatch.draw(AssetLibrary.bgBack, bgScrollerBack2.getxPos(), bgScrollerBack2.getyPos(), bgScrollerBack2.getWidth(), bgScrollerBack2.getHeight());
+        spriteBatch.draw(AssetLibrary.bgBackTexture, bgScrollerBack1.getxPos(), bgScrollerBack1.getyPos(), bgScrollerBack1.getWidth(), bgScrollerBack1.getHeight());
+        spriteBatch.draw(AssetLibrary.bgBackTexture, bgScrollerBack2.getxPos(), bgScrollerBack2.getyPos(), bgScrollerBack2.getWidth(), bgScrollerBack2.getHeight());
         spriteBatch.draw(AssetLibrary.bgTexture, bgScroller1.getxPos(), bgScroller1.getyPos(), bgScroller1.getWidth(), bgScroller1.getHeight());
         spriteBatch.draw(AssetLibrary.bgTexture, bgScroller2.getxPos(), bgScroller2.getyPos(), bgScroller2.getWidth(), bgScroller2.getHeight());
         spriteBatch.end();
@@ -175,9 +183,18 @@ public class GameRenderer {
 		
 		
 		//DRAW SCORE TEXT  ----------------------------------------------------
-		AssetLibrary.robotoLt.draw(spriteBatch, "total distance", 688, height - 20);		
-		totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
-		AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", 905 - totalDistWidth.width, height - 60);
+
+		
+		if(GameStateHandler.getAdState()){
+			AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 420);
+			totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
+			AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 380);	
+		} else {
+			AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 520);
+			totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
+			AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 480);			
+		}
+		
 		
 		if(world.getCollide()){
 			
@@ -187,46 +204,50 @@ public class GameRenderer {
 			if(world.getHigh()){						
 				thisScore = Float.toString(world.getThisScore());
 				
-				AssetLibrary.panelSprite.setX(230);
+				AssetLibrary.panelSprite.setX(actualWidth - 730);
 				AssetLibrary.panelSprite.setY(125);
 				AssetLibrary.panelSprite.setAlpha(.85f);
 				AssetLibrary.panelSprite.draw(spriteBatch);				
 				
 				AssetLibrary.robotoLt.setScale(1f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "yay.", 250, 405);
+				AssetLibrary.robotoLt.draw(spriteBatch, "yay.", actualWidth - 710, 405);
 				
 				AssetLibrary.robotoLt.setScale(.6f);
-				AssetLibrary.robotoLt.draw(spriteBatch, thisScore + "m", 250, 270);
+				AssetLibrary.robotoLt.draw(spriteBatch, thisScore + "m", actualWidth - 710, 270);
 				
 				AssetLibrary.robotoLt.setScale(.3f);
-				AssetLibrary.robotoLt.draw(spriteBatch, highScoreText, 250, 220);
+				AssetLibrary.robotoLt.draw(spriteBatch, highScoreText, actualWidth - 710, 220);
 				
 				AssetLibrary.robotoLt.setScale(.3f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", 550, 155);				
+				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", actualWidth - 410, 155);				
 				
 				AssetLibrary.robotoLt.setScale(.5f);
+
+				
 			} else {
 				highScore = Float.toString(world.getHighScore());
 				thisScore = Float.toString(world.getThisScore());
 				
-				AssetLibrary.panelSprite.setX(230);
+				AssetLibrary.panelSprite.setX(actualWidth - 730);
 				AssetLibrary.panelSprite.setY(125);
 				AssetLibrary.panelSprite.setAlpha(.85f);
 				AssetLibrary.panelSprite.draw(spriteBatch);							
 				
 				AssetLibrary.robotoLt.setScale(1f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "oof.", 250, 395);
+				AssetLibrary.robotoLt.draw(spriteBatch, "oof.", actualWidth - 710, 395);
 				
 				AssetLibrary.robotoLt.setScale(.6f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "score: " + thisScore + "m", 250, 270);
+				AssetLibrary.robotoLt.draw(spriteBatch, "score: " + thisScore + "m", actualWidth - 710, 270);
 				
 				AssetLibrary.robotoLt.setScale(.3f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "high score: " + highScore + "m", 250, 220);
+				AssetLibrary.robotoLt.draw(spriteBatch, "high score: " + highScore + "m", actualWidth - 710, 220);
 				
 				AssetLibrary.robotoLt.setScale(.3f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", 550, 155);
+				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", actualWidth - 410, 155);
 				
 				AssetLibrary.robotoLt.setScale(.5f);	
+				
+
 			}					
 		}		
 		spriteBatch.end();
@@ -235,11 +256,13 @@ public class GameRenderer {
 		
 		//Reset elapsedTime on game reset
 		if(world.getReset()){
-			elapsedTime2 = 0;
+			elapsedTime2 = 0;			
 		}
 		
 	}
 	
+	
+		
 	public void dispose(){
 		shape1.dispose();
 		spriteBatch.dispose();

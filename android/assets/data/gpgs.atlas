@@ -1,68 +1,89 @@
 
 gpgs.png
 format: RGBA8888
-filter: Nearest,Nearest
+filter: Linear,Linear
 repeat: none
+hd_off
+  rotate: false
+  xy: 1, 425
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+hd_on
+  rotate: false
+  xy: 1, 359
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
 games_achievements
   rotate: false
-  xy: 1, 261
+  xy: 259, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_achievements_green
   rotate: false
-  xy: 1, 131
+  xy: 1, 229
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_achievements_white
   rotate: false
-  xy: 131, 261
+  xy: 389, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_controller
   rotate: false
-  xy: 1, 1
+  xy: 1, 99
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_controller_grey
   rotate: false
-  xy: 131, 131
+  xy: 519, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_controller_white
   rotate: false
-  xy: 261, 261
+  xy: 649, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_leaderboards
   rotate: false
-  xy: 131, 1
+  xy: 779, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_leaderboards_green
   rotate: false
-  xy: 261, 131
+  xy: 131, 229
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_leaderboards_white
   rotate: false
-  xy: 261, 1
+  xy: 131, 99
   size: 128, 128
   orig: 128, 128
+  offset: 0, 0
+  index: -1
+cancel
+  rotate: false
+  xy: 1, 1
+  size: 96, 96
+  orig: 96, 96
   offset: 0, 0
   index: -1

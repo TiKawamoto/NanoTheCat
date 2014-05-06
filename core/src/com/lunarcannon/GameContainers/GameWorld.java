@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Rectangle;
 import com.lunarcannon.GameObjects.Cat;
 import com.lunarcannon.GameObjects.Platform;
 import com.lunarcannon.GameObjects.ScrollingHandler;
-import com.lunarcannon.NanoCat.NanoCat;
 
 public class GameWorld {
 
@@ -20,17 +20,20 @@ public class GameWorld {
 	private Iterator<Platform> pIter;
 	private Rectangle catBounds, platBounds;
 	private NumberFormat f = NumberFormat.getInstance(Locale.ENGLISH);
+	private Preferences adPref;
 	
 	private boolean gameReset = false;
 	private boolean midAirTrigger = false;
 	private boolean collide = false;	
 	private boolean highBool = false;
 	private boolean mainTrigger = false;
+	private boolean setFbTrue = false;
 	
 	private int runOnce = 0;
 	
 	private float totalDistance = 0;
 	private float highScore = 0;
+	private float actualWidth;
 	
 	
 	private enum GameState{
@@ -65,8 +68,7 @@ public class GameWorld {
 		case GAMEOVER:
 			gameOver();
 			break;
-		}
-		
+		}		
 		
 
 	}//END UPDATE
@@ -112,6 +114,7 @@ public class GameWorld {
 						
 						AssetLibrary.setTotalFall();
 						AssetLibrary.setDistance(totalDistance);
+//						fbTrue();
 						
 						if(totalDistance > highScore){
 							AssetLibrary.setHighScore(totalDistance);
@@ -141,6 +144,10 @@ public class GameWorld {
 		
 	}
 	
+//	public void fbTrue(){
+//		setFbTrue = AssetLibrary.getFbTrue();
+//	}
+//	
 	public boolean gameOver(){
 		return gameReset;		
 	}
@@ -183,7 +190,6 @@ public class GameWorld {
 		collide = false;	
 		runOnce = 0;
 		
-		
 	}
 	
 	public void setCollide(boolean collide){
@@ -207,6 +213,13 @@ public class GameWorld {
 	
 	public int getTotalFall(){
 		return AssetLibrary.getTotalFall();
+	}
+	
+	public void setActualWidth(float actual){
+		actualWidth = actual;
+	}
+	public float getActualWidth(){
+		return actualWidth;
 	}
 
 }
