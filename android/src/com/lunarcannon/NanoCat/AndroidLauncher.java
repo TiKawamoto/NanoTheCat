@@ -1,14 +1,27 @@
 package com.lunarcannon.NanoCat;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.List;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -20,6 +33,11 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
+import com.facebook.LoggingBehavior;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.Settings;
+
 
 
 
@@ -31,7 +49,30 @@ public class AndroidLauncher extends AndroidApplication implements ExternalInter
 	private static final String AD_ID = "ca-app-pub-9782017076126208/2849197083";
 	private final int SHOW_ADS = 1;
     private final int HIDE_ADS = 0;
+    private float theScore;
     
+    
+    private Session.StatusCallback statusCallback = new SessionStatusCallback();
+    //FB STUFF
+    private class SessionStatusCallback implements Session.StatusCallback {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            updateView();
+        }
+    }
+    
+    private void updateView() {
+        Session session = Session.getActiveSession();
+        if (session.isOpened()) {
+             
+        } else {
+  
+        }
+    }
+    //END FB STUFF
+    
+    
+    //AD VISIBILITY STUFF
     protected Handler adHandler = new Handler()
     {
         @Override
@@ -114,7 +155,43 @@ public class AndroidLauncher extends AndroidApplication implements ExternalInter
 	    gHelper.setup(listener);
 		
 	    pref = Gdx.app.getPreferences("androidprefs");
-				
+	    
+		//FB Session		
+	    Session session = Session.getActiveSession();
+        if (session == null) {
+            if (savedInstanceState != null) {
+                session = Session.restoreSession(this, null, statusCallback, savedInstanceState);
+            }
+            if (session == null) {
+                session = new Session(this);
+            }
+            Session.setActiveSession(session);
+            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+                session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
+            }
+        }        
+
+        try{
+        	PackageInfo info = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_SIGNATURES);
+        	 for (Signature signature : info.signatures) {
+
+                 MessageDigest md = MessageDigest.getInstance("SHA");
+                 md.update(signature.toByteArray());
+                 Log.d("====Hash Key===",Base64.encodeToString(md.digest(), 
+                          Base64.DEFAULT));
+
+             }
+
+         } catch (NameNotFoundException e) {
+
+             e.printStackTrace();
+
+         } catch (NoSuchAlgorithmException ex) {
+
+             ex.printStackTrace();
+
+         }
+        
 	}
 	
 	
@@ -125,6 +202,8 @@ public class AndroidLauncher extends AndroidApplication implements ExternalInter
                     Toast.makeText(getApplicationContext(),getString(R.string.logout), Toast.LENGTH_LONG).show();
             if(msg.arg1 == 2)
             	 	Toast.makeText(getApplicationContext(),getString(R.string.login), Toast.LENGTH_LONG).show();
+            if(msg.arg1 == 3)
+            		Toast.makeText(getApplicationContext(),getString(R.string.fblogout), Toast.LENGTH_LONG).show();
         }	
         	
         
@@ -139,14 +218,17 @@ public class AndroidLauncher extends AndroidApplication implements ExternalInter
 	    	pref.putBoolean("gpgs", true);
 	    	pref.flush();
 	    }	    
-	 	    
+	    
+	 	//GPGS Signin
 	    if(pref.getBoolean("gpgs")){
 	    	gHelper.onStart(this);
-	    	Message msg = handler.obtainMessage();
-			msg.arg1 = 2;
-			handler.sendMessage(msg);
+//	    	Message msg = handler.obtainMessage();
+//			msg.arg1 = 2;
+//			handler.sendMessage(msg);
 //	    	Toast.makeText(this, getString(R.string.login), Toast.LENGTH_LONG).show();
 	    }	    		    
+	    
+	    Session.getActiveSession().addCallback(statusCallback);
 	}
 		
 
@@ -154,16 +236,66 @@ public class AndroidLauncher extends AndroidApplication implements ExternalInter
 	protected void onStop() {
 	    super.onStop();
 	    gHelper.onStop();
+	    
+	    Session.getActiveSession().removeCallback(statusCallback);
 	}
 	
 	@Override
 	protected void onActivityResult(int request, int response, Intent data) {
 	    super.onActivityResult(request, response, data);
-	    gHelper.onActivityResult(request, response, data);
+	    System.out.println("REQUEST CODE: " + request);
 	    
-
+	    if(request == 64206){
+	    	Session.getActiveSession().onActivityResult(this, request, response, data);
+	    }else{
+	    	gHelper.onActivityResult(request, response, data);	  
+	    }
+	      	
+	}
+	
+	@Override
+	public void fbLogin(){
+		Session session = Session.getActiveSession();
+        if (!session.isOpened() && !session.isClosed()) {
+            session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
+            
+        } else {
+            Session.openActiveSession(this, true, statusCallback);
+        }
 	}
 		
+	@Override
+	public void fbLogOut(){
+		Session session = Session.getActiveSession();
+		if(!session.isClosed()){
+			session.closeAndClearTokenInformation();
+		}
+    	Message msg = handler.obtainMessage();
+		msg.arg1 = 3;
+		handler.sendMessage(msg);
+//    	Toast.makeText(this, getString(R.string.logout), Toast.LENGTH_LONG).show();
+	}
+	
+	@Override 
+	public boolean fbGetSignedIn(){
+		boolean signedState = false;
+		Session session = Session.getActiveSession();		
+		if(session.isOpened() && !session.isClosed()){
+			signedState = true;			
+		}
+		return signedState;
+	}
+	
+
+
+
+
+	@Override
+	public void fbSubmitScore(float score) {
+		System.out.println("SUBMIT SCORE! " + score);
+		
+	}
+	
 	@Override
 	public void login() {
 		gHelper.beginUserInitiatedSignIn();
@@ -184,7 +316,7 @@ public class AndroidLauncher extends AndroidApplication implements ExternalInter
 		msg.arg1 = 1;
 		handler.sendMessage(msg);
 		
-	}
+	}		
 
 	@Override
 	public boolean getSignedIn() {
@@ -233,5 +365,9 @@ public class AndroidLauncher extends AndroidApplication implements ExternalInter
 	public void showAds(boolean show) {
 	       adHandler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
 	    }
+
+
+	
+	
 
 }

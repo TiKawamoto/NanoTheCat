@@ -1,7 +1,7 @@
 
 gpgs.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 hd_off
   rotate: false
@@ -17,65 +17,86 @@ hd_on
   orig: 256, 64
   offset: 0, 0
   index: -1
-games_achievements
+fb_blue
   rotate: false
   xy: 259, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_achievements_green
+fb_grey
   rotate: false
   xy: 1, 229
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_achievements_white
+fb_white
   rotate: false
   xy: 389, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_controller
+games_achievements
   rotate: false
   xy: 1, 99
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_controller_grey
+games_achievements_green
   rotate: false
   xy: 519, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_controller_white
+games_achievements_white
   rotate: false
   xy: 649, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_leaderboards
+games_controller
   rotate: false
   xy: 779, 361
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_leaderboards_green
+games_controller_grey
   rotate: false
   xy: 131, 229
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_leaderboards_white
+games_controller_white
   rotate: false
   xy: 131, 99
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+games_leaderboards
+  rotate: false
+  xy: 261, 231
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+games_leaderboards_green
+  rotate: false
+  xy: 261, 101
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+games_leaderboards_white
+  rotate: false
+  xy: 391, 231
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

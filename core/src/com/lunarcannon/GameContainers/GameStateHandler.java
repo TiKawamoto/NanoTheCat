@@ -3,12 +3,15 @@ package com.lunarcannon.GameContainers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Vector3;
+import com.lunarcannon.NanoCat.ExternalInterface;
 import com.lunarcannon.NanoCat.NanoCat;
 
 public class GameStateHandler {
+	
 	private static boolean adState;
 	private static Preferences pref;
 	private static Vector3 touchPos;
+	private static float thescore = 0;
 	
 	public static void load(NanoCat game){
 		pref = Gdx.app.getPreferences("NanoGameState");
@@ -50,5 +53,6 @@ public class GameStateHandler {
 	public static boolean getHD(){		
 		return pref.getBoolean("hdState");
 	}
+	
 	
 }

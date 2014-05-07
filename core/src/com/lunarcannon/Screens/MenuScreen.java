@@ -39,9 +39,9 @@ public class MenuScreen implements Screen {
 	private Label settingsLabel;
 	private LabelStyle settingsLabelStyle;
 	private TextButton playButton, settingsButton, premiumButton;
-	private Button signButton, signButtonConnected, achieveButton, leaderButton, hdButton, hdButtonOff, cancelButton;
+	private Button signButton, signButtonConnected, achieveButton, leaderButton, hdButton, hdButtonOff, cancelButton, fbButton, fbButtonConnected;
 	private TextButtonStyle buttonStyle, buttonStyleHd;
-	private ButtonStyle signButtonStyle, signButtonConnectedStyle, achieveButtonStyle, leaderButtonStyle, hdButtonStyle, hdButtonStyleOff, cancelButtonStyle;
+	private ButtonStyle signButtonStyle, signButtonConnectedStyle, achieveButtonStyle, leaderButtonStyle, hdButtonStyle, hdButtonStyleOff, cancelButtonStyle, fbButtonStyle, fbButtonConnectedStyle;
 	private BitmapFont buttonFont;
 	private TextureAtlas menuAtlas, gpgsAtlas;
 	private Texture fontFilter, panel, line;
@@ -84,11 +84,23 @@ public class MenuScreen implements Screen {
 			stage.addActor(signButtonConnected);
 			stage.addActor(achieveButton);
 			stage.addActor(leaderButton);
-		} else {
+		} else if (!game.extInt.getSignedIn()) {
 			stage.getRoot().removeActor(signButtonConnected);
 			stage.getRoot().removeActor(achieveButton);
 			stage.getRoot().removeActor(leaderButton);
 			stage.addActor(signButton);
+		}
+		batch.end();
+		
+		batch.begin();
+		batch.enableBlending();		
+		if(game.extInt.fbGetSignedIn()){
+			stage.getRoot().removeActor(fbButton);
+			stage.addActor(fbButtonConnected);
+			
+		} else if(!game.extInt.fbGetSignedIn()) {
+			stage.getRoot().removeActor(fbButtonConnected);
+			stage.addActor(fbButton);			
 		}
 		
 		
@@ -147,8 +159,8 @@ public class MenuScreen implements Screen {
 		xDif = 960 / (float) width;
 		yDif = 540 / (float) height;
 		
-		System.out.println("GDX Width " + Gdx.graphics.getWidth() + " - GDX Height " + Gdx.graphics.getHeight());
-		System.out.println("Width " + widthCorrect);
+//		System.out.println("GDX Width " + Gdx.graphics.getWidth() + " - GDX Height " + Gdx.graphics.getHeight());
+//		System.out.println("Width " + widthCorrect);
 		
 		Gdx.input.setInputProcessor(stage);
 		Gdx.input.setCatchBackKey(true);
@@ -255,8 +267,16 @@ public class MenuScreen implements Screen {
 		cancelButtonStyle.up = gpgsSkin.getDrawable("cancel");
 		cancelButtonStyle.down = gpgsSkin.getDrawable("cancel");
 		
+		fbButtonStyle = new ButtonStyle();
+		fbButtonStyle.up = gpgsSkin.getDrawable("fb_blue");
+		fbButtonStyle.down = gpgsSkin.getDrawable("fb_white");
 		
-		//GPGS Button Stuff ------------------------------------
+		fbButtonConnectedStyle = new ButtonStyle();
+		fbButtonConnectedStyle.up = gpgsSkin.getDrawable("fb_grey");
+		fbButtonConnectedStyle.down = gpgsSkin.getDrawable("fb_white");
+		
+		
+		//GPGS Button Stuff ------------------------------------			
 		signButton = new Button(signButtonStyle);				
 		signButton.setWidth(80);
 		signButton.setHeight(80);
@@ -299,6 +319,8 @@ public class MenuScreen implements Screen {
 		});
 		
 		
+		
+		
 		achieveButton = new Button(achieveButtonStyle);				
 		achieveButton.setWidth(80);
 		achieveButton.setHeight(80);
@@ -333,6 +355,50 @@ public class MenuScreen implements Screen {
 		 	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 		 		if (game.extInt.getSignedIn()){
 		 			game.extInt.getLeaderboard();
+		 		}
+		 	}			
+		});
+		
+		//FB Button Stuff
+		
+		fbButton = new Button(fbButtonStyle);				
+		fbButton.setWidth(80);
+		fbButton.setHeight(80);
+		fbButton.setX(150);
+		fbButton.setY(430);
+		
+		fbButton.addListener(new InputListener() { 
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
+		 		return true;
+		 	}
+		 
+		 	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+		 		
+		 		if(game.extInt.fbGetSignedIn()){
+		 			game.extInt.fbLogOut();
+		 		} else {
+		 			game.extInt.fbLogin();
+		 		}
+		 	}			
+		});
+		
+		fbButtonConnected = new Button(fbButtonConnectedStyle);		
+		fbButtonConnected.setWidth(80);
+		fbButtonConnected.setHeight(80);
+		fbButtonConnected.setX(150);
+		fbButtonConnected.setY(430);
+		fbButtonConnected.setColor(1, 1, 1, .65f);
+		
+		fbButtonConnected.addListener(new InputListener() { 
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
+		 		return true;
+		 	}
+		 
+		 	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+		 		if(game.extInt.fbGetSignedIn()){
+		 			game.extInt.fbLogOut();
+		 		} else {
+		 			game.extInt.fbLogin();
 		 		}
 		 	}			
 		});
@@ -395,8 +461,8 @@ public class MenuScreen implements Screen {
 		hdButton.setHeight(50 * .8f);
 		
 		hdButton.setColor(1, 1, 1, 1f);
-		System.out.println("panel --- GETX - " + panelSprite.getX() + " GETY - " + panelSprite.getY());
-		System.out.println("hdButton --- GETX - " + hdButton.getX() + " GETY - " + hdButton.getY());
+//		System.out.println("panel --- GETX - " + panelSprite.getX() + " GETY - " + panelSprite.getY());
+//		System.out.println("hdButton --- GETX - " + hdButton.getX() + " GETY - " + hdButton.getY());
 		
 
 		hdButton.addListener(new InputListener() {

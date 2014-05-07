@@ -7,4 +7,5 @@
     <string name="ad_id">ca-app-pub-9782017076126208/2849197083</string>
 	<string name="logout">Signed out of Google Play Games</string>
 	<string name="login">Signed in to Google Play Games</string>
+	<string name="fblogout">Signed out of Facebook</string>
 </resources>

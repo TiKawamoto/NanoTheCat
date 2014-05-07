@@ -12,6 +12,7 @@ public class GameScreen implements Screen{
 	private NanoCat game;
 	private GameWorld world;
 	private GameRenderer renderer;
+	private int doOnce = 0;
 		
     public GameScreen(NanoCat game) {
     	this.game = game; 
@@ -28,6 +29,17 @@ public class GameScreen implements Screen{
     	
     	   	
     	if(world.getCollide()){
+    		
+    		if(world.getPostFb()){
+    			if(doOnce < 1){
+    				game.extInt.fbSubmitScore(world.getThisScore());
+    				doOnce++;
+    			}		    
+    		}
+			
+			if(!world.getReset()){
+				doOnce = 0;
+			}
     		
     		if(game.extInt.getSignedIn()){
         		achievementChecker();	

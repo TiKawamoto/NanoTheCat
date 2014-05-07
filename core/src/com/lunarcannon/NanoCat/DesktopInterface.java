@@ -60,5 +60,18 @@ public class DesktopInterface implements ExternalInterface {
 	
 	@Override
 	public void showAds(boolean show){}
+	
+	@Override
+	public void fbLogin(){}
+	
+	@Override
+	public void fbLogOut(){}
+	
+	@Override
+	public boolean fbGetSignedIn(){
+	return false;
+	}
 
+	public void fbSubmitScore(float score){}
+	
 }

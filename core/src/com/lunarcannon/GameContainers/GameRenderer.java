@@ -222,6 +222,11 @@ public class GameRenderer {
 				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", actualWidth - 410, 155);				
 				
 				AssetLibrary.robotoLt.setScale(.5f);
+				
+				AssetLibrary.fbShareSprite.setX(actualWidth - 420);
+				AssetLibrary.fbShareSprite.setY(350);		
+				AssetLibrary.fbShareSprite.setScale(.8f);
+				AssetLibrary.fbShareSprite.draw(spriteBatch);
 
 				
 			} else {
@@ -247,6 +252,10 @@ public class GameRenderer {
 				
 				AssetLibrary.robotoLt.setScale(.5f);	
 				
+				AssetLibrary.fbShareSprite.setX(actualWidth - 420);
+				AssetLibrary.fbShareSprite.setY(350);		
+				AssetLibrary.fbShareSprite.setScale(.8f);
+				AssetLibrary.fbShareSprite.draw(spriteBatch);
 
 			}					
 		}		

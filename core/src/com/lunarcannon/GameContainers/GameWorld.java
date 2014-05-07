@@ -27,7 +27,7 @@ public class GameWorld {
 	private boolean collide = false;	
 	private boolean highBool = false;
 	private boolean mainTrigger = false;
-	private boolean setFbTrue = false;
+	private boolean fbPost = false;
 	
 	private int runOnce = 0;
 	
@@ -188,6 +188,7 @@ public class GameWorld {
 		cat.reset();
 		gameReset = false;
 		collide = false;	
+		fbPost = false;
 		runOnce = 0;
 		
 	}
@@ -220,6 +221,13 @@ public class GameWorld {
 	}
 	public float getActualWidth(){
 		return actualWidth;
+	}
+	
+	public void SetPostFb(){
+		fbPost = true;
+	}
+	public boolean getPostFb(){
+		return fbPost;
 	}
 
 }

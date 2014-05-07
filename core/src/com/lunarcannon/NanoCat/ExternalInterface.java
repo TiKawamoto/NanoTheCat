@@ -22,6 +22,15 @@ public void unlockAchievement(String achievementID);
 public void getLeaderboard();
 
 public void showAds(boolean show);
+
+public void fbLogin();
+
+public void fbLogOut();
+
+public boolean fbGetSignedIn();
+
+
+public void fbSubmitScore(float score);
 }
 
 

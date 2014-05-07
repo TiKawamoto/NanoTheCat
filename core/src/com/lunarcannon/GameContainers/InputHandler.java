@@ -70,7 +70,11 @@ public class InputHandler implements InputProcessor {
 	
 			touchPos = GameStateHandler.getTouchPos();
 					
-			if(touchPos.x > (world.getActualWidth() - 730)  && touchPos.x < (world.getActualWidth() - 230) 
+			if(touchPos.x > (world.getActualWidth() - 420)  && touchPos.x < (world.getActualWidth() - 230) 
+					&&  touchPos.y > 350 && touchPos.y < 425){
+				world.SetPostFb();
+				
+			} else if (touchPos.x > (world.getActualWidth() - 730)  && touchPos.x < (world.getActualWidth() - 230) 
 					&&  touchPos.y > 125 && touchPos.y < 425){
 				world.gameReset();
 			}
