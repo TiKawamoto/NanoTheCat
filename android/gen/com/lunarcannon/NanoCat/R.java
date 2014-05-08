@@ -604,6 +604,7 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f07002d;
         public static final int fb_app_id=0x7f070041;
         public static final int fblogout=0x7f070045;
+        public static final int fbposted=0x7f070046;
         public static final int gamehelper_app_misconfigured=0x7f070036;
         public static final int gamehelper_license_failed=0x7f070037;
         public static final int gamehelper_sign_in_failed=0x7f070035;

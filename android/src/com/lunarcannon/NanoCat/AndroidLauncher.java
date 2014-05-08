@@ -33,290 +33,430 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
 import com.facebook.LoggingBehavior;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
+import com.facebook.SessionDefaultAudience;
+import com.facebook.widget.WebDialog;
 
+public class AndroidLauncher extends AndroidApplication implements
+		ExternalInterface {
 
-
-
-public class AndroidLauncher extends AndroidApplication implements ExternalInterface{
-	
 	GameHelper gHelper;
 	Preferences pref;
 	private AdView adView;
 	private static final String AD_ID = "ca-app-pub-9782017076126208/2849197083";
 	private final int SHOW_ADS = 1;
-    private final int HIDE_ADS = 0;
-    private float theScore;
-    
-    
-    private Session.StatusCallback statusCallback = new SessionStatusCallback();
-    //FB STUFF
-    private class SessionStatusCallback implements Session.StatusCallback {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            updateView();
-        }
-    }
-    
-    private void updateView() {
-        Session session = Session.getActiveSession();
-        if (session.isOpened()) {
-             
-        } else {
-  
-        }
-    }
-    //END FB STUFF
-    
-    
-    //AD VISIBILITY STUFF
-    protected Handler adHandler = new Handler()
-    {
-        @Override
-        public void handleMessage(Message msg) {
-            switch(msg.what) {
-                case SHOW_ADS:
-                {
-                    adView.setVisibility(View.VISIBLE);
-                    break;
-                }
-                case HIDE_ADS:
-                {
-                    adView.setVisibility(View.GONE);
-                    System.out.println("GONE");
-                    break;
-                    
-                }
-            }
-        }
-    };
+	private final int HIDE_ADS = 0;
+	private float theScore;
 	
+	private WebDialog dialog = null;
+    private String dialogAction = null;
+    private Bundle dialogParams = null;
+
+	private Session.StatusCallback statusCallback = new SessionStatusCallback();
+
+	// FB STUFF
+	private class SessionStatusCallback implements Session.StatusCallback {
+		@Override
+		public void call(Session session, SessionState state,
+				Exception exception) {
+			updateView();
+		}
+	}
+
+	private void updateView() {
+		Session session = Session.getActiveSession();
+		if (session.isOpened()) {
+
+		} else {
+
+		}
+	}
+
+	// END FB STUFF
+
+	// AD VISIBILITY STUFF
+	protected Handler adHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case SHOW_ADS: {
+				adView.setVisibility(View.VISIBLE);
+				break;
+			}
+			case HIDE_ADS: {
+				adView.setVisibility(View.GONE);
+				System.out.println("GONE");
+				break;
+
+			}
+			}
+		}
+	};
+
 	@Override
-	protected void onCreate (Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		RelativeLayout layout = new RelativeLayout(this);
-		
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
 		config.hideStatusBar = true;
 		config.useImmersiveMode = true;
-		
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-        
-		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().clearFlags(
+				WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
 		View gameView = initializeForView(new NanoCat(this), config);
-		
-		 // Admob Setup
+
+		// Admob Setup
 		adView = new AdView(this);
 		adView.setAdSize(AdSize.BANNER);
-		adView.setAdUnitId(AD_ID);		
-        
-//		AdRequest adRequest = new AdRequest.Builder()
-//			//.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-//			.addTestDevice("9E455A49BC75589448AD9D9EA73FF4EB")
-//			.build();
-        adView.loadAd(new AdRequest.Builder().build());
+		adView.setAdUnitId(AD_ID);
 
-        //LibGDX
-        layout.addView(gameView);
+		// AdRequest adRequest = new AdRequest.Builder()
+		// //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+		// .addTestDevice("9E455A49BC75589448AD9D9EA73FF4EB")
+		// .build();
+		adView.loadAd(new AdRequest.Builder().build());
 
-   	 //AdMob
-        RelativeLayout.LayoutParams adParams = 
-            new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        adParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        layout.addView(adView, adParams);
-        
-        
-        
-        setContentView(layout);
-		//initialize(new NanoCat(this), config);
-		
+		// LibGDX
+		layout.addView(gameView);
+
+		// AdMob
+		RelativeLayout.LayoutParams adParams = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		adParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		layout.addView(adView, adParams);
+
+		setContentView(layout);
+		// initialize(new NanoCat(this), config);
+
 		gHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
-		
+
 		GameHelperListener listener = new GameHelper.GameHelperListener() {
-	        @Override
-	        public void onSignInSucceeded() {
-	        
-	        }
-	        @Override
-	        public void onSignInFailed() {
-	  
-	        }
+			@Override
+			public void onSignInSucceeded() {
 
-	    };
-	    
-	    gHelper.setup(listener);
-		
-	    pref = Gdx.app.getPreferences("androidprefs");
-	    
-		//FB Session		
-	    Session session = Session.getActiveSession();
-        if (session == null) {
-            if (savedInstanceState != null) {
-                session = Session.restoreSession(this, null, statusCallback, savedInstanceState);
-            }
-            if (session == null) {
-                session = new Session(this);
-            }
-            Session.setActiveSession(session);
-            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-                session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
-            }
-        }        
+			}
 
-        try{
-        	PackageInfo info = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_SIGNATURES);
-        	 for (Signature signature : info.signatures) {
+			@Override
+			public void onSignInFailed() {
 
-                 MessageDigest md = MessageDigest.getInstance("SHA");
-                 md.update(signature.toByteArray());
-                 Log.d("====Hash Key===",Base64.encodeToString(md.digest(), 
-                          Base64.DEFAULT));
+			}
 
-             }
+		};
 
-         } catch (NameNotFoundException e) {
+		gHelper.setup(listener);
 
-             e.printStackTrace();
+		pref = Gdx.app.getPreferences("androidprefs");
 
-         } catch (NoSuchAlgorithmException ex) {
+		// FB Session
+		Session session = Session.getActiveSession();
+		if (session == null) {
+			if (savedInstanceState != null) {
+				session = Session.restoreSession(this, null, statusCallback,
+						savedInstanceState);
+			}
+			if (session == null) {
+				session = new Session(this);
+			}
+			Session.setActiveSession(session);
+			if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+				session.openForRead(new Session.OpenRequest(this)
+						.setCallback(statusCallback));
+			}
+		}
 
-             ex.printStackTrace();
+		//GET SIGNATURE
+		try {
+			PackageInfo info = getPackageManager().getPackageInfo(
+					this.getPackageName(), PackageManager.GET_SIGNATURES);
+			for (Signature signature : info.signatures) {
 
-         }
-        
+				MessageDigest md = MessageDigest.getInstance("SHA");
+				md.update(signature.toByteArray());
+				Log.d("====Hash Key===",
+						Base64.encodeToString(md.digest(), Base64.DEFAULT));
+
+			}
+
+		} catch (NameNotFoundException e) {
+
+			e.printStackTrace();
+
+		} catch (NoSuchAlgorithmException ex) {
+
+			ex.printStackTrace();
+
+		}
+
 	}
-	
-	
-	
+
 	private final Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            if(msg.arg1 == 1)
-                    Toast.makeText(getApplicationContext(),getString(R.string.logout), Toast.LENGTH_LONG).show();
-            if(msg.arg1 == 2)
-            	 	Toast.makeText(getApplicationContext(),getString(R.string.login), Toast.LENGTH_LONG).show();
-            if(msg.arg1 == 3)
-            		Toast.makeText(getApplicationContext(),getString(R.string.fblogout), Toast.LENGTH_LONG).show();
-        }	
-        	
-        
-    };
-	
+		public void handleMessage(Message msg) {
+			if (msg.arg1 == 1)
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.logout), Toast.LENGTH_LONG).show();
+			if (msg.arg1 == 2)
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login), Toast.LENGTH_LONG).show();
+			if (msg.arg1 == 3)
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.fblogout), Toast.LENGTH_LONG).show();
+			if (msg.arg1 == 4)
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.fbposted), Toast.LENGTH_LONG).show();
+		}
+
+	};
+
 	@Override
 	protected void onStart() {
-	    super.onStart();
-	    
-	    if(!pref.contains("firstTime")){
-	    	pref.putBoolean("firstTime", true);
-	    	pref.putBoolean("gpgs", true);
-	    	pref.flush();
-	    }	    
-	    
-	 	//GPGS Signin
-	    if(pref.getBoolean("gpgs")){
-	    	gHelper.onStart(this);
-//	    	Message msg = handler.obtainMessage();
-//			msg.arg1 = 2;
-//			handler.sendMessage(msg);
-//	    	Toast.makeText(this, getString(R.string.login), Toast.LENGTH_LONG).show();
-	    }	    		    
-	    
-	    Session.getActiveSession().addCallback(statusCallback);
+		super.onStart();
+
+		if (!pref.contains("firstTime")) {
+			pref.putBoolean("firstTime", true);
+			pref.putBoolean("gpgs", true);
+			pref.flush();
+		}
+
+		// GPGS Signin
+		if (pref.getBoolean("gpgs")) {
+			gHelper.onStart(this);
+			// Message msg = handler.obtainMessage();
+			// msg.arg1 = 2;
+			// handler.sendMessage(msg);
+			// Toast.makeText(this, getString(R.string.login),
+			// Toast.LENGTH_LONG).show();
+		}
+
+		Session.getActiveSession().addCallback(statusCallback);
 	}
-		
 
 	@Override
 	protected void onStop() {
-	    super.onStop();
-	    gHelper.onStop();
-	    
-	    Session.getActiveSession().removeCallback(statusCallback);
+		super.onStop();
+		gHelper.onStop();
+
+		Session.getActiveSession().removeCallback(statusCallback);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int request, int response, Intent data) {
-	    super.onActivityResult(request, response, data);
-	    System.out.println("REQUEST CODE: " + request);
-	    
-	    if(request == 64206){
-	    	Session.getActiveSession().onActivityResult(this, request, response, data);
-	    }else{
-	    	gHelper.onActivityResult(request, response, data);	  
-	    }
-	      	
+		super.onActivityResult(request, response, data);
+		System.out.println("REQUEST CODE: " + request);
+
+		if (request == 64206) {
+			Session.getActiveSession().onActivityResult(this, request, response, data);
+		}else if (request == 103 || request == 102){
+			Session.getActiveSession().onActivityResult(this, request, response, data);
+		} else {
+			gHelper.onActivityResult(request, response, data);
+		}
+
 	}
-	
+
+	// BEGIN FACEBOOK STUFF ----------------------------------
+
 	@Override
-	public void fbLogin(){
+	public void fbLogin() {
 		Session session = Session.getActiveSession();
-        if (!session.isOpened() && !session.isClosed()) {
-            session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
-            
-        } else {
-            Session.openActiveSession(this, true, statusCallback);
-        }
+		if (!session.isOpened() && !session.isClosed()) {
+			Session.OpenRequest openRequest = new Session.OpenRequest(this);
+			session.openForRead(openRequest.setPermissions(
+					Arrays.asList("user_games_activity",
+							"friends_games_activity")).setCallback(
+					statusCallback));
+
+		} else {
+			Session.openActiveSession(this, true, statusCallback);
+		}
 	}
-		
+
 	@Override
-	public void fbLogOut(){
+	public void fbLogOut() {
 		Session session = Session.getActiveSession();
-		if(!session.isClosed()){
+		if (!session.isClosed()) {
 			session.closeAndClearTokenInformation();
 		}
-    	Message msg = handler.obtainMessage();
+		Message msg = handler.obtainMessage();
 		msg.arg1 = 3;
 		handler.sendMessage(msg);
-//    	Toast.makeText(this, getString(R.string.logout), Toast.LENGTH_LONG).show();
+		// Toast.makeText(this, getString(R.string.logout),
+		// Toast.LENGTH_LONG).show();
 	}
-	
-	@Override 
-	public boolean fbGetSignedIn(){
+
+	@Override
+	public boolean fbGetSignedIn() {
 		boolean signedState = false;
-		Session session = Session.getActiveSession();		
-		if(session.isOpened() && !session.isClosed()){
-			signedState = true;			
+		Session session = Session.getActiveSession();
+		if (session.isOpened() && !session.isClosed()) {
+			signedState = true;
 		}
 		return signedState;
 	}
-	
-
-
-
 
 	@Override
 	public void fbSubmitScore(float score) {
-		System.out.println("SUBMIT SCORE! " + score);
+		Session session = Session.getActiveSession();
 		
+		if (!session.isOpened() && !session.isClosed()) {
+			System.out.println("FOO");
+			Session.OpenRequest openRequest = new Session.OpenRequest(this);
+			session.openForPublish(openRequest.setPermissions(
+					Arrays.asList("user_games_activity", "publish_actions",
+							"friends_games_activity")).setCallback(
+					statusCallback));
+//			session.openForPublish(openRequest.setPermissions(
+//					Arrays.asList("publish_actions")).setCallback(
+//					statusCallback));
+		} else if (!session.isOpened() && session.isClosed()) {
+			System.out.println("POO");
+						
+			session = new Session(this);
+			
+			Session.setActiveSession(session);
+//			if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+				session.openForRead(new Session.OpenRequest(this)
+						.setCallback(statusCallback));
+//			}
+			
+			
+		} else {
+			System.out.println("DOO");
+		}
+		
+		System.out.println(session.getState());
+		
+		if (session.isOpened() && !session.isClosed()) {
+			if (session.getPermissions().contains("publish_actions")) {
+				System.out.println("MOO");
+				fbPostLogic(score);
+			
+
+			} else if (session.getPermissions().contains("user_games_activity")) {
+				System.out.println("BOO");
+				 Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, "publish_actions")             
+	             .setDefaultAudience(SessionDefaultAudience.FRIENDS)
+	             .setRequestCode(103);
+				 session.requestNewPublishPermissions(newPermissionsRequest);
+				fbPostLogic(score);			
+			}
+		}
+		
+
 	}
 	
+	public void fbPostLogic(final float score){
+		final int theScore = (int) (score * 100);		
+		
+		if (theScore > 0) {
+			System.out.println("Pub SUBMIT SCORE! " + theScore);
+			AndroidLauncher.this.runOnUiThread(new Runnable(){
+				public void run(){
+					Bundle fbParams = new Bundle();
+					fbParams.putString("score", "" + theScore);	
+					Request postScoreRequest = new Request(Session.getActiveSession(), "me/scores", fbParams,HttpMethod.POST, new Request.Callback() {
+
+						@Override
+						public void onCompleted(Response response) {
+							System.out.println("Posted yo");
+							FacebookRequestError error = response.getError();
+							if (error != null) {
+								
+							} else {
+
+							}
+						}
+					});					
+					Request.executeBatchAsync(postScoreRequest);	
+					
+					
+					Bundle postParams = new Bundle();
+					postParams.putString("name", "Nano the Cat!");
+					postParams.putString("caption", "MEOW.");
+					postParams.putString("description", "I ran " + Float.toString(score) + " meters in Nano the Cat!");
+					postParams.putString("link", "http://play.google.com");
+					postParams.putString("picture", "http://lunarcannon.com/img/nano-icon-512.png");
+					
+					showDialogWithoutNotificationBar("feed", postParams);
+					
+//					Message msg = handler.obtainMessage();
+//					msg.arg1 = 4;
+//					handler.sendMessage(msg);
+					
+				}	
+			});
+				
+		}
+	}
+	
+	private void showDialogWithoutNotificationBar(String action, Bundle params) {
+		// Create the dialog
+		dialog = new WebDialog.Builder(this, Session.getActiveSession(), action, params).setOnCompleteListener(
+				new WebDialog.OnCompleteListener() {
+
+					@Override
+					public void onComplete(Bundle values,FacebookException error) {
+						if (error != null && !(error instanceof FacebookOperationCanceledException)) {
+							System.out.println("error");
+						}
+						dialog = null;
+						dialogAction = null;
+						dialogParams = null;
+						
+					}
+
+				}).build();
+
+		// Hide the notification bar and resize to full screen
+		Window dialog_window = dialog.getWindow();
+    	dialog_window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    	
+    	// Store the dialog information in attributes
+    	dialogAction = action;
+    	dialogParams = params;
+    	
+    	// Show the dialog
+    	dialog.show();
+	}
+
+
+	// END FACEBOOK STUFF ----------------------------------
+
 	@Override
 	public void login() {
 		gHelper.beginUserInitiatedSignIn();
 		pref.putBoolean("gpgs", true);
-		pref.flush();		
+		pref.flush();
 	}
-	
 
-	
 	@Override
 	public void logout() {
-		
+
 		gHelper.signOut();
-		gHelper.disconnect();		
+		gHelper.disconnect();
 		pref.putBoolean("gpgs", false);
 		pref.flush();
 		Message msg = handler.obtainMessage();
 		msg.arg1 = 1;
 		handler.sendMessage(msg);
-		
-	}		
+
+	}
 
 	@Override
 	public boolean getSignedIn() {
@@ -325,49 +465,46 @@ public class AndroidLauncher extends AndroidApplication implements ExternalInter
 
 	@Override
 	public void submitScore(long highScore) {
-		Games.Leaderboards.submitScore(gHelper.getApiClient(), "CgkI1Yuo44kEEAIQBg", highScore);
-		
+		Games.Leaderboards.submitScore(gHelper.getApiClient(),
+				"CgkI1Yuo44kEEAIQBg", highScore);
+
 	}
 
 	@Override
 	public void getScore() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getScoreData() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getAchievement() {
-		startActivityForResult(Games.Achievements.getAchievementsIntent(gHelper.getApiClient()), 1);
-		
-		
+		startActivityForResult(Games.Achievements.getAchievementsIntent(gHelper
+				.getApiClient()), 1);
+
 	}
 
 	@Override
 	public void unlockAchievement(String achievementID) {
 		Games.Achievements.unlock(gHelper.getApiClient(), achievementID);
-		
+
 	}
 
 	@Override
 	public void getLeaderboard() {
-		startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gHelper.getApiClient(), "CgkI1Yuo44kEEAIQBg"), 1);
-		
-		
+		startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
+				gHelper.getApiClient(), "CgkI1Yuo44kEEAIQBg"), 1);
+
 	}
-	
+
 	@Override
 	public void showAds(boolean show) {
-	       adHandler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
-	    }
-
-
-	
-	
+		adHandler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
+	}
 
 }

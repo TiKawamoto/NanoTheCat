@@ -226,6 +226,10 @@ public class GameWorld {
 	public void SetPostFb(){
 		fbPost = true;
 	}
+	
+	public void resetPostFb(){
+		fbPost = false;
+	}
 	public boolean getPostFb(){
 		return fbPost;
 	}

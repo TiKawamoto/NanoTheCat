@@ -31,16 +31,10 @@ public class GameScreen implements Screen{
     	if(world.getCollide()){
     		
     		if(world.getPostFb()){
-    			if(doOnce < 1){
     				game.extInt.fbSubmitScore(world.getThisScore());
-    				doOnce++;
-    			}		    
     		}
-			
-			if(!world.getReset()){
-				doOnce = 0;
-			}
-    		
+    		world.resetPostFb();
+
     		if(game.extInt.getSignedIn()){
         		achievementChecker();	
         	}   	    	
@@ -82,7 +76,7 @@ public class GameScreen implements Screen{
     }
     
     public void achievementChecker(){
-    	if(world.getThisScore() >= 50){
+    	if(world.getThisScore() >= 25){
     		game.extInt.unlockAchievement("CgkI1Yuo44kEEAIQAQ");
     	}
     	if(world.getThisScore() >= 100){
@@ -94,7 +88,7 @@ public class GameScreen implements Screen{
     	if(world.getThisScore() >= 500){
     		game.extInt.unlockAchievement("CgkI1Yuo44kEEAIQBA");
     	}
-    	if(world.getThisScore() >= 1000){
+    	if(world.getThisScore() >= 50){
     		game.extInt.unlockAchievement("CgkI1Yuo44kEEAIQBQ");
     	}
     	

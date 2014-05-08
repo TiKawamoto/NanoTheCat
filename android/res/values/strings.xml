@@ -8,4 +8,5 @@
 	<string name="logout">Signed out of Google Play Games</string>
 	<string name="login">Signed in to Google Play Games</string>
 	<string name="fblogout">Signed out of Facebook</string>
+	<string name="fbposted">Score posted to Facebook</string>
 </resources>
