@@ -278,8 +278,7 @@ public class AndroidLauncher extends AndroidApplication implements
 		if (!session.isOpened() && !session.isClosed()) {
 			Session.OpenRequest openRequest = new Session.OpenRequest(this);
 			session.openForRead(openRequest.setPermissions(
-					Arrays.asList("user_games_activity",
-							"friends_games_activity")).setCallback(
+					Arrays.asList("friends_games_activity")).setCallback(
 					statusCallback));
 
 		} else {
@@ -314,11 +313,13 @@ public class AndroidLauncher extends AndroidApplication implements
 	public void fbSubmitScore(float score) {
 		Session session = Session.getActiveSession();
 		
+		
+		
 		if (!session.isOpened() && !session.isClosed()) {
 			System.out.println("FOO");
 			Session.OpenRequest openRequest = new Session.OpenRequest(this);
 			session.openForPublish(openRequest.setPermissions(
-					Arrays.asList("user_games_activity", "publish_actions",
+					Arrays.asList("publish_actions",
 							"friends_games_activity")).setCallback(
 					statusCallback));
 //			session.openForPublish(openRequest.setPermissions(
@@ -336,6 +337,7 @@ public class AndroidLauncher extends AndroidApplication implements
 //			}
 			
 			
+			
 		} else {
 			System.out.println("DOO");
 		}
@@ -343,12 +345,13 @@ public class AndroidLauncher extends AndroidApplication implements
 		System.out.println(session.getState());
 		
 		if (session.isOpened() && !session.isClosed()) {
+			fbPostLogic(score);
 			if (session.getPermissions().contains("publish_actions")) {
 				System.out.println("MOO");
 				fbPostLogic(score);
 			
 
-			} else if (session.getPermissions().contains("user_games_activity")) {
+			} else if (session.getPermissions().contains("friends_games_activity")) {
 				System.out.println("BOO");
 				 Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, "publish_actions")             
 	             .setDefaultAudience(SessionDefaultAudience.FRIENDS)
@@ -504,6 +507,7 @@ public class AndroidLauncher extends AndroidApplication implements
 
 	@Override
 	public void showAds(boolean show) {
+
 		adHandler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
 	}
 

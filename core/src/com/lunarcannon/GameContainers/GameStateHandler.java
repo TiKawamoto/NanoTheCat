@@ -3,21 +3,23 @@ package com.lunarcannon.GameContainers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Vector3;
-import com.lunarcannon.NanoCat.ExternalInterface;
 import com.lunarcannon.NanoCat.NanoCat;
 
 public class GameStateHandler {
 	
+	private static NanoCat game;
 	private static boolean adState;
 	private static Preferences pref;
 	private static Vector3 touchPos;
 	private static float thescore = 0;
 	
-	public static void load(NanoCat game){
+	public static void load(NanoCat thegame){
+		game = thegame;
+		
 		pref = Gdx.app.getPreferences("NanoGameState");
 		
 		if(!pref.contains("adState")){
-			pref.putBoolean("adState", false);
+			pref.putBoolean("adState", true);
 			pref.flush();
 		}
 		
@@ -28,13 +30,14 @@ public class GameStateHandler {
 	}
 	
 	public static boolean getAdState(){
-		adState = pref.getBoolean("adState");
+//		adState = pref.getBoolean("adState");
 		return adState;
 	}
 	
 	public static void setAdState(boolean state){
 		adState = state;
 		pref.putBoolean("adState", adState);
+		game.adRefresh(adState);
 	}
 	
 	public static void setTouchPos(Vector3 touch){

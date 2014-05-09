@@ -1,5 +1,9 @@
 package com.lunarcannon.Screens;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -12,13 +16,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -26,7 +30,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.lunarcannon.GameContainers.AssetLibrary;
+import com.lunarcannon.GameContainers.ButtonAccessor;
 import com.lunarcannon.GameContainers.GameStateHandler;
+import com.lunarcannon.GameContainers.ImageAccessor;
+import com.lunarcannon.GameContainers.LabelAccessor;
+import com.lunarcannon.GameContainers.SpriteAccessor;
 import com.lunarcannon.NanoCat.ExternalInterface;
 import com.lunarcannon.NanoCat.NanoCat;
 
@@ -49,12 +57,18 @@ public class MenuScreen implements Screen {
 	private SpriteBatch batch;
 	private Skin menuSkin, gpgsSkin;
 	private Sprite bgDaySprite, logoSprite, panelSprite, lineSprite;
+	private Image lineImage, panelImage;
 
 	private float aspectRatio, xDif, yDif;
 	private int widthCorrect, heightCorrect;
 	private String hdText;
 	private boolean settingsOn = false;
+	private TweenManager tweenManager;
 	
+	private int doOnce = 0;
+	private int doOnce2 = 0;
+	
+	private float realX, realY;
 
 	public MenuScreen(NanoCat game) {
 		this.game = game;
@@ -79,7 +93,7 @@ public class MenuScreen implements Screen {
 		batch.begin();
 		batch.enableBlending();
 		
-		if(game.extInt.getSignedIn()){
+		if(game.extInt.getSignedIn()){	
 			stage.getRoot().removeActor(signButton);
 			stage.addActor(signButtonConnected);
 			stage.addActor(achieveButton);
@@ -109,31 +123,72 @@ public class MenuScreen implements Screen {
 		batch.end();
 		batch.begin();
 		if(settingsOn){
-			
+			if(doOnce < 2){
+				Tween.registerAccessor(Image.class, new ImageAccessor());
+				Tween.registerAccessor(Label.class, new LabelAccessor());
+				Tween.registerAccessor(Button.class, new ButtonAccessor());
+				tweenManager = new TweenManager();			
+				panelImage.setColor(1,1,1,0);
+				settingsLabel.setColor(1, 1, 1, 0);
+				lineImage.setColor(1,1,1,0);
+				hdButton.setColor(1,1,1,0);
+				hdButtonOff.setColor(1,1,1,0);
+				Tween.to(panelImage, ImageAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(lineImage, ImageAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(settingsLabel, LabelAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(cancelButton, ButtonAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(hdButton, ButtonAccessor.ALPHA, .2f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(hdButtonOff, ButtonAccessor.ALPHA, .2f).target(.35f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				
+				
+				doOnce++;
+			}			
+			tweenManager.update(delta);	
 			batch.enableBlending();
-			panelSprite.draw(batch);	
+//			panelSprite.draw(batch);
+//			lineSprite.draw(batch);
+			stage.addActor(panelImage);
+			stage.addActor(lineImage);
 			stage.addActor(settingsLabel);	
 			stage.addActor(cancelButton);
-			lineSprite.draw(batch);
-			batch.end();
 
+			batch.end();	
 			
-			batch.begin();
-			if(GameStateHandler.getHD()){
+			batch.begin();			
+			if(GameStateHandler.getHD()){	
 				stage.getRoot().removeActor(hdButtonOff);
-				hdButton.setColor(1,1,1,.85f);
-				stage.addActor(hdButton);
-			} else {
+				stage.addActor(hdButton);			
+			} else {			
 				stage.getRoot().removeActor(hdButton);
-				hdButtonOff.setColor(1,1,1,.35f);
-				stage.addActor(hdButtonOff);
-			}
+				stage.addActor(hdButtonOff);		
+			}			
 			
 		} else {
-			stage.getRoot().removeActor(settingsLabel);
-			stage.getRoot().removeActor(cancelButton);
-			stage.getRoot().removeActor(hdButton);
-			stage.getRoot().removeActor(hdButtonOff);
+			if(doOnce < 3){
+				
+				Tween.registerAccessor(Image.class, new ImageAccessor());
+				Tween.registerAccessor(Label.class, new LabelAccessor());
+				Tween.registerAccessor(Button.class, new ButtonAccessor());
+				tweenManager = new TweenManager();
+				Tween.to(panelImage, ImageAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(lineImage, ImageAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(settingsLabel, LabelAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(cancelButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(hdButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(hdButtonOff, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				
+				doOnce++;
+			}			
+			tweenManager.update(delta);	
+			if(panelImage.getColor().a <.001f){
+				stage.getRoot().removeActor(panelImage);
+				stage.getRoot().removeActor(lineImage);
+				stage.getRoot().removeActor(settingsLabel);
+				stage.getRoot().removeActor(cancelButton);
+				stage.getRoot().removeActor(hdButton);
+				stage.getRoot().removeActor(hdButtonOff);
+				doOnce = 0;
+			}			
 		}
 		
 		stage.draw();				
@@ -143,7 +198,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {		
-		
+		GameStateHandler.setAdState(true);
 		
 		aspectRatio = (float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
 		
@@ -155,6 +210,9 @@ public class MenuScreen implements Screen {
 				
 		stage.clear();
 		stage.getViewport().update(widthCorrect, Gdx.graphics.getHeight());
+		
+		realX = stage.stageToScreenCoordinates(new Vector2(200,200)).x;
+		realY = stage.screenToStageCoordinates(new Vector2(200,200)).y;
 		
 		xDif = 960 / (float) width;
 		yDif = 540 / (float) height;
@@ -203,13 +261,18 @@ public class MenuScreen implements Screen {
 		
 		panel = new Texture(Gdx.files.internal("data/panelcolor.png"));
 		panel.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		panelImage = new Image(panel);
+		panelImage.setBounds(250, 125, 500, 300);
 		panelSprite = new Sprite(panel);
-		panelSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), ((float)height / 2) - (145 / xDif), 500 / xDif, 300 / xDif);
+		panelSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), (float)(height / 2) - (145 / xDif), 500 / xDif, 300 / xDif);
+		
 		
 		line = new Texture(Gdx.files.internal("data/whitecolor.png"));
 		line.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		lineImage = new Image(line);
+		lineImage.setBounds(250, 360, 500, 2);
 		lineSprite = new Sprite(line);
-		lineSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), ((float)height / 2) - (-90 / xDif), 500 / xDif, 2);
+		lineSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), (float)(height / 2) - (-90 / xDif), 500 / xDif, 2);
 		
 		
 //		logoSprite.setX(430);
@@ -282,6 +345,7 @@ public class MenuScreen implements Screen {
 		signButton.setHeight(80);
 		signButton.setX(50);
 		signButton.setY(430);
+		signButton.setColor(1,1,1,1);
 		
 		signButton.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
@@ -302,7 +366,7 @@ public class MenuScreen implements Screen {
 		signButtonConnected.setHeight(80);
 		signButtonConnected.setX(50);
 		signButtonConnected.setY(430);
-		signButtonConnected.setColor(1, 1, 1, .65f);
+		signButtonConnected.setColor(1, 1, 1, .35f);
 		
 		signButtonConnected.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
@@ -326,7 +390,7 @@ public class MenuScreen implements Screen {
 		achieveButton.setHeight(80);
 		achieveButton.setX(50);
 		achieveButton.setY(330);
-		achieveButton.setColor(1, 1, 1, 1f);
+		achieveButton.setColor(1, 1, 1, 1);
 		
 		achieveButton.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
@@ -345,7 +409,7 @@ public class MenuScreen implements Screen {
 		leaderButton.setHeight(80);
 		leaderButton.setX(50);
 		leaderButton.setY(230);
-		leaderButton.setColor(1, 1, 1, 1f);
+		leaderButton.setColor(1, 1, 1, 1);
 		
 		leaderButton.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
@@ -379,7 +443,8 @@ public class MenuScreen implements Screen {
 		 		} else {
 		 			game.extInt.fbLogin();
 		 		}
-		 	}			
+		 		doOnce2 = 0;
+		 	}					 	
 		});
 		
 		fbButtonConnected = new Button(fbButtonConnectedStyle);		
@@ -387,7 +452,7 @@ public class MenuScreen implements Screen {
 		fbButtonConnected.setHeight(80);
 		fbButtonConnected.setX(150);
 		fbButtonConnected.setY(430);
-		fbButtonConnected.setColor(1, 1, 1, .65f);
+		fbButtonConnected.setColor(1, 1, 1, .35f);
 		
 		fbButtonConnected.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
@@ -400,6 +465,7 @@ public class MenuScreen implements Screen {
 		 		} else {
 		 			game.extInt.fbLogin();
 		 		}
+		 		doOnce2 = 0;
 		 	}			
 		});
 		
@@ -581,6 +647,7 @@ public class MenuScreen implements Screen {
 		fontFilter.dispose();
 		line.dispose();
 		panel.dispose();
+		
 		
 
 	}

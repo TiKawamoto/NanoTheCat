@@ -31,7 +31,7 @@ public class NanoCat extends Game {
 		
 		AssetLibrary.load(this);
 		GameStateHandler.load(this);
-		this.extInt.showAds(GameStateHandler.getAdState());
+		
 		setScreen(new MenuScreen(this));
 		
 //		setScreen(new GameScreen());
@@ -45,6 +45,10 @@ public class NanoCat extends Game {
 	
 	public int getTime(){
 		return timeOfDay;
+	}
+	
+	public void adRefresh(boolean ad){
+		extInt.showAds(ad);
 	}
 
 }

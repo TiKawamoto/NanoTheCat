@@ -7,10 +7,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -37,6 +43,11 @@ public class GameRenderer {
 	private ArrayList<Platform> platformScroller = new ArrayList<Platform>();
 	private Iterator<Platform> platformIterator;
 	private Cat cat;
+	private int doOnce = 0;
+	
+	private Value xVal = new Value();
+	
+	private TweenManager tweenManager;
 	
 	private Vector3 touchPos;
 	
@@ -44,7 +55,7 @@ public class GameRenderer {
 	
 	private float width, height, aspectRatio, actualWidth;
 
-	public GameRenderer(GameWorld world) {
+	public GameRenderer(GameWorld world) {		
 		this.scrollHandler = world.getScroller();
 		this.world = world;
 		
@@ -73,6 +84,8 @@ public class GameRenderer {
 		
 		f.setMaximumFractionDigits(2);
 		f.setMinimumFractionDigits(2);
+		
+		xVal.setValue(actualWidth + 800);
 		
 		
 		
@@ -185,74 +198,99 @@ public class GameRenderer {
 		//DRAW SCORE TEXT  ----------------------------------------------------
 
 		
-		if(GameStateHandler.getAdState()){
-			AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 420);
-			totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
-			AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 380);	
-		} else {
-			AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 520);
-			totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
-			AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 480);			
-		}
 		
 		
-		if(world.getCollide()){
-			
+		if(!world.getCollide()){
+			doOnce = 0;
+			if(GameStateHandler.getAdState()){
+				AssetLibrary.robotoLt.setColor(1,1,1,1);
+				AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 420);
+				totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
+				AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 380);	
+			} else {
+				AssetLibrary.robotoLt.setColor(1,1,1,1);
+				AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 520);
+				totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
+				AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 480);			
+			}
+			xVal.setValue(actualWidth + 800);
+			GameStateHandler.setAdState(false);
 		}
 		
 		if(world.getCollide()){			
-			if(world.getHigh()){						
+			GameStateHandler.setAdState(true);
+			
+			if(doOnce < 2){
+				Tween.registerAccessor(Sprite.class, new SpriteAccessor());
+				Tween.registerAccessor(BitmapFont.class, new BitmapFontAccessor());
+				Tween.registerAccessor(Value.class, new ValueAccessor());
+				tweenManager = new TweenManager();
+				AssetLibrary.panelSprite.setAlpha(0);
+				AssetLibrary.fbShareSprite.setAlpha(0);
+				AssetLibrary.robotoLt.setColor(1, 1, 1, 0);
+				Tween.to(xVal, -1, .2f).target((actualWidth / 2) - 250).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(AssetLibrary.panelSprite, SpriteAccessor.ALPHA, .3f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(AssetLibrary.fbShareSprite, SpriteAccessor.ALPHA, .3f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(AssetLibrary.robotoLt, BitmapFontAccessor.ALPHA, .3f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				doOnce++;
+			}
+			
+			if(world.getHigh()){	
+				
+				tweenManager.update(delta);
 				thisScore = Float.toString(world.getThisScore());
 				
-				AssetLibrary.panelSprite.setX(actualWidth - 730);
+				AssetLibrary.panelSprite.setX(xVal.getValue());
 				AssetLibrary.panelSprite.setY(125);
-				AssetLibrary.panelSprite.setAlpha(.85f);
+				
 				AssetLibrary.panelSprite.draw(spriteBatch);				
 				
 				AssetLibrary.robotoLt.setScale(1f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "yay.", actualWidth - 710, 405);
+				AssetLibrary.robotoLt.draw(spriteBatch, "yay.",  xVal.getValue() + 20, 405);
 				
 				AssetLibrary.robotoLt.setScale(.6f);
-				AssetLibrary.robotoLt.draw(spriteBatch, thisScore + "m", actualWidth - 710, 270);
+				AssetLibrary.robotoLt.draw(spriteBatch, thisScore + "m",  xVal.getValue() + 20, 270);
 				
 				AssetLibrary.robotoLt.setScale(.3f);
-				AssetLibrary.robotoLt.draw(spriteBatch, highScoreText, actualWidth - 710, 220);
+				AssetLibrary.robotoLt.draw(spriteBatch, highScoreText,  xVal.getValue() + 20, 220);
 				
 				AssetLibrary.robotoLt.setScale(.3f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", actualWidth - 410, 155);				
+				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue",  xVal.getValue() + 320, 155);				
 				
 				AssetLibrary.robotoLt.setScale(.5f);
 				
-				AssetLibrary.fbShareSprite.setX(actualWidth - 420);
+				AssetLibrary.fbShareSprite.setX( xVal.getValue() + 300);
 				AssetLibrary.fbShareSprite.setY(350);		
 				AssetLibrary.fbShareSprite.setScale(.8f);
 				AssetLibrary.fbShareSprite.draw(spriteBatch);
 
 				
 			} else {
+				tweenManager.update(delta);
+				
 				highScore = Float.toString(world.getHighScore());
 				thisScore = Float.toString(world.getThisScore());
 				
-				AssetLibrary.panelSprite.setX(actualWidth - 730);
+				AssetLibrary.panelSprite.setX( xVal.getValue());
 				AssetLibrary.panelSprite.setY(125);
 				AssetLibrary.panelSprite.setAlpha(.85f);
 				AssetLibrary.panelSprite.draw(spriteBatch);							
 				
 				AssetLibrary.robotoLt.setScale(1f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "oof.", actualWidth - 710, 395);
+				AssetLibrary.robotoLt.draw(spriteBatch, "oof.", xVal.getValue() + 20, 395);
 				
 				AssetLibrary.robotoLt.setScale(.6f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "score: " + thisScore + "m", actualWidth - 710, 270);
+				AssetLibrary.robotoLt.draw(spriteBatch, "score: " + thisScore + "m", xVal.getValue() + 20, 270);
 				
 				AssetLibrary.robotoLt.setScale(.3f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "high score: " + highScore + "m", actualWidth - 710, 220);
+				AssetLibrary.robotoLt.draw(spriteBatch, "high score: " + highScore + "m", xVal.getValue() + 20, 220);
 				
 				AssetLibrary.robotoLt.setScale(.3f);
-				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", actualWidth - 410, 155);
+				AssetLibrary.robotoLt.draw(spriteBatch, "tap to continue", xVal.getValue() + 320, 155);
 				
 				AssetLibrary.robotoLt.setScale(.5f);	
 				
-				AssetLibrary.fbShareSprite.setX(actualWidth - 420);
+				AssetLibrary.fbShareSprite.setX(xVal.getValue() + 310);
 				AssetLibrary.fbShareSprite.setY(350);		
 				AssetLibrary.fbShareSprite.setScale(.8f);
 				AssetLibrary.fbShareSprite.draw(spriteBatch);
