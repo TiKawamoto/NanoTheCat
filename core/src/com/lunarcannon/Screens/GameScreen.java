@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.lunarcannon.GameContainers.AssetLibrary;
 import com.lunarcannon.GameContainers.GameRenderer;
+import com.lunarcannon.GameContainers.GameStateHandler;
 import com.lunarcannon.GameContainers.GameWorld;
 import com.lunarcannon.GameContainers.InputHandler;
 import com.lunarcannon.NanoCat.NanoCat;
@@ -13,6 +14,7 @@ public class GameScreen implements Screen{
 	private GameWorld world;
 	private GameRenderer renderer;
 	private int doOnce = 0;
+	private float muteState = 1;
 		
     public GameScreen(NanoCat game) {
     	this.game = game; 
@@ -20,6 +22,12 @@ public class GameScreen implements Screen{
         renderer = new GameRenderer(world);
         
         Gdx.input.setInputProcessor(new InputHandler(world));
+        
+        if(GameStateHandler.getMute()){
+        	muteState = 0;
+        } else {
+        	muteState = 1;
+        }
     }
 
     @Override
@@ -42,7 +50,7 @@ public class GameScreen implements Screen{
     	
     	if(world.returnToMain()){
     		AssetLibrary.run.stop();
-    		AssetLibrary.select.play(.5f);
+    		AssetLibrary.select.play(muteState * .5f);
     		game.setScreen(new MenuScreen(game));
     	}
     }

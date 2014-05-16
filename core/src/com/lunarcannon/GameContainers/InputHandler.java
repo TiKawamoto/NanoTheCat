@@ -13,12 +13,20 @@ public class InputHandler implements InputProcessor {
 	private Cat cat;
 	private boolean gameReset = false;
 	private Vector3 touchPos;
+	
+	private float muteState = 1;
 
 	public InputHandler(GameWorld world) {
 		this.world = world;
 		cat = world.getCat();
 		gameReset = world.gameOver();
 		Gdx.input.setCatchBackKey(true);
+		
+		if(GameStateHandler.getMute()){
+			muteState = 0;
+		} else{
+			muteState = 1;
+		}
 
 	}
 
@@ -79,11 +87,15 @@ public class InputHandler implements InputProcessor {
 			if(touchPos.x > (world.getActualWidth() - 420)  && touchPos.x < (world.getActualWidth() - 230) 
 					&&  touchPos.y > 350 && touchPos.y < 425){
 				world.SetPostFb();
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
+			} else if (touchPos.x > (0)  && touchPos.x < (350) 
+					&&  touchPos.y > 480 && touchPos.y < 540){
+				AssetLibrary.run.stop();
+				world.setMainTrigger(true);
 			} else if (touchPos.x > (0)  && touchPos.x < (world.getActualWidth()) 
 					&&  touchPos.y > 0 && touchPos.y < 540){
 				world.gameReset();
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 			}
 					
 		}

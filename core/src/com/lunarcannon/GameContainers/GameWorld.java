@@ -34,6 +34,7 @@ public class GameWorld {
 	private float totalDistance = 0;
 	private float highScore = 0;
 	private float actualWidth;
+	private float muteState = 1;
 	
 	
 	private enum GameState{
@@ -50,6 +51,12 @@ public class GameWorld {
 		this.platform = scrollHandler.getPlatform();
 		gameState = GameState.RUNNING;
 		mainTrigger = false;
+		
+		if(GameStateHandler.getMute()){
+			muteState = 0;
+		} else{
+			muteState = 1;
+		}
 		
 		f.setMaximumFractionDigits(2);
 		f.setMinimumFractionDigits(2);
@@ -106,8 +113,8 @@ public class GameWorld {
 					
 					if(runOnce == 0){
 						//collision sound
-						AssetLibrary.collision.play();
-						AssetLibrary.hit.play(.3f);
+						AssetLibrary.collision.play(muteState);
+						AssetLibrary.hit.play(muteState * .3f);
 						
 						//check high score
 						totalDistance = Float.parseFloat(f.format(scrollHandler.getTotalDist()));

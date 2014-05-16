@@ -23,9 +23,9 @@ public class AssetLibrary {
 	public static Texture bgTexture, bgBackTexture;
 	public static Texture texture;
 	public static TextureRegion bg, bgBack;
-	public static Texture fontFilter;
-	public static Texture panel, fbShare, smoke;
-	public static Sprite panelSprite, fbShareSprite, smokeSprite;
+	public static Texture fontFilter, fontFilter2;
+	public static Texture panel, fbShare, smoke, menuBack;
+	public static Sprite panelSprite, fbShareSprite, smokeSprite, menuBackSprite;
 	public static ParticleEmitter smokeEmitter, starEmitter;
 	public static ParticleEffect smokeParticle, starParticle;	
 	
@@ -41,6 +41,7 @@ public class AssetLibrary {
 	public static Animation catCollideAnim;
 	
 	public static BitmapFont robotoLt;
+	public static BitmapFont robotoBlk;
 	
 	public static Preferences score, pref;
 	
@@ -200,6 +201,11 @@ public class AssetLibrary {
 		robotoLt = new BitmapFont(Gdx.files.internal("data/roboto_lt.fnt"), new TextureRegion(fontFilter), false);
 		robotoLt.setScale(.5f, .5f);
 		
+		fontFilter2 = new Texture(Gdx.files.internal("data/roboto_blk.png"));
+		fontFilter2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		robotoBlk = new BitmapFont(Gdx.files.internal("data/roboto_blk.fnt"), new TextureRegion(fontFilter2), false);
+		robotoBlk.setScale(.5f, .5f);
+		
 		panel = new Texture(Gdx.files.internal("data/panelcolor.png"));
 		panel.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		panelSprite = new Sprite(panel, 500, 300);
@@ -207,6 +213,10 @@ public class AssetLibrary {
 		fbShare = new Texture(Gdx.files.internal("data/fbshare.png"));
 		fbShare.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		fbShareSprite = new Sprite(fbShare, 199, 57);
+		
+		menuBack = new Texture(Gdx.files.internal("data/menu_back.png"));
+		menuBack.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		menuBackSprite = new Sprite(menuBack, 320, 50);
 		
 		collision = Gdx.audio.newSound(Gdx.files.internal("data/audio/collide.wav"));
 		milestone = Gdx.audio.newSound(Gdx.files.internal("data/audio/milestone.wav"));

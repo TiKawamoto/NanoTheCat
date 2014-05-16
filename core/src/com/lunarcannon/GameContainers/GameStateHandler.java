@@ -27,6 +27,11 @@ public class GameStateHandler {
 			pref.putBoolean("hdState", true);
 			pref.flush();
 		}
+		
+		if(!pref.contains("muteState")){
+			pref.putBoolean("muteState", false);
+			pref.flush();
+		}
 	}
 	
 	public static boolean getAdState(){
@@ -55,6 +60,15 @@ public class GameStateHandler {
 	
 	public static boolean getHD(){		
 		return pref.getBoolean("hdState");
+	}
+	
+	public static void setMute(boolean val){
+		pref.putBoolean("muteState", val);
+		pref.flush();
+	}
+	
+	public static boolean getMute(){
+		return pref.getBoolean("muteState");
 	}
 	
 	

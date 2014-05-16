@@ -59,6 +59,7 @@ public class GameRenderer {
 	
 	private Value xVal = new Value();
 	private Value yVal = new Value();
+	private Value yVal2 = new Value();
 	private Value alphaVal = new Value();
 	private Value scaleVal = new Value();
 	
@@ -69,6 +70,8 @@ public class GameRenderer {
 	private NumberFormat f = NumberFormat.getInstance(Locale.ENGLISH);
 	
 	private float width, height, aspectRatio, actualWidth, catY, catX;
+	
+	private float muteState = 1;
 
 	public GameRenderer(GameWorld world) {		
 		this.scrollHandler = world.getScroller();
@@ -101,7 +104,13 @@ public class GameRenderer {
 		f.setMinimumFractionDigits(2);
 		
 		xVal.setValue(actualWidth + 800);
+		yVal2.setValue(540);
 		
+		if(GameStateHandler.getMute()){
+			muteState = 0;
+		} else{
+			muteState = 1;
+		}
 		
 		
 	}
@@ -152,7 +161,7 @@ public class GameRenderer {
 				spriteBatch.draw(AssetLibrary.catRunAnim.getKeyFrame(elapsedTime, true), cat.getPosition().x - 95f, cat.getPosition().y - 13f, 250, 100);
 				if(doOnce6 < 1){
 					
-					AssetLibrary.run.loop(.7f);
+					AssetLibrary.run.loop(muteState * .4f);
 					doOnce6++;
 				}
 				
@@ -185,7 +194,7 @@ public class GameRenderer {
 		if(cat.getDblJump()){
 			if(doOnce5 < 1){
 				doOnce6 = 0;
-				AssetLibrary.dblJump.play(.1f);	
+				AssetLibrary.dblJump.play(muteState * .2f);	
 				doOnce5++;
 			}
 			
@@ -196,8 +205,8 @@ public class GameRenderer {
 			if(doOnce2 < 1){
 				doOnce6 = 0;
 				AssetLibrary.run.stop();
-				AssetLibrary.jump.play(.1f);
-				AssetLibrary.jumpSound.play(1f);
+				AssetLibrary.jump.play(muteState * .2f);
+				AssetLibrary.jumpSound.play(muteState * .8f);
 				catY = cat.getPosition().y;
 				catX = cat.getPosition().x + 55f;
 			
@@ -274,6 +283,7 @@ public class GameRenderer {
 				AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 480);			
 			}
 			xVal.setValue(actualWidth + 800);
+			yVal2.setValue(540);
 			GameStateHandler.setAdState(false);
 			
 			//DRAW MILESTONE POPUP TEXT
@@ -299,9 +309,9 @@ public class GameRenderer {
 				AssetLibrary.starParticle.start();
 				AssetLibrary.starParticle.setPosition((actualWidth / 2) , 450);
 				if(milestone%50 == 0){
-					AssetLibrary.milestone50.play(.3f);
+					AssetLibrary.milestone50.play(muteState * .3f);
 				} else{
-					AssetLibrary.milestone.play(.1f);	
+					AssetLibrary.milestone.play(muteState * .1f);	
 				}
 				
 				doOnce4++;
@@ -315,21 +325,21 @@ public class GameRenderer {
 				AssetLibrary.starParticle.findEmitter("star502").getTransparency().setHigh(1, 1);
 				AssetLibrary.starParticle.findEmitter("star50").getScale().setHigh(10f);
 				AssetLibrary.starParticle.findEmitter("star502").getScale().setHigh(10f);
-				AssetLibrary.robotoLt.setColor(1f,.8f,.2f,alphaVal.getValue());
-				AssetLibrary.robotoLt.setScale(scaleVal.getValue() + .3f);
+				AssetLibrary.robotoBlk.setColor(1f,.8f,.2f,alphaVal.getValue());
+				AssetLibrary.robotoBlk.setScale(scaleVal.getValue() + .3f);
 			}else{
 				
 				AssetLibrary.starParticle.findEmitter("star").getScale().setHigh(5f);
 				AssetLibrary.starParticle.findEmitter("star2").getScale().setHigh(5f);
 				AssetLibrary.starParticle.findEmitter("star50").getTransparency().setHigh(0, 0);
 				AssetLibrary.starParticle.findEmitter("star502").getTransparency().setHigh(0, 0);
-				AssetLibrary.robotoLt.setColor(1,1,1,alphaVal.getValue());
-				AssetLibrary.robotoLt.setScale(scaleVal.getValue());
+				AssetLibrary.robotoBlk.setColor(1,1,1,alphaVal.getValue());
+				AssetLibrary.robotoBlk.setScale(scaleVal.getValue());
 			}
 			AssetLibrary.starParticle.draw(spriteBatch, delta);			
 			
 			
-			AssetLibrary.robotoLt.draw(spriteBatch, milestone + "m", (actualWidth / 2) - ((AssetLibrary.robotoLt.getBounds((milestone + "m"), new TextBounds()).width) / 2), yVal.getValue());	
+			AssetLibrary.robotoBlk.draw(spriteBatch, milestone + "m", (actualWidth / 2) - ((AssetLibrary.robotoBlk.getBounds((milestone + "m"), new TextBounds()).width) / 2), yVal.getValue());	
 			
 		}
 		
@@ -351,20 +361,32 @@ public class GameRenderer {
 				AssetLibrary.fbShareSprite.setAlpha(0);
 				AssetLibrary.robotoLt.setColor(1, 1, 1, 0);
 				Tween.to(xVal, -1, .2f).target((actualWidth / 2) - 250).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(yVal2, -1, .2f).target(480).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(AssetLibrary.panelSprite, SpriteAccessor.ALPHA, .3f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(AssetLibrary.fbShareSprite, SpriteAccessor.ALPHA, .3f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(AssetLibrary.robotoLt, BitmapFontAccessor.ALPHA, .3f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				doOnce++;
 			}
 			
+			
+			AssetLibrary.panelSprite.setX(0);
+			AssetLibrary.panelSprite.setY(yVal2.getValue());
+			AssetLibrary.panelSprite.setSize(actualWidth, 60);
+			AssetLibrary.panelSprite.setAlpha(.85f);
+			AssetLibrary.panelSprite.draw(spriteBatch);
+			
+			AssetLibrary.menuBackSprite.setX(0);
+			AssetLibrary.menuBackSprite.setY(yVal2.getValue() + 5);
+			AssetLibrary.menuBackSprite.draw(spriteBatch);
+			
 			if(world.getHigh()){	
 				
 				tweenManager.update(delta);
 				thisScore = Float.toString(world.getThisScore());
-				
+				AssetLibrary.panelSprite.setSize(500, 300);
 				AssetLibrary.panelSprite.setX(xVal.getValue());
 				AssetLibrary.panelSprite.setY(125);
-				
+				AssetLibrary.panelSprite.setAlpha(.85f);
 				AssetLibrary.panelSprite.draw(spriteBatch);				
 				
 				AssetLibrary.robotoLt.setScale(1f);
@@ -393,6 +415,7 @@ public class GameRenderer {
 				highScore = Float.toString(world.getHighScore());
 				thisScore = Float.toString(world.getThisScore());
 				
+				AssetLibrary.panelSprite.setSize(500, 300);
 				AssetLibrary.panelSprite.setX( xVal.getValue());
 				AssetLibrary.panelSprite.setY(125);
 				AssetLibrary.panelSprite.setAlpha(.85f);

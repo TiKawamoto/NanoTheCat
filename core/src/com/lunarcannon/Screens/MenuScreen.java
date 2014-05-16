@@ -47,9 +47,9 @@ public class MenuScreen implements Screen {
 	private Label settingsLabel;
 	private LabelStyle settingsLabelStyle;
 	private TextButton playButton, settingsButton, premiumButton;
-	private Button signButton, signButtonConnected, achieveButton, leaderButton, hdButton, hdButtonOff, cancelButton, fbButton, fbButtonConnected;
+	private Button signButton, signButtonConnected, achieveButton, leaderButton, hdButton, hdButtonOff, cancelButton, fbButton, fbButtonConnected, muteButton, muteButtonOff;
 	private TextButtonStyle buttonStyle, buttonStyleHd;
-	private ButtonStyle signButtonStyle, signButtonConnectedStyle, achieveButtonStyle, leaderButtonStyle, hdButtonStyle, hdButtonStyleOff, cancelButtonStyle, fbButtonStyle, fbButtonConnectedStyle;
+	private ButtonStyle signButtonStyle, signButtonConnectedStyle, achieveButtonStyle, leaderButtonStyle, hdButtonStyle, hdButtonStyleOff, cancelButtonStyle, fbButtonStyle, fbButtonConnectedStyle, muteButtonStyle, muteButtonStyleOff;
 	private BitmapFont buttonFont;
 	private TextureAtlas menuAtlas, gpgsAtlas;
 	private Texture fontFilter, panel, line;
@@ -60,6 +60,7 @@ public class MenuScreen implements Screen {
 	private Image lineImage, panelImage;
 
 	private float aspectRatio, xDif, yDif;
+	private float muteState = 1;
 	private int widthCorrect, heightCorrect;
 	private String hdText;
 	private boolean settingsOn = false;
@@ -76,9 +77,15 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-				
+		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
+		System.out.println(GameStateHandler.getMute());
+		if(GameStateHandler.getMute()){
+			muteState = 0;
+		} else{
+			muteState = 1;
+		}
 		
 		if(Gdx.input.isKeyPressed(Keys.BACK)){
 			Gdx.app.exit();
@@ -133,12 +140,16 @@ public class MenuScreen implements Screen {
 				lineImage.setColor(1,1,1,0);
 				hdButton.setColor(1,1,1,0);
 				hdButtonOff.setColor(1,1,1,0);
+				muteButton.setColor(1,1,1,0);
+				muteButtonOff.setColor(1,1,1,0);
 				Tween.to(panelImage, ImageAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(lineImage, ImageAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(settingsLabel, LabelAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(cancelButton, ButtonAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(hdButton, ButtonAccessor.ALPHA, .2f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(hdButtonOff, ButtonAccessor.ALPHA, .2f).target(.35f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(muteButton, ButtonAccessor.ALPHA, .2f).target(.85f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(muteButtonOff, ButtonAccessor.ALPHA, .2f).target(.35f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				
 				
 				doOnce++;
@@ -161,7 +172,15 @@ public class MenuScreen implements Screen {
 			} else {			
 				stage.getRoot().removeActor(hdButton);
 				stage.addActor(hdButtonOff);		
-			}			
+			}	
+			
+			if(GameStateHandler.getMute()){	
+				stage.getRoot().removeActor(muteButtonOff);
+				stage.addActor(muteButton);			
+			} else {			
+				stage.getRoot().removeActor(muteButton);
+				stage.addActor(muteButtonOff);		
+			}	
 			
 		} else {
 			if(doOnce < 3){
@@ -176,6 +195,8 @@ public class MenuScreen implements Screen {
 				Tween.to(cancelButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(hdButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				Tween.to(hdButtonOff, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(muteButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(muteButtonOff, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 				
 				doOnce++;
 			}			
@@ -187,6 +208,8 @@ public class MenuScreen implements Screen {
 				stage.getRoot().removeActor(cancelButton);
 				stage.getRoot().removeActor(hdButton);
 				stage.getRoot().removeActor(hdButtonOff);
+				stage.getRoot().removeActor(muteButton);
+				stage.getRoot().removeActor(muteButtonOff);
 				doOnce = 0;
 			}			
 		}
@@ -318,6 +341,14 @@ public class MenuScreen implements Screen {
 		leaderButtonStyle.up = gpgsSkin.getDrawable("games_leaderboards_white");
 		leaderButtonStyle.down = gpgsSkin.getDrawable("games_leaderboards");
 		
+		muteButtonStyle = new ButtonStyle();
+		muteButtonStyle.up = gpgsSkin.getDrawable("mute_on");
+		muteButtonStyle.down = gpgsSkin.getDrawable("mute_on");
+		
+		muteButtonStyleOff = new ButtonStyle();
+		muteButtonStyleOff.up = gpgsSkin.getDrawable("mute_off");
+		muteButtonStyleOff.down = gpgsSkin.getDrawable("mute_off");
+		
 		hdButtonStyle = new ButtonStyle();
 		hdButtonStyle.up = gpgsSkin.getDrawable("hd_on");
 		hdButtonStyle.down = gpgsSkin.getDrawable("hd_on");
@@ -349,7 +380,7 @@ public class MenuScreen implements Screen {
 		
 		signButton.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 		 		return true;
 		 	}
 		 
@@ -371,7 +402,7 @@ public class MenuScreen implements Screen {
 		
 		signButtonConnected.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 		 		return true;
 		 	}
 		 
@@ -396,7 +427,7 @@ public class MenuScreen implements Screen {
 		
 		achieveButton.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 		 		return true;
 		 	}
 		 
@@ -416,7 +447,7 @@ public class MenuScreen implements Screen {
 		
 		leaderButton.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 		 		return true;
 		 	}
 		 
@@ -437,7 +468,7 @@ public class MenuScreen implements Screen {
 		
 		fbButton.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 		 		return true;
 		 	}
 		 
@@ -461,7 +492,7 @@ public class MenuScreen implements Screen {
 		
 		fbButtonConnected.addListener(new InputListener() { 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 		 		return true;
 		 	}
 		 
@@ -487,7 +518,7 @@ public class MenuScreen implements Screen {
 		
 			playButton.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					AssetLibrary.select.play(.5f);
+					AssetLibrary.select.play(muteState * .5f);
 					return true;
 				}
 	
@@ -512,7 +543,7 @@ public class MenuScreen implements Screen {
 		
 			settingsButton.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					AssetLibrary.select.play(.5f);
+					AssetLibrary.select.play(muteState * .5f);
 					return true;
 				}
 
@@ -525,14 +556,14 @@ public class MenuScreen implements Screen {
 		
 		
 		
-		
+		//HD Settings -------------------------------------
 		
 		
 		hdButton = new Button(hdButtonStyle);		
 		hdButton.setX(320);
 		hdButton.setY(270);
-		hdButton.setWidth(200 * .8f);
-		hdButton.setHeight(50 * .8f);
+		hdButton.setWidth(450 * .8f);
+		hdButton.setHeight(64 * .8f);
 		
 		hdButton.setColor(1, 1, 1, 1f);
 //		System.out.println("panel --- GETX - " + panelSprite.getX() + " GETY - " + panelSprite.getY());
@@ -541,7 +572,7 @@ public class MenuScreen implements Screen {
 
 		hdButton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 				return true;
 			}
 
@@ -563,15 +594,15 @@ public class MenuScreen implements Screen {
 		hdButtonOff = new Button(hdButtonStyleOff);		
 		hdButtonOff.setX(320);
 		hdButtonOff.setY(270);
-		hdButtonOff.setWidth(200 * .8f);
-		hdButtonOff.setHeight(50 * .8f);
+		hdButtonOff.setWidth(450 * .8f);
+		hdButtonOff.setHeight(64 * .8f);
 		
 		hdButtonOff.setColor(1, 1, 1, 1f);
 		
 
 		hdButtonOff.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 				return true;
 				
 			}
@@ -590,6 +621,74 @@ public class MenuScreen implements Screen {
 				
 			}
 		});
+		
+	//Mute Settings -------------------------------------
+		
+		
+		muteButton = new Button(muteButtonStyle);		
+		muteButton.setX(320);
+		muteButton.setY(200);
+		muteButton.setWidth(450 * .8f);
+		muteButton.setHeight(64 * .8f);
+		
+		muteButton.setColor(1, 1, 1, 1f);
+//		System.out.println("panel --- GETX - " + panelSprite.getX() + " GETY - " + panelSprite.getY());
+//		System.out.println("hdButton --- GETX - " + hdButton.getX() + " GETY - " + hdButton.getY());
+		
+
+		muteButton.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				AssetLibrary.select.play(muteState * .5f);
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,	int pointer, int button) {
+				if(GameStateHandler.getMute()){
+					GameStateHandler.setMute(false);
+					AssetLibrary.dispose();
+					AssetLibrary.load(game);					
+					
+				} else{
+					GameStateHandler.setMute(true);	
+					AssetLibrary.dispose();
+					AssetLibrary.load(game);				
+				}
+				
+			}
+		});
+		
+		muteButtonOff = new Button(muteButtonStyleOff);		
+		muteButtonOff.setX(320);
+		muteButtonOff.setY(200);
+		muteButtonOff.setWidth(450 * .8f);
+		muteButtonOff.setHeight(64 * .8f);
+		
+		muteButtonOff.setColor(1, 1, 1, 1f);
+		
+
+		muteButtonOff.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				AssetLibrary.select.play(muteState * .5f);
+				return true;
+				
+			}
+
+			public void touchUp(InputEvent event, float x, float y,	int pointer, int button) {
+				if(GameStateHandler.getMute()){
+					GameStateHandler.setMute(false);
+					AssetLibrary.dispose();
+					AssetLibrary.load(game);					
+					
+				} else{
+					GameStateHandler.setMute(true);	
+					AssetLibrary.dispose();
+					AssetLibrary.load(game);				
+				}
+				
+			}
+		});
+		
+		
 		
 		
 		settingsLabelStyle = new LabelStyle();
@@ -610,7 +709,7 @@ public class MenuScreen implements Screen {
 
 		cancelButton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				AssetLibrary.select.play(.5f);
+				AssetLibrary.select.play(muteState * .5f);
 				return true;
 			}
 
