@@ -190,6 +190,10 @@ public class ScrollingHandler {
 
 	}
 	
+	public float getXSpeed(){
+		return xSpeed;
+	}
+	
 	public void stop(){
 		stopped = true;
 		

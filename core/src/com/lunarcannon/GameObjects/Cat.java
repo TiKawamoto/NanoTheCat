@@ -162,6 +162,14 @@ public class Cat {
 		
 	}
 	
+	public boolean getJump(){
+		return jump;
+	}
+	
+	public boolean getDblJump(){
+		return dblJump;
+	}
+	
 	public void reset(){
 		this.yGrav = -1;
 		this.ySpeed = 0;

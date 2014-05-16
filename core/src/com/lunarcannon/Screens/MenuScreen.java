@@ -348,7 +348,8 @@ public class MenuScreen implements Screen {
 		signButton.setColor(1,1,1,1);
 		
 		signButton.addListener(new InputListener() { 
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
+				AssetLibrary.select.play(.5f);
 		 		return true;
 		 	}
 		 
@@ -369,7 +370,8 @@ public class MenuScreen implements Screen {
 		signButtonConnected.setColor(1, 1, 1, .35f);
 		
 		signButtonConnected.addListener(new InputListener() { 
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
+				AssetLibrary.select.play(.5f);
 		 		return true;
 		 	}
 		 
@@ -393,7 +395,8 @@ public class MenuScreen implements Screen {
 		achieveButton.setColor(1, 1, 1, 1);
 		
 		achieveButton.addListener(new InputListener() { 
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
+				AssetLibrary.select.play(.5f);
 		 		return true;
 		 	}
 		 
@@ -412,7 +415,8 @@ public class MenuScreen implements Screen {
 		leaderButton.setColor(1, 1, 1, 1);
 		
 		leaderButton.addListener(new InputListener() { 
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
+				AssetLibrary.select.play(.5f);
 		 		return true;
 		 	}
 		 
@@ -432,7 +436,8 @@ public class MenuScreen implements Screen {
 		fbButton.setY(430);
 		
 		fbButton.addListener(new InputListener() { 
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
+				AssetLibrary.select.play(.5f);
 		 		return true;
 		 	}
 		 
@@ -455,7 +460,8 @@ public class MenuScreen implements Screen {
 		fbButtonConnected.setColor(1, 1, 1, .35f);
 		
 		fbButtonConnected.addListener(new InputListener() { 
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {		 		
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {	
+				AssetLibrary.select.play(.5f);
 		 		return true;
 		 	}
 		 
@@ -481,6 +487,7 @@ public class MenuScreen implements Screen {
 		
 			playButton.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					AssetLibrary.select.play(.5f);
 					return true;
 				}
 	
@@ -505,6 +512,7 @@ public class MenuScreen implements Screen {
 		
 			settingsButton.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					AssetLibrary.select.play(.5f);
 					return true;
 				}
 
@@ -533,6 +541,7 @@ public class MenuScreen implements Screen {
 
 		hdButton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				AssetLibrary.select.play(.5f);
 				return true;
 			}
 
@@ -562,7 +571,9 @@ public class MenuScreen implements Screen {
 
 		hdButtonOff.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				AssetLibrary.select.play(.5f);
 				return true;
+				
 			}
 
 			public void touchUp(InputEvent event, float x, float y,	int pointer, int button) {
@@ -599,6 +610,7 @@ public class MenuScreen implements Screen {
 
 		cancelButton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				AssetLibrary.select.play(.5f);
 				return true;
 			}
 

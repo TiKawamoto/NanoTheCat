@@ -30,9 +30,11 @@ public class InputHandler implements InputProcessor {
 			cat.jump();
 			break;
 		case Keys.BACK:
+			AssetLibrary.run.stop();
 			world.setMainTrigger(true);
 			break;	
 		case Keys.BACKSPACE:
+			AssetLibrary.run.stop();
 			world.setMainTrigger(true);
 			break;
 		default:
@@ -55,9 +57,13 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		
+		if(world.gameOver()){
+			
+		}else{
 			// CAT JUMP
-			cat.jump();			
+			cat.jump();		
+		}
+				
 
 		return true;
 	}
@@ -73,10 +79,11 @@ public class InputHandler implements InputProcessor {
 			if(touchPos.x > (world.getActualWidth() - 420)  && touchPos.x < (world.getActualWidth() - 230) 
 					&&  touchPos.y > 350 && touchPos.y < 425){
 				world.SetPostFb();
-				
-			} else if (touchPos.x > (world.getActualWidth() - 730)  && touchPos.x < (world.getActualWidth() - 200) 
-					&&  touchPos.y > 105 && touchPos.y < 425){
+				AssetLibrary.select.play(.5f);
+			} else if (touchPos.x > (0)  && touchPos.x < (world.getActualWidth()) 
+					&&  touchPos.y > 0 && touchPos.y < 540){
 				world.gameReset();
+				AssetLibrary.select.play(.5f);
 			}
 					
 		}

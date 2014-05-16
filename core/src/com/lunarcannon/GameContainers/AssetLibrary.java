@@ -1,5 +1,7 @@
 package com.lunarcannon.GameContainers;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
@@ -7,15 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.lunarcannon.NanoCat.NanoCat;
 
 public class AssetLibrary {
@@ -25,8 +24,10 @@ public class AssetLibrary {
 	public static Texture texture;
 	public static TextureRegion bg, bgBack;
 	public static Texture fontFilter;
-	public static Texture panel, fbShare;
-	public static Sprite panelSprite, fbShareSprite;
+	public static Texture panel, fbShare, smoke;
+	public static Sprite panelSprite, fbShareSprite, smokeSprite;
+	public static ParticleEmitter smokeEmitter, starEmitter;
+	public static ParticleEffect smokeParticle, starParticle;	
 	
 	public static AtlasRegion catRun1, catRun2, catRun3, catRun4, catRun5, catRun6, catRun7, catRun8, catRun9, catRun10, catRun11, catRun12, catRun13, catRun14, catRun15;
 	public static AtlasRegion catCollide1, catCollide2, catCollide3, catCollide4, catCollide5, catCollide6, catCollide7, catCollide8;
@@ -44,6 +45,14 @@ public class AssetLibrary {
 	public static Preferences score, pref;
 	
 	public static Sound collision;
+	public static Sound milestone;
+	public static Sound milestone50;
+	public static Sound jumpSound;
+	public static Sound jump;
+	public static Sound dblJump;
+	public static Sound hit;
+	public static Sound select;
+	public static Sound run;
 	
 	private static float distTemp = 0;
 	private static int fallTemp = 0;
@@ -83,35 +92,54 @@ public class AssetLibrary {
 		} else if(pref.getBoolean("hdState")) {
 			if(nano.getTime() < 15 && nano.getTime() >= 5){				
 				bgTexture = new Texture(Gdx.files.internal("data/bg_1.png"));
-				bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 				
 				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_1.png"));
-				bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			} else if (nano.getTime() < 20 && nano.getTime() >= 15){
 				bgTexture = new Texture(Gdx.files.internal("data/bg_2.png"));
-				bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);	
+				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);	
 				
 				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_2.png"));
-				bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);	
+				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);	
 			} else if (nano.getTime() >= 20){
 				bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
-				bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 				
 				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
-				bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			} else {
 				bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
-				bgTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 				
 				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
-				bgBackTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			}	
 		}
 			
-				
-				
 		
 		bgBack = new TextureRegion(bgBackTexture, 0, 0, 4096, 580);
+		
+		//Particle Stuff
+		
+		smoke = new Texture(Gdx.files.internal("data/smoke_particle.png"));
+		smokeSprite = new Sprite(smoke);
+		smokeEmitter = new ParticleEmitter();
+		smokeParticle = new ParticleEffect();
+		smokeParticle.load(Gdx.files.internal("data/particlesmoke"), Gdx.files.internal("data"));
+		smokeParticle.findEmitter("smoke").getScale().setHigh(50f);
+		
+		
+		starEmitter = new ParticleEmitter();
+		starParticle = new ParticleEffect();
+		starParticle.load(Gdx.files.internal("data/particles"), Gdx.files.internal("data"));
+		starParticle.findEmitter("star").getScale().setHigh(5f);
+		starParticle.findEmitter("star2").getScale().setHigh(5f);
+		
+//		smokeParticle.getScale().setHigh(5f);
+		
+		
+		//End Particle Stuff
 		
 		texture = new Texture(Gdx.files.internal("data/nano_region.png"));
 		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -173,7 +201,7 @@ public class AssetLibrary {
 		robotoLt.setScale(.5f, .5f);
 		
 		panel = new Texture(Gdx.files.internal("data/panelcolor.png"));
-		panel.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		panel.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		panelSprite = new Sprite(panel, 500, 300);
 		
 		fbShare = new Texture(Gdx.files.internal("data/fbshare.png"));
@@ -181,7 +209,14 @@ public class AssetLibrary {
 		fbShareSprite = new Sprite(fbShare, 199, 57);
 		
 		collision = Gdx.audio.newSound(Gdx.files.internal("data/audio/collide.wav"));
-		
+		milestone = Gdx.audio.newSound(Gdx.files.internal("data/audio/milestone.wav"));
+		milestone50 = Gdx.audio.newSound(Gdx.files.internal("data/audio/milestone50.wav"));
+		jump = Gdx.audio.newSound(Gdx.files.internal("data/audio/nanojump.wav"));
+		jumpSound = Gdx.audio.newSound(Gdx.files.internal("data/audio/jump_sound.wav"));
+		dblJump = Gdx.audio.newSound(Gdx.files.internal("data/audio/nanojump2.wav"));
+		hit = Gdx.audio.newSound(Gdx.files.internal("data/audio/hit.wav"));
+		select = Gdx.audio.newSound(Gdx.files.internal("data/audio/select.wav"));
+		run = Gdx.audio.newSound(Gdx.files.internal("data/audio/run.wav"));
 		
 		//Scoring
 		score = Gdx.app.getPreferences("NanoCat");
@@ -241,6 +276,19 @@ public class AssetLibrary {
 		panel.dispose();
 		fontFilter.dispose();
 		collision.dispose();
+		jump.dispose();
+		jumpSound.dispose();
+		dblJump.dispose();
+		milestone50.dispose();
+		run.dispose();
+		hit.dispose();
+		milestone.dispose();
+		milestone50.dispose();
+		select.dispose();
+		smoke.dispose();
+		smokeParticle.dispose();
+		starParticle.dispose();
+	
 		
 	}
 

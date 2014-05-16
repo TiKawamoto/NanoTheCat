@@ -41,6 +41,8 @@ public class GameScreen implements Screen{
     	}    	 	
     	
     	if(world.returnToMain()){
+    		AssetLibrary.run.stop();
+    		AssetLibrary.select.play(.5f);
     		game.setScreen(new MenuScreen(game));
     	}
     }

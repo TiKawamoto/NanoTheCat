@@ -107,6 +107,7 @@ public class GameWorld {
 					if(runOnce == 0){
 						//collision sound
 						AssetLibrary.collision.play();
+						AssetLibrary.hit.play(.3f);
 						
 						//check high score
 						totalDistance = Float.parseFloat(f.format(scrollHandler.getTotalDist()));

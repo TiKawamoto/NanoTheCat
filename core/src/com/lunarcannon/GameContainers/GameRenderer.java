@@ -12,6 +12,7 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,6 +21,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.lunarcannon.GameObjects.Background;
 import com.lunarcannon.GameObjects.Cat;
 import com.lunarcannon.GameObjects.Platform;
@@ -44,8 +47,20 @@ public class GameRenderer {
 	private Iterator<Platform> platformIterator;
 	private Cat cat;
 	private int doOnce = 0;
+	private int doOnce2 = 0;
+	private int doOnce3 = 0;
+	private int doOnce4 = 0;
+	private int doOnce5 = 0;
+	private int doOnce6 = 0;
+	private long milestone = 0;
+	private boolean timerBool = false;
+	
+	private Timer timer;
 	
 	private Value xVal = new Value();
+	private Value yVal = new Value();
+	private Value alphaVal = new Value();
+	private Value scaleVal = new Value();
 	
 	private TweenManager tweenManager;
 	
@@ -53,7 +68,7 @@ public class GameRenderer {
 	
 	private NumberFormat f = NumberFormat.getInstance(Locale.ENGLISH);
 	
-	private float width, height, aspectRatio, actualWidth;
+	private float width, height, aspectRatio, actualWidth, catY, catX;
 
 	public GameRenderer(GameWorld world) {		
 		this.scrollHandler = world.getScroller();
@@ -135,20 +150,68 @@ public class GameRenderer {
 		if(!world.getCollide()){			
 			if(!world.getMidAirTrigger()){
 				spriteBatch.draw(AssetLibrary.catRunAnim.getKeyFrame(elapsedTime, true), cat.getPosition().x - 95f, cat.getPosition().y - 13f, 250, 100);
-			} else if (world.getMidAirTrigger()){			
+				if(doOnce6 < 1){
+					
+					AssetLibrary.run.loop(.7f);
+					doOnce6++;
+				}
+				
+				doOnce2 = 0;
+				doOnce3 = 0;
+				doOnce5 = 0;
+				
+			
+				
+			} else if (world.getMidAirTrigger()){	
+					doOnce6 = 0;
+					AssetLibrary.run.stop();
 					spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(elapsedTime, false), cat.getPosition().x - 95f, cat.getPosition().y - 45f, 100f, 40f,250, 100,1,1,10f);
+					
+
 			} else if (cat.getDblJumpTrigger()){
+				doOnce6 = 0;
+				AssetLibrary.run.stop();
 				spriteBatch.draw(AssetLibrary.catJumpAnim.getKeyFrame(.9f, false), cat.getPosition().x - 95f, cat.getPosition().y - 45f, 250, 100);
 			}
 		} else if(world.getCollide()){
+			doOnce6 = 0;
+			AssetLibrary.run.stop();
 			elapsedTime2 += Gdx.graphics.getDeltaTime();
 			spriteBatch.draw(AssetLibrary.catCollideAnim.getKeyFrame(elapsedTime2, false), cat.getPosition().x - 135f, cat.getPosition().y - 13f, 250, 125);
 			
+			
 		}
+		
+		if(cat.getDblJump()){
+			if(doOnce5 < 1){
+				doOnce6 = 0;
+				AssetLibrary.dblJump.play(.1f);	
+				doOnce5++;
+			}
+			
+		}
+		
+		//Jump smoke		
+		if(cat.getJump()){
+			if(doOnce2 < 1){
+				doOnce6 = 0;
+				AssetLibrary.run.stop();
+				AssetLibrary.jump.play(.1f);
+				AssetLibrary.jumpSound.play(1f);
+				catY = cat.getPosition().y;
+				catX = cat.getPosition().x + 55f;
+			
+				AssetLibrary.smokeParticle.start();	
+				
+				doOnce2++;
+			}
+								
+			AssetLibrary.smokeParticle.findEmitter("smoke").getWind().setHigh(scrollHandler.getXSpeed());			
+			AssetLibrary.smokeParticle.setPosition(catX, catY);
+		}
+		AssetLibrary.smokeParticle.draw(spriteBatch, delta);
 		spriteBatch.end();
 
-
-		
 		
 		
 //		shape1.begin(ShapeType.Line);
@@ -193,21 +256,18 @@ public class GameRenderer {
 		}
 		
 		
-		
-		
 		//DRAW SCORE TEXT  ----------------------------------------------------
-
-		
-		
 		
 		if(!world.getCollide()){
 			doOnce = 0;
 			if(GameStateHandler.getAdState()){
+				AssetLibrary.robotoLt.setScale(.5f);
 				AssetLibrary.robotoLt.setColor(1,1,1,1);
 				AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 420);
 				totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
 				AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 380);	
 			} else {
+				AssetLibrary.robotoLt.setScale(.5f);
 				AssetLibrary.robotoLt.setColor(1,1,1,1);
 				AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 520);
 				totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
@@ -215,12 +275,74 @@ public class GameRenderer {
 			}
 			xVal.setValue(actualWidth + 800);
 			GameStateHandler.setAdState(false);
+			
+			//DRAW MILESTONE POPUP TEXT
+			
+			if((Math.round(scrollHandler.getTotalDist()) % 10) == 0 && !(Math.round(scrollHandler.getTotalDist()) == 0)){
+				milestone = (Math.round(scrollHandler.getTotalDist()));
+				System.out.println(milestone + " -- milestone!");
+				drawMilestone(delta);
+			}			
 		}
 		
-		if(world.getCollide()){			
+		if(timerBool){
+			if(doOnce4 < 1){
+				yVal.setValue(400);
+				alphaVal.setValue(0);
+				scaleVal.setValue(0);
+				Tween.registerAccessor(Value.class, new ValueAccessor());
+				
+				tweenManager = new TweenManager();
+				Tween.to(yVal, -1, .4f).target(470).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+				Tween.to(alphaVal, -1, .3f).target(1).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 1).start(tweenManager);
+				Tween.to(scaleVal, -1, .5f).target(1).ease(TweenEquations.easeInOutExpo).start(tweenManager);
+				AssetLibrary.starParticle.start();
+				AssetLibrary.starParticle.setPosition((actualWidth / 2) , 450);
+				if(milestone%50 == 0){
+					AssetLibrary.milestone50.play(.3f);
+				} else{
+					AssetLibrary.milestone.play(.1f);	
+				}
+				
+				doOnce4++;
+			}
+			tweenManager.update(delta);
+			
+			if(milestone % 50 == 0){
+				AssetLibrary.starParticle.findEmitter("star").getScale().setHigh(10f);
+				AssetLibrary.starParticle.findEmitter("star2").getScale().setHigh(10f);
+				AssetLibrary.starParticle.findEmitter("star50").getTransparency().setHigh(1, 1);
+				AssetLibrary.starParticle.findEmitter("star502").getTransparency().setHigh(1, 1);
+				AssetLibrary.starParticle.findEmitter("star50").getScale().setHigh(10f);
+				AssetLibrary.starParticle.findEmitter("star502").getScale().setHigh(10f);
+				AssetLibrary.robotoLt.setColor(1f,.8f,.2f,alphaVal.getValue());
+				AssetLibrary.robotoLt.setScale(scaleVal.getValue() + .3f);
+			}else{
+				
+				AssetLibrary.starParticle.findEmitter("star").getScale().setHigh(5f);
+				AssetLibrary.starParticle.findEmitter("star2").getScale().setHigh(5f);
+				AssetLibrary.starParticle.findEmitter("star50").getTransparency().setHigh(0, 0);
+				AssetLibrary.starParticle.findEmitter("star502").getTransparency().setHigh(0, 0);
+				AssetLibrary.robotoLt.setColor(1,1,1,alphaVal.getValue());
+				AssetLibrary.robotoLt.setScale(scaleVal.getValue());
+			}
+			AssetLibrary.starParticle.draw(spriteBatch, delta);			
+			
+			
+			AssetLibrary.robotoLt.draw(spriteBatch, milestone + "m", (actualWidth / 2) - ((AssetLibrary.robotoLt.getBounds((milestone + "m"), new TextBounds()).width) / 2), yVal.getValue());	
+			
+		}
+		
+		//--------
+		
+		if(world.getCollide()){		
+			timerBool = false;
 			GameStateHandler.setAdState(true);
 			
 			if(doOnce < 2){
+				AssetLibrary.run.stop();
+				AssetLibrary.jump.stop();
+				AssetLibrary.dblJump.stop();
 				Tween.registerAccessor(Sprite.class, new SpriteAccessor());
 				Tween.registerAccessor(BitmapFont.class, new BitmapFontAccessor());
 				Tween.registerAccessor(Value.class, new ValueAccessor());
@@ -308,10 +430,39 @@ public class GameRenderer {
 		
 	}
 	
+	public void drawMilestone(float delta){
+		
+		if(doOnce3 <1){					
+			
+			if(!timerBool){
+				timerBool = true;
+				timer = new Timer();			
+				timer.scheduleTask(new Task(){
+
+					@Override
+					public void run() {
+						timerBool = false;
+						doOnce4 = 0;						
+						
+					}
+					
+				}, 2);
+				
+				doOnce3++;
+				}		
+				
+				
+			}
+						
+	
+	}
+		
+		
 	
 		
 	public void dispose(){
 		shape1.dispose();
 		spriteBatch.dispose();
+		
 	}
 }
