@@ -3,54 +3,60 @@ package com.lunarcannon.NanoCat;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.List;
 
-import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionDefaultAudience;
+import com.facebook.SessionState;
+import com.facebook.widget.WebDialog;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
-import com.facebook.FacebookException;
-import com.facebook.FacebookOperationCanceledException;
-import com.facebook.FacebookRequestError;
-import com.facebook.HttpMethod;
-import com.facebook.LoggingBehavior;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.Settings;
-import com.facebook.SessionDefaultAudience;
-import com.facebook.widget.WebDialog;
+import com.lunarcannon.NanoCat.util.IabHelper;
+import com.lunarcannon.NanoCat.util.IabResult;
+import com.lunarcannon.NanoCat.util.Inventory;
+import com.lunarcannon.NanoCat.util.Purchase;
 
 public class AndroidLauncher extends AndroidApplication implements
 		ExternalInterface {
 
 	GameHelper gHelper;
 	Preferences pref;
+	
+	private IabHelper mHelper;
 	private AdView adView;
 	private static final String AD_ID = "ca-app-pub-9782017076126208/2849197083";
 	private final int SHOW_ADS = 1;
@@ -60,6 +66,15 @@ public class AndroidLauncher extends AndroidApplication implements
 	private WebDialog dialog = null;
     private String dialogAction = null;
     private Bundle dialogParams = null;
+    
+    private boolean isPremium = false;
+    
+    
+    
+    private static final String TAG = "com.lunarcannon.NanoCat";
+    static final String PREMIUM_SKU = "android.test.purchased";
+    
+
 
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 
@@ -119,7 +134,25 @@ public class AndroidLauncher extends AndroidApplication implements
 				WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
 		View gameView = initializeForView(new NanoCat(this), config);
-
+		//IAP Setup
+			String base64EncodedPublicKey ="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkdMpTypThPFh0JQb09a/5xeEZl9d+AYefWPokMc5HURv5A6LUlFhybZspYcqCplY4N7zOQF/+WL8baE9+GA5laKimt3i4LzJ4ryXjNFKWe+iLCb/XIUxZpo8O+mPo+UW6kz+DrdWxoVu9/FS75/ujFWeAhZ8wCYSbn+3p0zk3FHBdNg3Bb3Hns1RQdCV1eLvkmtTOg1X/JQa0sOb0SaVW0uGyOwCLgyUFk66vUie9LGlDxSrHVPAG7c61urCVqT1Fk+iVE317mFdJ0/cLdolKSnhjvMHy/6a0LRssgW+oa/nRaEu3p3Cm4+DdDQOsNDqQd+0LGpEpcltJ63w2c4CAwIDAQAB";
+			mHelper = new IabHelper(this, base64EncodedPublicKey);
+			
+			mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+		        	   	 public void onIabSetupFinished(IabResult result) 
+					 {
+		        	           if (!result.isSuccess()) {
+		        	             Log.d(TAG, "In-app Billing setup failed: " + result);
+		        	           } else {             
+		        	      	     Log.d(TAG, "In-app Billing is set up OK");
+		        	      	     mHelper.queryInventoryAsync(mGotInventoryListener);
+				           }
+		        	         }
+		        	});
+			
+			
+			 
+		
 		// Admob Setup
 		adView = new AdView(this);
 		adView.setAdSize(AdSize.BANNER);
@@ -257,18 +290,93 @@ public class AndroidLauncher extends AndroidApplication implements
 
 	@Override
 	protected void onActivityResult(int request, int response, Intent data) {
-		super.onActivityResult(request, response, data);
-		System.out.println("REQUEST CODE: " + request);
-
-		if (request == 64206) {
-			Session.getActiveSession().onActivityResult(this, request, response, data);
-		}else if (request == 103 || request == 102){
-			Session.getActiveSession().onActivityResult(this, request, response, data);
-		} else {
+		
+		if (!mHelper.handleActivityResult(request, response, data)) {
+			super.onActivityResult(request, response, data);
+			System.out.println("REQUEST CODE: " + request);
+	
+			if (request == 64206) {
+				Session.getActiveSession().onActivityResult(this, request, response, data);
+			}else if (request == 103 || request == 102){
+				Session.getActiveSession().onActivityResult(this, request, response, data);
+			} else {
 			gHelper.onActivityResult(request, response, data);
+			} 
 		}
 
 	}
+	
+	// BEGIN IAP STUFF ----------------------------------------
+	@Override
+	public void buyPremium(){
+		
+		mHelper.launchPurchaseFlow(this, PREMIUM_SKU, 10001, mPurchaseFinishedListener, "mypurchasetoken");
+		
+			
+		System.out.println("BUY INITIATED");
+	}
+	IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+	   public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+
+	      if (result.isFailure()) {
+	        // handle error here
+	      }
+	      else {
+	        // does the user have the premium upgrade?
+	    	  Purchase premiumPurchase = inventory.getPurchase(PREMIUM_SKU);
+	    	  isPremium = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
+	            Log.d(TAG, "User is " + (isPremium ? "PREMIUM" : "NOT PREMIUM"));
+	    	  
+	    	  if(inventory.hasDetails(PREMIUM_SKU)){
+//	    		  mHelper.consumeAsync(inventory.getPurchase(PREMIUM_SKU), mConsumeFinishedListener);
+	    	  }
+	    	 
+	        // update UI accordingly
+	      }
+	   }
+	};
+	
+	IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
+			   new IabHelper.OnConsumeFinishedListener() {
+			   public void onConsumeFinished(Purchase purchase, IabResult result) {
+			      if (result.isSuccess()) {
+			         // provision the in-app purchase to the user
+			         // (for example, credit 50 gold coins to player's character)
+			      }
+			      else {
+			         // handle error
+			      }
+			   }
+			};
+	
+	IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener 	= new IabHelper.OnIabPurchaseFinishedListener() {
+	@Override
+	public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+			 if (result.isFailure()) {
+				 Log.d(TAG, "PURCHASE FAILURE.");				
+			     return;
+			 }      
+			 else if (purchase.getSku().equals(PREMIUM_SKU)) {
+				 
+				 isPremium = (purchase != null && verifyDeveloperPayload(purchase));
+		         Log.d(TAG, "User is " + (isPremium ? "PREMIUM" : "NOT PREMIUM"));
+				 Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");	
+				 
+				 
+			 }
+	}
+};
+
+	public boolean getPremium(){
+		System.out.println(isPremium);
+		return isPremium;
+	}
+
+	boolean verifyDeveloperPayload(Purchase p) {
+	    String payload = p.getDeveloperPayload();
+	
+	    return true;
+    }
 
 	// BEGIN FACEBOOK STUFF ----------------------------------
 
@@ -510,5 +618,13 @@ public class AndroidLauncher extends AndroidApplication implements
 
 		adHandler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
 	}
-
+	
+	@Override
+	public void onDestroy() {
+	    super.onDestroy();
+	    if (mHelper != null) {
+	    	mHelper.dispose();
+	    	mHelper = null;
+	    }   
+	}
 }

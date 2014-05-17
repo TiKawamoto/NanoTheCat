@@ -29,6 +29,9 @@ public void fbLogOut();
 
 public boolean fbGetSignedIn();
 
+public void buyPremium();
+
+public boolean getPremium();
 
 public void fbSubmitScore(float score);
 }

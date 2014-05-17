@@ -3,121 +3,128 @@ gpgs.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-hd_off
+buy_premium
   rotate: false
   xy: 1, 393
-  size: 450, 64
-  orig: 450, 64
+  size: 450, 80
+  orig: 450, 80
   offset: 0, 0
   index: -1
-hd_on
+hd_off
   rotate: false
   xy: 1, 327
   size: 450, 64
   orig: 450, 64
   offset: 0, 0
   index: -1
-mute_off
+hd_on
   rotate: false
-  xy: 453, 393
+  xy: 453, 409
   size: 450, 64
   orig: 450, 64
   offset: 0, 0
   index: -1
-mute_on
+mute_off
   rotate: false
   xy: 1, 261
   size: 450, 64
   orig: 450, 64
   offset: 0, 0
   index: -1
-fb_blue
+mute_on
   rotate: false
-  xy: 453, 263
-  size: 128, 128
-  orig: 128, 128
+  xy: 453, 343
+  size: 450, 64
+  orig: 450, 64
   offset: 0, 0
   index: -1
-fb_grey
+fb_blue
   rotate: false
   xy: 1, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-fb_white
-  rotate: false
-  xy: 583, 263
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-games_achievements
+fb_grey
   rotate: false
   xy: 1, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_achievements_green
+fb_white
   rotate: false
   xy: 131, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_achievements_white
-  rotate: false
-  xy: 713, 263
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-games_controller
+games_achievements
   rotate: false
   xy: 131, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_controller_grey
+games_achievements_green
   rotate: false
   xy: 261, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-games_controller_white
+games_achievements_white
   rotate: false
   xy: 261, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
+games_controller
+  rotate: false
+  xy: 453, 213
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+games_controller_grey
+  rotate: false
+  xy: 583, 213
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+games_controller_white
+  rotate: false
+  xy: 713, 213
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 games_leaderboards
   rotate: false
-  xy: 843, 263
+  xy: 391, 83
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_leaderboards_green
   rotate: false
-  xy: 391, 131
+  xy: 521, 83
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 games_leaderboards_white
   rotate: false
-  xy: 391, 1
+  xy: 651, 83
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 cancel
   rotate: false
-  xy: 521, 165
+  xy: 905, 377
   size: 96, 96
   orig: 96, 96
   offset: 0, 0

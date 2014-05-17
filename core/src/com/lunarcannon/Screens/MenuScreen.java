@@ -44,12 +44,12 @@ public class MenuScreen implements Screen {
 
 	private NanoCat game;
 	private Stage stage;
-	private Label settingsLabel;
-	private LabelStyle settingsLabelStyle;
+	private Label settingsLabel, premiumLabel, premiumCopyLabel;
+	private LabelStyle settingsLabelStyle, premiumLabelStyle, premiumCopyLabelStyle;
 	private TextButton playButton, settingsButton, premiumButton;
-	private Button signButton, signButtonConnected, achieveButton, leaderButton, hdButton, hdButtonOff, cancelButton, fbButton, fbButtonConnected, muteButton, muteButtonOff;
+	private Button signButton, signButtonConnected, achieveButton, leaderButton, hdButton, hdButtonOff, cancelButton, fbButton, fbButtonConnected, muteButton, muteButtonOff, buyPremiumButton;
 	private TextButtonStyle buttonStyle, buttonStyleHd;
-	private ButtonStyle signButtonStyle, signButtonConnectedStyle, achieveButtonStyle, leaderButtonStyle, hdButtonStyle, hdButtonStyleOff, cancelButtonStyle, fbButtonStyle, fbButtonConnectedStyle, muteButtonStyle, muteButtonStyleOff;
+	private ButtonStyle signButtonStyle, signButtonConnectedStyle, achieveButtonStyle, leaderButtonStyle, hdButtonStyle, hdButtonStyleOff, cancelButtonStyle, fbButtonStyle, fbButtonConnectedStyle, muteButtonStyle, muteButtonStyleOff, buyPremiumButtonStyle;
 	private BitmapFont buttonFont;
 	private TextureAtlas menuAtlas, gpgsAtlas;
 	private Texture fontFilter, panel, line;
@@ -64,10 +64,12 @@ public class MenuScreen implements Screen {
 	private int widthCorrect, heightCorrect;
 	private String hdText;
 	private boolean settingsOn = false;
+	private boolean premiumOn = false;
 	private TweenManager tweenManager;
 	
 	private int doOnce = 0;
 	private int doOnce2 = 0;
+	private int doOnce3 = 0;
 	
 	private float realX, realY;
 
@@ -80,7 +82,9 @@ public class MenuScreen implements Screen {
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-		System.out.println(GameStateHandler.getMute());
+	
+		
+		
 		if(GameStateHandler.getMute()){
 			muteState = 0;
 		} else{
@@ -126,9 +130,17 @@ public class MenuScreen implements Screen {
 		
 		
 		stage.addActor(playButton);
-		stage.addActor(settingsButton);		
+		stage.addActor(settingsButton);
+		
+		if(!game.extInt.getPremium()){
+			stage.addActor(premiumButton);	
+		} else if(game.extInt.getPremium()) {
+			premiumOn = false;
+		}
+		
 		batch.end();
 		batch.begin();
+		
 		if(settingsOn){
 			if(doOnce < 2){
 				Tween.registerAccessor(Image.class, new ImageAccessor());
@@ -182,7 +194,7 @@ public class MenuScreen implements Screen {
 				stage.addActor(muteButtonOff);		
 			}	
 			
-		} else {
+		} else if (!premiumOn) {
 			if(doOnce < 3){
 				
 				Tween.registerAccessor(Image.class, new ImageAccessor());
@@ -212,6 +224,71 @@ public class MenuScreen implements Screen {
 				stage.getRoot().removeActor(muteButtonOff);
 				doOnce = 0;
 			}			
+		}
+		
+		//PremiumOn
+		if(!game.extInt.getPremium()){
+		
+			if(premiumOn){
+			
+				if(doOnce3 < 2){
+					Tween.registerAccessor(Image.class, new ImageAccessor());
+					Tween.registerAccessor(Label.class, new LabelAccessor());
+					Tween.registerAccessor(Button.class, new ButtonAccessor());
+					tweenManager = new TweenManager();			
+					panelImage.setColor(1,1,1,0);
+					settingsLabel.setColor(1, 1, 1, 0);
+					lineImage.setColor(1,1,1,0);				
+					Tween.to(panelImage, ImageAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(lineImage, ImageAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(premiumLabel, LabelAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(premiumCopyLabel, LabelAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(cancelButton, ButtonAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(buyPremiumButton, ButtonAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					
+					
+					doOnce3++;
+				}			
+				tweenManager.update(delta);	
+				batch.enableBlending();
+				stage.addActor(panelImage);
+				stage.addActor(lineImage);
+				stage.addActor(premiumLabel);
+				stage.addActor(premiumCopyLabel);	
+				stage.addActor(cancelButton);
+				stage.addActor(buyPremiumButton);
+	
+				batch.end();	
+				
+				batch.begin();		
+				
+			} else if (!settingsOn) {
+				if(doOnce3 < 3){
+					
+					Tween.registerAccessor(Image.class, new ImageAccessor());
+					Tween.registerAccessor(Label.class, new LabelAccessor());
+					Tween.registerAccessor(Button.class, new ButtonAccessor());
+					tweenManager = new TweenManager();
+					Tween.to(panelImage, ImageAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(lineImage, ImageAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(premiumLabel, LabelAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(premiumCopyLabel, LabelAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(cancelButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(buyPremiumButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					
+					doOnce3++;
+				}			
+				tweenManager.update(delta);	
+				if(panelImage.getColor().a <.001f){
+					stage.getRoot().removeActor(panelImage);
+					stage.getRoot().removeActor(lineImage);
+					stage.getRoot().removeActor(premiumLabel);
+					stage.getRoot().removeActor(premiumCopyLabel);
+					stage.getRoot().removeActor(cancelButton);
+					stage.getRoot().removeActor(buyPremiumButton);
+					doOnce3 = 0;
+				}			
+			}
 		}
 		
 		stage.draw();				
@@ -369,6 +446,9 @@ public class MenuScreen implements Screen {
 		fbButtonConnectedStyle.up = gpgsSkin.getDrawable("fb_grey");
 		fbButtonConnectedStyle.down = gpgsSkin.getDrawable("fb_white");
 		
+		buyPremiumButtonStyle = new ButtonStyle();
+		buyPremiumButtonStyle.up = gpgsSkin.getDrawable("buy_premium");
+		buyPremiumButtonStyle.down = gpgsSkin.getDrawable("buy_premium");
 		
 		//GPGS Button Stuff ------------------------------------			
 		signButton = new Button(signButtonStyle);				
@@ -508,7 +588,7 @@ public class MenuScreen implements Screen {
 		
 		
 		//Play Button Stuff -------------------------------------
-		playButton = new TextButton("      play", buttonStyle);
+		playButton = new TextButton("        play", buttonStyle);
 		playButton.setX(650);
 		playButton.setY(270);
 		playButton.setColor(1, 1, 1, .85f);
@@ -523,17 +603,15 @@ public class MenuScreen implements Screen {
 				}
 	
 				public void touchUp(InputEvent event, float x, float y,	int pointer, int button) {
-					if(!settingsOn){
+					if(!settingsOn && !premiumOn){
 						game.setScreen(new GameScreen(game));
 					}
 				}
 			});
 		
-		//Play Button Stuff -------------------------------------
+		//Settings Button Stuff -------------------------------------
 		
-		
-		
-		settingsButton = new TextButton("settings", buttonStyle);
+		settingsButton = new TextButton("  settings", buttonStyle);
 		settingsButton.setX(650);
 		settingsButton.setY(170);
 		settingsButton.setColor(1, 1, 1, .85f);
@@ -548,14 +626,35 @@ public class MenuScreen implements Screen {
 				}
 
 				public void touchUp(InputEvent event, float x, float y,	int pointer, int button) {
-					if(!settingsOn){
+					if(!settingsOn && !premiumOn){
 						settingsOn = true;	
 					}
 				}
 			});
 		
-		
-		
+		//Premium Button Stuff -------------------------------------
+			
+			premiumButton = new TextButton("premium", buttonStyle);
+			premiumButton.setX(650);
+			premiumButton.setY(70);
+			premiumButton.setColor(1, 1, 1, .85f);
+			premiumButton.setWidth(280);
+			premiumButton.setHeight(70);
+			
+			
+			premiumButton.addListener(new InputListener() {
+					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+						AssetLibrary.select.play(muteState * .5f);
+						return true;
+					}
+
+					public void touchUp(InputEvent event, float x, float y,	int pointer, int button) {
+						if(!settingsOn && !premiumOn){
+							premiumOn = true;	
+						}
+					}
+				});
+					
 		//HD Settings -------------------------------------
 		
 		
@@ -689,7 +788,29 @@ public class MenuScreen implements Screen {
 		});
 		
 		
+		//BuyPremium --------------------------------------------
+		buyPremiumButton = new Button(buyPremiumButtonStyle);		
+		buyPremiumButton.setX((500) - ((450 * .6f) / 2));
+		buyPremiumButton.setY(150);
+		buyPremiumButton.setWidth(450 * .6f);
+		buyPremiumButton.setHeight(80 * .6f);
 		
+		buyPremiumButton.setColor(1, 1, 1, 1f);
+		
+
+		buyPremiumButton.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				AssetLibrary.select.play(muteState * .5f);
+				return true;
+				
+			}
+
+			public void touchUp(InputEvent event, float x, float y,	int pointer, int button) {
+				game.extInt.buyPremium();
+			}
+		});
+		
+		//Labels ----------------------------------
 		
 		settingsLabelStyle = new LabelStyle();
 		settingsLabelStyle.font = buttonFont;		 
@@ -697,6 +818,21 @@ public class MenuScreen implements Screen {
 		settingsLabel.setX(280);
 		settingsLabel.setY(370);
 		settingsLabel.setScale(1f);
+		
+		premiumLabelStyle = new LabelStyle();
+		premiumLabelStyle.font = buttonFont;		 
+		premiumLabel = new Label("buy premium", premiumLabelStyle);
+		premiumLabel.setX(280);
+		premiumLabel.setY(370);
+		premiumLabel.setScale(1f);
+		
+		premiumCopyLabelStyle = new LabelStyle();
+		premiumCopyLabelStyle.font = buttonFont; 
+		premiumCopyLabel = new Label("premium features: \n" + "  - remove ads\n  - support developer\n  - buy nano cat food", premiumCopyLabelStyle);
+		premiumCopyLabel.setX(280);
+		premiumCopyLabel.setY(190);
+		premiumCopyLabel.setFontScale(.3f);
+		
 		
 		cancelButton = new Button(cancelButtonStyle);		
 		cancelButton.setX(690);
@@ -716,6 +852,9 @@ public class MenuScreen implements Screen {
 			public void touchUp(InputEvent event, float x, float y,	int pointer, int button) {
 				if(settingsOn){
 					settingsOn = false;	
+				}
+				if(premiumOn){
+					premiumOn = false;	
 				}
 			}
 		});

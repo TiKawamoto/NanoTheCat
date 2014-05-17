@@ -40,9 +40,16 @@ public class GameStateHandler {
 	}
 	
 	public static void setAdState(boolean state){
-		adState = state;
-		pref.putBoolean("adState", adState);
-		game.adRefresh(adState);
+		
+		if(game.extInt.getPremium()){
+			pref.putBoolean("adState", false);
+			game.adRefresh(false);
+		} else {
+			adState = state;
+			pref.putBoolean("adState", adState);
+			game.adRefresh(adState);	
+		}
+				
 	}
 	
 	public static void setTouchPos(Vector3 touch){

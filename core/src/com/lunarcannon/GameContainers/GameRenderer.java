@@ -269,19 +269,19 @@ public class GameRenderer {
 		
 		if(!world.getCollide()){
 			doOnce = 0;
-			if(GameStateHandler.getAdState()){
-				AssetLibrary.robotoLt.setScale(.5f);
-				AssetLibrary.robotoLt.setColor(1,1,1,1);
-				AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 420);
-				totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
-				AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 380);	
-			} else {
+//			if(GameStateHandler.getAdState()){
+//				AssetLibrary.robotoLt.setScale(.5f);
+//				AssetLibrary.robotoLt.setColor(1,1,1,1);
+//				AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 420);
+//				totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
+//				AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 380);	
+//			} else {
 				AssetLibrary.robotoLt.setScale(.5f);
 				AssetLibrary.robotoLt.setColor(1,1,1,1);
 				AssetLibrary.robotoLt.draw(spriteBatch, "total distance", actualWidth - 272, 520);
 				totalDistWidth = AssetLibrary.robotoLt.getBounds(f.format(scrollHandler.getTotalDist()));
 				AssetLibrary.robotoLt.draw(spriteBatch, f.format(scrollHandler.getTotalDist()) + "m", (actualWidth - 55) - totalDistWidth.width, 480);			
-			}
+//			}
 			xVal.setValue(actualWidth + 800);
 			yVal2.setValue(540);
 			GameStateHandler.setAdState(false);
