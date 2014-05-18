@@ -1,67 +1,88 @@
 
 menuitems.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 menubg_day
   rotate: false
-  xy: 1, 1496
+  xy: 1, 1476
   size: 960, 540
   orig: 960, 540
   offset: 0, 0
   index: -1
-menubg_evening
+menubg_premium1
   rotate: false
-  xy: 1, 954
+  xy: 1, 934
   size: 960, 540
   orig: 960, 540
   offset: 0, 0
   index: -1
-menubg_night
+menubg_premium2
   rotate: false
-  xy: 1, 412
+  xy: 963, 1476
+  size: 960, 540
+  orig: 960, 540
+  offset: 0, 0
+  index: -1
+menubg_premium3
+  rotate: false
+  xy: 1, 392
+  size: 960, 540
+  orig: 960, 540
+  offset: 0, 0
+  index: -1
+menubg_premium4
+  rotate: false
+  xy: 963, 934
   size: 960, 540
   orig: 960, 540
   offset: 0, 0
   index: -1
 logo_i
   rotate: false
-  xy: 1, 235
+  xy: 1, 215
   size: 500, 175
   orig: 500, 175
   offset: 0, 0
   index: -1
 logo
   rotate: false
-  xy: 1, 93
+  xy: 963, 792
+  size: 450, 140
+  orig: 450, 140
+  offset: 0, 0
+  index: -1
+logo_premium
+  rotate: false
+  xy: 1, 73
   size: 450, 140
   orig: 450, 140
   offset: 0, 0
   index: -1
 button_down_i
   rotate: false
-  xy: 503, 320
+  xy: 503, 300
   size: 350, 90
   orig: 350, 90
   offset: 0, 0
   index: -1
 button_up_i
   rotate: false
-  xy: 1, 1
+  xy: 963, 700
   size: 350, 90
   orig: 350, 90
   offset: 0, 0
   index: -1
 button_down
   rotate: false
-  xy: 503, 248
+  xy: 1415, 862
   size: 280, 70
   orig: 280, 70
   offset: 0, 0
   index: -1
 button_up
   rotate: false
-  xy: 503, 176
+  xy: 1, 1
   size: 280, 70
   orig: 280, 70
   offset: 0, 0

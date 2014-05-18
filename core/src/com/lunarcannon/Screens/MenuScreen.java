@@ -1,5 +1,7 @@
 package com.lunarcannon.Screens;
 
+import java.util.Random;
+
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
@@ -34,7 +36,6 @@ import com.lunarcannon.GameContainers.ButtonAccessor;
 import com.lunarcannon.GameContainers.GameStateHandler;
 import com.lunarcannon.GameContainers.ImageAccessor;
 import com.lunarcannon.GameContainers.LabelAccessor;
-import com.lunarcannon.GameContainers.SpriteAccessor;
 import com.lunarcannon.NanoCat.ExternalInterface;
 import com.lunarcannon.NanoCat.NanoCat;
 
@@ -53,10 +54,10 @@ public class MenuScreen implements Screen {
 	private BitmapFont buttonFont;
 	private TextureAtlas menuAtlas, gpgsAtlas;
 	private Texture fontFilter, panel, line;
-	private AtlasRegion buttonUp, buttonDown, bgDay, logo, gpgsSignGreen, gpgsSignGrey, gpgsSignWhite, gpgsAchieveGreen, gpgsAchieveGrey, gpgsLeaderGreen, gpgsLeaderGrey;
+	private AtlasRegion buttonUp, buttonDown, bgDay, logo, logoPremium, gpgsSignGreen, gpgsSignGrey, gpgsSignWhite, gpgsAchieveGreen, gpgsAchieveGrey, gpgsLeaderGreen, gpgsLeaderGrey;
 	private SpriteBatch batch;
 	private Skin menuSkin, gpgsSkin;
-	private Sprite bgDaySprite, logoSprite, panelSprite, lineSprite;
+	private Sprite bgDaySprite, logoSprite, logoPremiumSprite, panelSprite, lineSprite;
 	private Image lineImage, panelImage;
 
 	private float aspectRatio, xDif, yDif;
@@ -72,9 +73,14 @@ public class MenuScreen implements Screen {
 	private int doOnce3 = 0;
 	
 	private float realX, realY;
+	
+	private Random randPremium = new Random();
+	private int splashNum;
 
 	public MenuScreen(NanoCat game) {
 		this.game = game;
+		
+		splashNum = (randPremium.nextInt(5)+1);
 	}
 
 	@Override
@@ -98,7 +104,11 @@ public class MenuScreen implements Screen {
 		stage.act(delta);		
 		batch.begin();
 		bgDaySprite.draw(batch);
-		logoSprite.draw(batch);
+		if(!game.extInt.getPremium()){
+			logoSprite.draw(batch);
+		} else {
+			logoPremiumSprite.draw(batch);
+		}
 		batch.end();
 		
 		batch.begin();
@@ -323,7 +333,9 @@ public class MenuScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		Gdx.input.setCatchBackKey(true);
 		
-
+		
+		
+		
 
 		
 		batch = new SpriteBatch();
@@ -337,8 +349,41 @@ public class MenuScreen implements Screen {
 		menuAtlas = new TextureAtlas(Gdx.files.internal("data/menuitems.atlas"));
 		buttonUp = menuAtlas.findRegion("button_up");
 		buttonDown = menuAtlas.findRegion("button_down");
-		bgDay = menuAtlas.findRegion("menubg_day");
-		logo = menuAtlas.findRegion("logo"); 
+		
+		//Splash Premium logic ----------------------------------------
+				
+		
+		
+		if(game.extInt.getPremium()){
+			switch(splashNum){
+			case 1:
+				bgDay = menuAtlas.findRegion("menubg_day");
+				break;
+			case 2:
+				bgDay = menuAtlas.findRegion("menubg_premium1");
+				break;
+			case 3:
+				bgDay = menuAtlas.findRegion("menubg_premium2");
+				break;
+			case 4:
+				bgDay = menuAtlas.findRegion("menubg_premium3");
+				break;
+			case 5:
+				bgDay = menuAtlas.findRegion("menubg_premium4");
+				break;
+			default:
+				bgDay = menuAtlas.findRegion("menubg_day");	
+				break;
+			}
+			
+		} else if (!game.extInt.getPremium()) {
+			bgDay = menuAtlas.findRegion("menubg_day");	
+		}
+		
+		
+		
+		logo = menuAtlas.findRegion("logo");
+		logoPremium = menuAtlas.findRegion("logo_premium");
 		
 		gpgsAtlas = new TextureAtlas(Gdx.files.internal("data/gpgs.atlas"));
 		gpgsSignGreen = gpgsAtlas.findRegion("games_controller");
@@ -358,6 +403,10 @@ public class MenuScreen implements Screen {
 		logoSprite = new Sprite(logo);
 		logoSprite.setAlpha(.85f);
 		logoSprite.setBounds(480 / xDif, 365 / yDif, 450 / xDif, 140 / xDif);
+		
+		logoPremiumSprite = new Sprite(logoPremium);
+		logoPremiumSprite.setAlpha(.85f);
+		logoPremiumSprite.setBounds(480 / xDif, 365 / yDif, 450 / xDif, 140 / xDif);
 		
 		panel = new Texture(Gdx.files.internal("data/panelcolor.png"));
 		panel.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -828,7 +877,7 @@ public class MenuScreen implements Screen {
 		
 		premiumCopyLabelStyle = new LabelStyle();
 		premiumCopyLabelStyle.font = buttonFont; 
-		premiumCopyLabel = new Label("premium features: \n" + "  - remove ads\n  - support developer\n  - buy nano cat food", premiumCopyLabelStyle);
+		premiumCopyLabel = new Label("  - remove ads\n  - support developer\n  - buy nano cat food", premiumCopyLabelStyle);
 		premiumCopyLabel.setX(280);
 		premiumCopyLabel.setY(190);
 		premiumCopyLabel.setFontScale(.3f);
@@ -863,7 +912,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		
+
 		
 	}
 
@@ -897,7 +946,6 @@ public class MenuScreen implements Screen {
 		fontFilter.dispose();
 		line.dispose();
 		panel.dispose();
-		
 		
 
 	}

@@ -328,7 +328,7 @@ public class AndroidLauncher extends AndroidApplication implements
 	            Log.d(TAG, "User is " + (isPremium ? "PREMIUM" : "NOT PREMIUM"));
 	    	  
 	    	  if(inventory.hasDetails(PREMIUM_SKU)){
-//	    		  mHelper.consumeAsync(inventory.getPurchase(PREMIUM_SKU), mConsumeFinishedListener);
+	    		  mHelper.consumeAsync(inventory.getPurchase(PREMIUM_SKU), mConsumeFinishedListener);
 	    	  }
 	    	 
 	        // update UI accordingly

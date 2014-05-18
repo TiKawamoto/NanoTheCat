@@ -5,56 +5,56 @@ filter: Nearest,Nearest
 repeat: none
 case0
   rotate: false
-  xy: 1, 837
+  xy: 1, 816
   size: 800, 118
   orig: 800, 118
   offset: 0, 0
   index: -1
 case5
   rotate: false
-  xy: 1, 535
+  xy: 1, 514
   size: 400, 300
   orig: 400, 300
   offset: 0, 0
   index: -1
-case1
+case4
   rotate: false
-  xy: 1, 183
-  size: 210, 350
-  orig: 210, 350
+  xy: 1, 253
+  size: 320, 259
+  orig: 320, 259
   offset: 0, 0
   index: -1
 case6
   rotate: false
-  xy: 803, 735
+  xy: 803, 714
   size: 220, 220
   orig: 220, 220
   offset: 0, 0
   index: -1
-case4
+case1
   rotate: false
-  xy: 403, 655
-  size: 320, 180
-  orig: 320, 180
+  xy: 403, 464
+  size: 210, 350
+  orig: 210, 350
   offset: 0, 0
   index: -1
 default
   rotate: false
-  xy: 213, 283
+  xy: 1, 1
   size: 100, 250
   orig: 100, 250
   offset: 0, 0
   index: -1
 case3
   rotate: false
-  xy: 1, 1
+  xy: 615, 634
   size: 100, 180
   orig: 100, 180
   offset: 0, 0
   index: -1
 case2
   rotate: false
-  xy: 103, 61
+  xy: 103, 131
   size: 100, 120
   orig: 100, 120
   offset: 0, 0

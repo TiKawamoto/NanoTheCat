@@ -253,7 +253,7 @@ public class GameRenderer {
 			} else if(platformScroller.get(i).getType() == 3){
 				spriteBatch.draw(AssetLibrary.case3, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 100, 180);
 			} else if(platformScroller.get(i).getType() == 4){
-				spriteBatch.draw(AssetLibrary.case4, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 320, 180);
+				spriteBatch.draw(AssetLibrary.case4, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 320, 259);
 			} else if(platformScroller.get(i).getType() == 5){
 				//spriteBatch.draw(AssetLibrary.case3, platformScroller.get(i).getxPos(), platformScroller.get(i).getyPos(), 100, 180);
 			} else if(platformScroller.get(i).getType() == 6){

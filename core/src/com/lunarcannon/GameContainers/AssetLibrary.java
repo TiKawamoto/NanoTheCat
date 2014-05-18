@@ -281,10 +281,17 @@ public class AssetLibrary {
 	public static void dispose(){
 		texture.dispose();
 		bgTexture.dispose();
-		robotoLt.dispose();
 		bgBackTexture.dispose();
+		
+		robotoLt.dispose();
+		robotoBlk.dispose();		
 		panel.dispose();
 		fontFilter.dispose();
+		fontFilter2.dispose();
+		menuBack.dispose();
+		smoke.dispose();
+		fbShare.dispose();
+		
 		collision.dispose();
 		jump.dispose();
 		jumpSound.dispose();
@@ -295,10 +302,13 @@ public class AssetLibrary {
 		milestone.dispose();
 		milestone50.dispose();
 		select.dispose();
-		smoke.dispose();
+		
 		smokeParticle.dispose();
 		starParticle.dispose();
-	
+		platform.dispose();
+		nanoRun.dispose();
+//		gpgsAtlas.dispose();
+		
 		
 	}
 

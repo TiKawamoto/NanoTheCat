@@ -78,6 +78,6 @@ public class DesktopInterface implements ExternalInterface {
 	public void buyPremium(){}
 	
 	public boolean getPremium(){
-		return false;		
+		return true;		
 	}
 }
