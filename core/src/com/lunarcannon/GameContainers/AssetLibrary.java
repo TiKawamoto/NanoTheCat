@@ -54,6 +54,7 @@ public class AssetLibrary {
 	public static Sound hit;
 	public static Sound select;
 	public static Sound run;
+	public static Sound highScore;
 	
 	private static float distTemp = 0;
 	private static int fallTemp = 0;
@@ -107,7 +108,7 @@ public class AssetLibrary {
 				bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
 				bgTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 				
-				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png"));
+				bgBackTexture = new Texture(Gdx.files.internal("data/bg_dist_3.png") );
 				bgBackTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			} else {
 				bgTexture = new Texture(Gdx.files.internal("data/bg_3.png"));
@@ -227,6 +228,7 @@ public class AssetLibrary {
 		hit = Gdx.audio.newSound(Gdx.files.internal("data/audio/hit.wav"));
 		select = Gdx.audio.newSound(Gdx.files.internal("data/audio/select.wav"));
 		run = Gdx.audio.newSound(Gdx.files.internal("data/audio/run.wav"));
+		highScore = Gdx.audio.newSound(Gdx.files.internal("data/audio/highscore.wav"));
 		
 		//Scoring
 		score = Gdx.app.getPreferences("NanoCat");
@@ -302,6 +304,7 @@ public class AssetLibrary {
 		milestone.dispose();
 		milestone50.dispose();
 		select.dispose();
+		highScore.dispose();
 		
 		smokeParticle.dispose();
 		starParticle.dispose();

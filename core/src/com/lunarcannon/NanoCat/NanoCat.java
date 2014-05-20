@@ -27,7 +27,7 @@ public class NanoCat extends Game {
 		DateFormat dateFormatter = new SimpleDateFormat("HH");
 		Calendar cal = Calendar.getInstance();
 		timeOfDay = Integer.parseInt(dateFormatter.format(cal.getTime()));
-		System.out.println(timeOfDay);
+//		System.out.println(timeOfDay);
 		
 		AssetLibrary.load(this);
 		GameStateHandler.load(this);

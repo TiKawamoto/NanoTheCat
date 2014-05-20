@@ -155,7 +155,6 @@ public class Cat {
 			dblJump = true;
 		}
 		jump = true;
-		System.out.println("JUMP");
 	}
 	public void noJump(){
 	//	jump = false;

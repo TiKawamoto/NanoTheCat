@@ -53,12 +53,12 @@ public class MenuScreen implements Screen {
 	private ButtonStyle signButtonStyle, signButtonConnectedStyle, achieveButtonStyle, leaderButtonStyle, hdButtonStyle, hdButtonStyleOff, cancelButtonStyle, fbButtonStyle, fbButtonConnectedStyle, muteButtonStyle, muteButtonStyleOff, buyPremiumButtonStyle;
 	private BitmapFont buttonFont;
 	private TextureAtlas menuAtlas, gpgsAtlas;
-	private Texture fontFilter, panel, line;
+	private Texture fontFilter, panel, line, catCan;
 	private AtlasRegion buttonUp, buttonDown, bgDay, logo, logoPremium, gpgsSignGreen, gpgsSignGrey, gpgsSignWhite, gpgsAchieveGreen, gpgsAchieveGrey, gpgsLeaderGreen, gpgsLeaderGrey;
 	private SpriteBatch batch;
 	private Skin menuSkin, gpgsSkin;
 	private Sprite bgDaySprite, logoSprite, logoPremiumSprite, panelSprite, lineSprite;
-	private Image lineImage, panelImage;
+	private Image lineImage, panelImage, catCanImage;
 
 	private float aspectRatio, xDif, yDif;
 	private float muteState = 1;
@@ -71,6 +71,7 @@ public class MenuScreen implements Screen {
 	private int doOnce = 0;
 	private int doOnce2 = 0;
 	private int doOnce3 = 0;
+	private int doOnce4 = 0;
 	
 	private float realX, realY;
 	
@@ -81,10 +82,18 @@ public class MenuScreen implements Screen {
 		this.game = game;
 		
 		splashNum = (randPremium.nextInt(5)+1);
+		
 	}
 
 	@Override
 	public void render(float delta) {
+		
+		if(game.extInt.getPremium()){
+			if(doOnce4 < 1){
+				game.extInt.unlockAchievement("CgkI1Yuo44kEEAIQCw");
+				doOnce4++;
+			}			
+		}
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -254,6 +263,7 @@ public class MenuScreen implements Screen {
 					Tween.to(premiumLabel, LabelAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 					Tween.to(premiumCopyLabel, LabelAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 					Tween.to(cancelButton, ButtonAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(catCanImage, ButtonAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 					Tween.to(buyPremiumButton, ButtonAccessor.ALPHA, .2f).target(1f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 					
 					
@@ -266,6 +276,7 @@ public class MenuScreen implements Screen {
 				stage.addActor(premiumLabel);
 				stage.addActor(premiumCopyLabel);	
 				stage.addActor(cancelButton);
+				stage.addActor(catCanImage);
 				stage.addActor(buyPremiumButton);
 	
 				batch.end();	
@@ -284,6 +295,7 @@ public class MenuScreen implements Screen {
 					Tween.to(premiumLabel, LabelAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 					Tween.to(premiumCopyLabel, LabelAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 					Tween.to(cancelButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					Tween.to(catCanImage, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 					Tween.to(buyPremiumButton, ButtonAccessor.ALPHA, .2f).target(0).ease(TweenEquations.easeInOutQuad).start(tweenManager);
 					
 					doOnce3++;
@@ -295,6 +307,7 @@ public class MenuScreen implements Screen {
 					stage.getRoot().removeActor(premiumLabel);
 					stage.getRoot().removeActor(premiumCopyLabel);
 					stage.getRoot().removeActor(cancelButton);
+					stage.getRoot().removeActor(catCanImage);
 					stage.getRoot().removeActor(buyPremiumButton);
 					doOnce3 = 0;
 				}			
@@ -419,10 +432,15 @@ public class MenuScreen implements Screen {
 		line = new Texture(Gdx.files.internal("data/whitecolor.png"));
 		line.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		lineImage = new Image(line);
-		lineImage.setBounds(250, 360, 500, 2);
+		lineImage.setBounds(250, 360, 500, 1);
 		lineSprite = new Sprite(line);
 		lineSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), (float)(height / 2) - (-90 / xDif), 500 / xDif, 2);
 		
+		catCan = new Texture(Gdx.files.internal("data/catcans.png"));
+		catCan.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		catCanImage = new Image(catCan);
+		catCanImage.setBounds(540, 192, 200, 128);
+	
 		
 //		logoSprite.setX(430);
 //		logoSprite.setY(330);
@@ -839,10 +857,10 @@ public class MenuScreen implements Screen {
 		
 		//BuyPremium --------------------------------------------
 		buyPremiumButton = new Button(buyPremiumButtonStyle);		
-		buyPremiumButton.setX((500) - ((450 * .6f) / 2));
-		buyPremiumButton.setY(150);
-		buyPremiumButton.setWidth(450 * .6f);
-		buyPremiumButton.setHeight(80 * .6f);
+		buyPremiumButton.setX((530) - ((450 * .6f) / 2));
+		buyPremiumButton.setY(140);
+		buyPremiumButton.setWidth(225);
+		buyPremiumButton.setHeight(40);
 		
 		buyPremiumButton.setColor(1, 1, 1, 1f);
 		
@@ -870,16 +888,16 @@ public class MenuScreen implements Screen {
 		
 		premiumLabelStyle = new LabelStyle();
 		premiumLabelStyle.font = buttonFont;		 
-		premiumLabel = new Label("buy premium", premiumLabelStyle);
+		premiumLabel = new Label("go premium", premiumLabelStyle);
 		premiumLabel.setX(280);
 		premiumLabel.setY(370);
 		premiumLabel.setScale(1f);
 		
 		premiumCopyLabelStyle = new LabelStyle();
 		premiumCopyLabelStyle.font = buttonFont; 
-		premiumCopyLabel = new Label("  - remove ads\n  - support developer\n  - buy nano cat food", premiumCopyLabelStyle);
+		premiumCopyLabel = new Label(" - remove ads\n - new random menu art\n - nano love achievement\n - support developer\n - buy nano cat food", premiumCopyLabelStyle);
 		premiumCopyLabel.setX(280);
-		premiumCopyLabel.setY(190);
+		premiumCopyLabel.setY(150);
 		premiumCopyLabel.setFontScale(.3f);
 		
 		

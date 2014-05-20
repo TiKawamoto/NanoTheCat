@@ -74,10 +74,11 @@ public class DesktopInterface implements ExternalInterface {
 
 	public void fbSubmitScore(float score){}
 	
+	public void fbAutoScore(float score){}
 	
 	public void buyPremium(){}
 	
 	public boolean getPremium(){
-		return true;		
+		return false;		
 	}
 }

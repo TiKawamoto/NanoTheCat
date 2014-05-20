@@ -38,6 +38,12 @@ public class GameScreen implements Screen{
     	   	
     	if(world.getCollide()){
     		
+//    		if(doOnce < 1){
+//    			game.extInt.fbAutoScore(world.getThisScore());
+//    			doOnce++;
+//    		}
+    		
+    		
     		if(world.getPostFb()){
     				game.extInt.fbSubmitScore(world.getThisScore());
     		}
@@ -46,7 +52,9 @@ public class GameScreen implements Screen{
     		if(game.extInt.getSignedIn()){
         		achievementChecker();	
         	}   	    	
-    	}    	 	
+    	} else {
+//    		doOnce = 0;
+    	}
     	
     	if(world.returnToMain()){
     		AssetLibrary.run.stop();

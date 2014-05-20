@@ -34,7 +34,11 @@ public void buyPremium();
 public boolean getPremium();
 
 public void fbSubmitScore(float score);
+
+public void fbAutoScore(float score);
+
 }
+
 
 
 

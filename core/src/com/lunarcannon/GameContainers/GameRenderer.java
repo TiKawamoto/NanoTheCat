@@ -52,6 +52,7 @@ public class GameRenderer {
 	private int doOnce4 = 0;
 	private int doOnce5 = 0;
 	private int doOnce6 = 0;
+	private int doOnce7 = 0;
 	private long milestone = 0;
 	private boolean timerBool = false;
 	
@@ -168,6 +169,7 @@ public class GameRenderer {
 				doOnce2 = 0;
 				doOnce3 = 0;
 				doOnce5 = 0;
+				doOnce7 = 0;
 				
 			
 				
@@ -290,7 +292,7 @@ public class GameRenderer {
 			
 			if((Math.round(scrollHandler.getTotalDist()) % 10) == 0 && !(Math.round(scrollHandler.getTotalDist()) == 0)){
 				milestone = (Math.round(scrollHandler.getTotalDist()));
-				System.out.println(milestone + " -- milestone!");
+//				System.out.println(milestone + " -- milestone!");
 				drawMilestone(delta);
 			}			
 		}
@@ -380,7 +382,10 @@ public class GameRenderer {
 			AssetLibrary.menuBackSprite.draw(spriteBatch);
 			
 			if(world.getHigh()){	
-				
+				if(doOnce7 < 1){
+					AssetLibrary.highScore.play(muteState * .2f);
+					doOnce7++;
+				}
 				tweenManager.update(delta);
 				thisScore = Float.toString(world.getThisScore());
 				AssetLibrary.panelSprite.setSize(500, 300);

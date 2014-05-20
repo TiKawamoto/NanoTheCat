@@ -109,7 +109,7 @@ public class AndroidLauncher extends AndroidApplication implements
 			}
 			case HIDE_ADS: {
 				adView.setVisibility(View.GONE);
-				System.out.println("GONE");
+//				System.out.println("GONE");
 				break;
 
 			}
@@ -368,7 +368,7 @@ public class AndroidLauncher extends AndroidApplication implements
 };
 
 	public boolean getPremium(){
-		System.out.println(isPremium);
+//		System.out.println(isPremium);
 		return isPremium;
 	}
 
@@ -416,7 +416,42 @@ public class AndroidLauncher extends AndroidApplication implements
 		}
 		return signedState;
 	}
+	
+	@Override
+	public void fbAutoScore(float score){
+		Session session = Session.getActiveSession();
+		System.out.println("AUTO POSTO CALLED");
+		if(session.isOpened() && !session.isClosed() && session.getPermissions().contains("publish_actions")){
+			System.out.println("AUTO POSTO");
+			final int theScore = (int) (score * 100);		
+			
+			if (theScore > 0) {
+				System.out.println("Auto Score submitted! " + theScore);
+				AndroidLauncher.this.runOnUiThread(new Runnable(){
+					public void run(){
+						Bundle fbParams = new Bundle();
+						fbParams.putString("score", "" + theScore);	
+						Request postScoreRequest = new Request(Session.getActiveSession(), "me/scores", fbParams,HttpMethod.POST, new Request.Callback() {
 
+							@Override
+							public void onCompleted(Response response) {
+								System.out.println("Posted yo");
+								FacebookRequestError error = response.getError();
+								if (error != null) {
+									
+								} else {
+
+								}
+							}
+						});					
+						Request.executeBatchAsync(postScoreRequest);	
+						
+					}	
+				});					
+			}			
+		}
+	}
+	
 	@Override
 	public void fbSubmitScore(float score) {
 		Session session = Session.getActiveSession();
@@ -447,10 +482,10 @@ public class AndroidLauncher extends AndroidApplication implements
 			
 			
 		} else {
-			System.out.println("DOO");
+//			System.out.println("DOO");
 		}
 		
-		System.out.println(session.getState());
+//		System.out.println(session.getState());
 		
 		if (session.isOpened() && !session.isClosed()) {
 			fbPostLogic(score);
@@ -502,7 +537,7 @@ public class AndroidLauncher extends AndroidApplication implements
 					postParams.putString("caption", "MEOW.");
 					postParams.putString("description", "I ran " + Float.toString(score) + " meters in Nano the Cat!");
 					postParams.putString("link", "http://play.google.com");
-					postParams.putString("picture", "http://lunarcannon.com/img/nano-icon-512.png");
+					postParams.putString("picture", "http://lunarcannon.com/img/nano-web-icon.png");
 					
 					showDialogWithoutNotificationBar("feed", postParams);
 					
