@@ -24,7 +24,7 @@ public class GameStateHandler {
 		}
 		
 		if(!pref.contains("hdState")){
-			pref.putBoolean("hdState", true);
+			pref.putBoolean("hdState", false);
 			pref.flush();
 		}
 		

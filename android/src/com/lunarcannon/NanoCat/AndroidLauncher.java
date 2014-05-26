@@ -72,7 +72,7 @@ public class AndroidLauncher extends AndroidApplication implements
     
     
     private static final String TAG = "com.lunarcannon.NanoCat";
-    static final String PREMIUM_SKU = "android.test.purchased";
+    static final String PREMIUM_SKU = "premium";
     
 
 
@@ -134,6 +134,32 @@ public class AndroidLauncher extends AndroidApplication implements
 				WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
 		View gameView = initializeForView(new NanoCat(this), config);
+		
+		//GET SIGNATURE
+//		try {
+//			PackageInfo info = getPackageManager().getPackageInfo(
+//					this.getPackageName(), PackageManager.GET_SIGNATURES);
+//			for (Signature signature : info.signatures) {
+//
+//				MessageDigest md = MessageDigest.getInstance("SHA");
+//				md.update(signature.toByteArray());
+//				Log.d("====Hash Key===",
+//						Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//
+//			}
+//
+//		} catch (NameNotFoundException e) {
+//
+//			e.printStackTrace();
+//
+//		} catch (NoSuchAlgorithmException ex) {
+//
+//			ex.printStackTrace();
+//
+//		}
+//		
+		
+		
 		//IAP Setup
 			String base64EncodedPublicKey ="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkdMpTypThPFh0JQb09a/5xeEZl9d+AYefWPokMc5HURv5A6LUlFhybZspYcqCplY4N7zOQF/+WL8baE9+GA5laKimt3i4LzJ4ryXjNFKWe+iLCb/XIUxZpo8O+mPo+UW6kz+DrdWxoVu9/FS75/ujFWeAhZ8wCYSbn+3p0zk3FHBdNg3Bb3Hns1RQdCV1eLvkmtTOg1X/JQa0sOb0SaVW0uGyOwCLgyUFk66vUie9LGlDxSrHVPAG7c61urCVqT1Fk+iVE317mFdJ0/cLdolKSnhjvMHy/6a0LRssgW+oa/nRaEu3p3Cm4+DdDQOsNDqQd+0LGpEpcltJ63w2c4CAwIDAQAB";
 			mHelper = new IabHelper(this, base64EncodedPublicKey);
@@ -149,6 +175,8 @@ public class AndroidLauncher extends AndroidApplication implements
 				           }
 		        	         }
 		        	});
+			
+	
 			
 			
 			 
@@ -214,28 +242,7 @@ public class AndroidLauncher extends AndroidApplication implements
 			}
 		}
 
-		//GET SIGNATURE
-		try {
-			PackageInfo info = getPackageManager().getPackageInfo(
-					this.getPackageName(), PackageManager.GET_SIGNATURES);
-			for (Signature signature : info.signatures) {
 
-				MessageDigest md = MessageDigest.getInstance("SHA");
-				md.update(signature.toByteArray());
-				Log.d("====Hash Key===",
-						Base64.encodeToString(md.digest(), Base64.DEFAULT));
-
-			}
-
-		} catch (NameNotFoundException e) {
-
-			e.printStackTrace();
-
-		} catch (NoSuchAlgorithmException ex) {
-
-			ex.printStackTrace();
-
-		}
 
 	}
 
@@ -313,7 +320,7 @@ public class AndroidLauncher extends AndroidApplication implements
 		mHelper.launchPurchaseFlow(this, PREMIUM_SKU, 10001, mPurchaseFinishedListener, "mypurchasetoken");
 		
 			
-		System.out.println("BUY INITIATED");
+//		System.out.println("BUY INITIATED");
 	}
 	IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
 	   public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
@@ -328,26 +335,27 @@ public class AndroidLauncher extends AndroidApplication implements
 	            Log.d(TAG, "User is " + (isPremium ? "PREMIUM" : "NOT PREMIUM"));
 	    	  
 	    	  if(inventory.hasDetails(PREMIUM_SKU)){
-	    		  mHelper.consumeAsync(inventory.getPurchase(PREMIUM_SKU), mConsumeFinishedListener);
+//	    		  mHelper.consumeAsync(inventory.getPurchase(PREMIUM_SKU), mConsumeFinishedListener);
 	    	  }
 	    	 
 	        // update UI accordingly
 	      }
 	   }
 	};
-	
-	IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
-			   new IabHelper.OnConsumeFinishedListener() {
-			   public void onConsumeFinished(Purchase purchase, IabResult result) {
-			      if (result.isSuccess()) {
-			         // provision the in-app purchase to the user
-			         // (for example, credit 50 gold coins to player's character)
-			      }
-			      else {
-			         // handle error
-			      }
-			   }
-			};
+
+// DEBUG CONSUME STUFF --------------------------------------------------------	
+//	IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
+//			   new IabHelper.OnConsumeFinishedListener() {
+//			   public void onConsumeFinished(Purchase purchase, IabResult result) {
+//			      if (result.isSuccess()) {
+//			         // provision the in-app purchase to the user
+//			         // (for example, credit 50 gold coins to player's character)
+//			      }
+//			      else {
+//			         // handle error
+//			      }
+//			   }
+//			};
 	
 	IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener 	= new IabHelper.OnIabPurchaseFinishedListener() {
 	@Override
@@ -360,7 +368,7 @@ public class AndroidLauncher extends AndroidApplication implements
 				 
 				 isPremium = (purchase != null && verifyDeveloperPayload(purchase));
 		         Log.d(TAG, "User is " + (isPremium ? "PREMIUM" : "NOT PREMIUM"));
-				 Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");	
+				 Log.d(TAG, "Purchased premium.");	
 				 
 				 
 			 }
@@ -368,8 +376,9 @@ public class AndroidLauncher extends AndroidApplication implements
 };
 
 	public boolean getPremium(){
-//		System.out.println(isPremium);
+
 		return isPremium;
+		
 	}
 
 	boolean verifyDeveloperPayload(Purchase p) {
@@ -420,13 +429,13 @@ public class AndroidLauncher extends AndroidApplication implements
 	@Override
 	public void fbAutoScore(float score){
 		Session session = Session.getActiveSession();
-		System.out.println("AUTO POSTO CALLED");
+//		System.out.println("AUTO POSTO CALLED");
 		if(session.isOpened() && !session.isClosed() && session.getPermissions().contains("publish_actions")){
-			System.out.println("AUTO POSTO");
+//			System.out.println("AUTO POSTO");
 			final int theScore = (int) (score * 100);		
 			
 			if (theScore > 0) {
-				System.out.println("Auto Score submitted! " + theScore);
+//				System.out.println("Auto Score submitted! " + theScore);
 				AndroidLauncher.this.runOnUiThread(new Runnable(){
 					public void run(){
 						Bundle fbParams = new Bundle();
@@ -459,7 +468,7 @@ public class AndroidLauncher extends AndroidApplication implements
 		
 		
 		if (!session.isOpened() && !session.isClosed()) {
-			System.out.println("FOO");
+//			System.out.println("FOO");
 			Session.OpenRequest openRequest = new Session.OpenRequest(this);
 			session.openForPublish(openRequest.setPermissions(
 					Arrays.asList("publish_actions",
@@ -469,7 +478,7 @@ public class AndroidLauncher extends AndroidApplication implements
 //					Arrays.asList("publish_actions")).setCallback(
 //					statusCallback));
 		} else if (!session.isOpened() && session.isClosed()) {
-			System.out.println("POO");
+//			System.out.println("POO");
 						
 			session = new Session(this);
 			
@@ -490,12 +499,12 @@ public class AndroidLauncher extends AndroidApplication implements
 		if (session.isOpened() && !session.isClosed()) {
 			fbPostLogic(score);
 			if (session.getPermissions().contains("publish_actions")) {
-				System.out.println("MOO");
+//				System.out.println("MOO");
 				fbPostLogic(score);
 			
 
 			} else if (session.getPermissions().contains("friends_games_activity")) {
-				System.out.println("BOO");
+//				System.out.println("BOO");
 				 Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, "publish_actions")             
 	             .setDefaultAudience(SessionDefaultAudience.FRIENDS)
 	             .setRequestCode(103);
@@ -511,7 +520,7 @@ public class AndroidLauncher extends AndroidApplication implements
 		final int theScore = (int) (score * 100);		
 		
 		if (theScore > 0) {
-			System.out.println("Pub SUBMIT SCORE! " + theScore);
+//			System.out.println("Pub SUBMIT SCORE! " + theScore);
 			AndroidLauncher.this.runOnUiThread(new Runnable(){
 				public void run(){
 					Bundle fbParams = new Bundle();
@@ -520,7 +529,7 @@ public class AndroidLauncher extends AndroidApplication implements
 
 						@Override
 						public void onCompleted(Response response) {
-							System.out.println("Posted yo");
+//							System.out.println("Posted yo");
 							FacebookRequestError error = response.getError();
 							if (error != null) {
 								
@@ -536,7 +545,7 @@ public class AndroidLauncher extends AndroidApplication implements
 					postParams.putString("name", "Nano the Cat!");
 					postParams.putString("caption", "MEOW.");
 					postParams.putString("description", "I ran " + Float.toString(score) + " meters in Nano the Cat!");
-					postParams.putString("link", "http://play.google.com");
+					postParams.putString("link", "http://play.google.com/store/apps/details?id=com.lunarcannon.NanoCat");
 					postParams.putString("picture", "http://lunarcannon.com/img/nano-web-icon.png");
 					
 					showDialogWithoutNotificationBar("feed", postParams);

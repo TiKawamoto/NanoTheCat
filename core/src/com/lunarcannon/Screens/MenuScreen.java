@@ -87,17 +87,9 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		
-		if(game.extInt.getPremium()){
-			if(doOnce4 < 1){
-				game.extInt.unlockAchievement("CgkI1Yuo44kEEAIQCw");
-				doOnce4++;
-			}			
-		}
-		
+
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-	
 		
 		
 		if(GameStateHandler.getMute()){
@@ -317,6 +309,13 @@ public class MenuScreen implements Screen {
 		stage.draw();				
 		batch.end();
 		
+		if(game.extInt.getPremium() && game.extInt.getSignedIn()){
+			if(doOnce4 < 1){
+				game.extInt.unlockAchievement("CgkI1Yuo44kEEAIQCw");
+				doOnce4++;
+			}			
+		}
+		
 	}
 
 	@Override
@@ -360,6 +359,7 @@ public class MenuScreen implements Screen {
 		
 		//Texture Atlas  -------------------------------------
 		menuAtlas = new TextureAtlas(Gdx.files.internal("data/menuitems.atlas"));
+		
 		buttonUp = menuAtlas.findRegion("button_up");
 		buttonDown = menuAtlas.findRegion("button_down");
 		
@@ -425,17 +425,17 @@ public class MenuScreen implements Screen {
 		panel.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		panelImage = new Image(panel);
 		panelImage.setBounds(250, 125, 500, 300);
-		panelSprite = new Sprite(panel);
-		panelSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), (float)(height / 2) - (145 / xDif), 500 / xDif, 300 / xDif);
-		
+//		panelSprite = new Sprite(panel);
+//		panelSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), (float)(height / 2) - (145 / xDif), 500 / xDif, 300 / xDif);
+	
 		
 		line = new Texture(Gdx.files.internal("data/whitecolor.png"));
 		line.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		lineImage = new Image(line);
 		lineImage.setBounds(250, 360, 500, 1);
-		lineSprite = new Sprite(line);
-		lineSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), (float)(height / 2) - (-90 / xDif), 500 / xDif, 2);
-		
+//		lineSprite = new Sprite(line);
+//		lineSprite.setBounds((float)(widthCorrect / 2) - (230 / xDif), (float)(height / 2) - (-90 / xDif), 500 / xDif, 2);
+	
 		catCan = new Texture(Gdx.files.internal("data/catcans.png"));
 		catCan.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		catCanImage = new Image(catCan);
